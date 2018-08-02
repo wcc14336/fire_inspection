@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+    <title>消防监督检查系统</title>
+    <!--    <link  th:href="@{assets/plugins/select2/dist/css/select2.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/select2/dist/css/select2-bootstrap.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css"/>-->
+
+    <link th:href="@{assets/plugins/sweetalert/dist/sweetalert.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/core.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/icons.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/components.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/pages.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/menu.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/responsive.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap-select.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}" rel="stylesheet">
+    <script th:src="@{assets/js/modernizr.min.js}"></script>
+    <style type="text/css">
+        #detailateForm div div input{
+            background-color: #d6d5d5;
+        }
+        #detailateForm div div textarea{
+            background-color: #d6d5d5;
+        }
+        #queryTable tr th{
+            width:80px;
+            text-align: right;
+        }
+        #queryTable tr td select{
+            width:180px;
+        }
+        #queryTable tr td input{
+            width:180px;
+        }
+        #queryTable tr td{
+            width:180px;
+        }
+        .dataTables_scrollHead {
+            height: 39px;
+        }
+        th,td{
+            white-space:nowrap;
+        }
+
+        #uploadAtt {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!-- 导入头部 -->
+    <!--<%@ include file="top.jsp"%>-->
+    <div th:insert="~{top :: top}"></div>
+    <!-- 导入左侧菜单栏 -->
+    <!--<%@ include file="menu.jsp"%>-->
+    <div th:insert="~{meun :: meun}" style="width: 200px"></div>
+    <!-- 内容页 -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <!-- 层级菜单 -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="pull-left page-title">日常巡检</h4>
+                        <ol class="breadcrumb pull-right">
+                            <li><a href="#">消防监督检查系统</a></li>
+                            <li class="active">日常巡检</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- 列表、新增、修改区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <div style="overflow: auto">
+                            <table class="table table-bordered table-striped" id="datatable">
+                                <caption align="top" style="text-align: center"><font size="5">[[${unit}]]号机组[[${checkproject}]]定期检查文件</font></caption>
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center">序号</th>
+                                    <!--<th style="text-align:center">序号</th>-->
+                                    <th style="text-align:center">机组</th>
+                                    <th style="text-align:center">厂房</th>
+                                    <th style="text-align:center">位置</th>
+                                    <th style="text-align:center">KKS</th>
+                                    <th style="text-align:center">名称</th>
+                                    <th style="text-align:center">定检周期</th>
+                                    <th style="text-align:center">状态</th>
+                                    <th style="text-align:center">检查人</th>
+                                    <th style="text-align:center">检查时间</th>
+                                    <th style="text-align:center">缺陷描述</th>
+                                    <th style="text-align:center">整改方式</th>
+                                    <th style="text-align:center">跟踪单号</th>
+                                    <th style="text-align:center">备注</th>
+                                    <th style="text-align:center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody style="text-align:center ">
+                                <tr th:each="inspect:${list}">
+                                    <td></td>
+                                    <!--<td th:text="${equip.id}"></td>-->
+                                    <td th:text="${inspect.unit}"></td>
+                                    <td th:text="${inspect.factoryBuilding}"></td>
+                                    <td th:text="${inspect.location}"></td>
+                                    <td th:text="${inspect.kks}"></td>
+                                    <td th:text="${inspect.name}"></td>
+                                    <td th:text="${inspect.checkcycle}"></td>
+                                    <td>
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true" th:if="${inspect.state  eq 1}"></span>
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" th:if="${inspect.state ne 1}"></span>
+                                    </td>
+                                    <td th:text="${inspect.checker}"></td>
+                                    <td th:text="${inspect.checktime}"></td>
+                                    <td th:text="${inspect.defectdesc}"></td>
+                                    <td th:text="${inspect.method}"></td>
+                                    <td th:text="${inspect.tracenumber}"></td>
+                                    <td th:if="${inspect.attachment eq 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${inspect.id})}">附件</a>
+                                    </td>
+                                    <td th:if="${inspect.attachment ne 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${inspect.id},record='ricrecord')}">无附件</a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-taskid="${inspect.taskid}"
+                                        th:data-unit="${inspect.unit}" th:data-year="${inspect.year}" th:data-fac="${inspect.factoryBuilding}" th:data-location="${inspect.location}" th:data-kks="${inspect.location}"
+                                        th:data-name="${inspect.name}" th:data-checkcycle="${inspect.checkcycle}">录入</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${regularInspectApprovalRecord.submitstate ne 1}" style="text-align: center"><a class="btn btn-lg btn-info" th:href="@{/submitregularinspectrecord(submiter=${session.username},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1,taskid=${taskid},unit=${unit},checkproject=${checkproject},year=${year})}">提交</a></div>
+                <div th:if="${regularInspectApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
+                    <div th:if="${regularInspectApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
+                    <div th:if="${regularInspectApprovalRecord.approvalstate eq 1}">
+                        <div th:if="${regularInspectApprovalRecord.approvalresult eq 0}">
+                            审批未通过，审批意见：<p th:text="${regularInspectApprovalRecord.comments}">无</p>
+                            <a class="btn btn-lg btn-info" th:href="@{/submitregularinspectrecord(submiter=${session.username},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1,taskid=${taskid},unit=${unit},checkproject=${checkproject},year=${year})}">重新提交</a>
+                        </div>
+                        <div th:if="${regularInspectApprovalRecord.approvalresult eq 1}">审批通过
+                            <a class="btn btn-info" th:href="@{/regularinspectrecordPDF}">导出PDF</a>
+                        </div>
+                    </div>
+                </div>
+                <footer class="footer text-right">
+                    2018 © jnpc.com.cn
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 审批模态框（Modal） -->
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="approvalModalLabel">审批</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/regularinspectrecordcommit}">
+                    <div class="form-group">审批人
+                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
+                    </div>
+                    <div class="form-group">审批结果
+                        <label class="radio-inline">
+                            <input type="radio" name="approvalresult" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true">通过</span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="approvalresult" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true">不通过</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="comments" placeholder="审批意见" name="comments"></textarea>
+                    </div>
+                    <input type="hidden" name="id" th:value="${regularInspectApprovalRecord.id}">
+                    <input type="hidden" name="submiter" th:value="${regularInspectApprovalRecord.submiter}">
+                    <input type="hidden" name="submitdate" th:value="${regularInspectApprovalRecord.submitdate}">
+                    <input type="hidden" name="submitstate" th:value="${regularInspectApprovalRecord.submitstate}">
+                    <input type="hidden" name="approvaldate" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}">
+                    <input type="hidden" name="approvalstate" value="1">
+                    <input type="hidden" name="taskid" th:value="${regularInspectApprovalRecord.taskid}">
+                    <input type="hidden" name="unit" th:value="${unit}">
+                    <input type="hidden" name="year" th:value="${year}">
+                    <input type="hidden" name="checkproject" th:value="${checkproject}">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- change模态框（Modal） -->
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"><font color="red">录入</font></h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/entryregularinspectrecord}">
+                    <div class="form-group">
+                        <input type="hidden" name="id" id="id">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="taskid" id="taskid">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="unit" id="unit">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="factoryBuilding" id="factoryBuilding">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="year" id="year">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="location" id="location">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="kks" id="kks">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="name" id="name">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="checkcycle" id="checkcycle">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="ifchecked" id="ifchecked" value="1">
+                    </div>
+                    <div class="form-group">状态
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state1" value="1" readonly>已完工
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state2" value="0" readonly>未完工
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="checker">检查人</label>
+                        <input type="text" class="form-control" id="checker" name="checker" th:attr="value=${session.username}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="checktime">检查时间</label>
+                        <input type="text" class="form-control" id="checktime" name="checktime" th:attr="value=${#dates.format(new java.util.Date().getTime(),'yyyy-MM-dd')}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="defectdesc">缺陷描述</label>
+                        <input type="text" class="form-control" id="defectdesc" name="defectdesc" placeholder="缺陷描述">
+                    </div>
+                    <div class="form-group">
+                        <label for="method">整改方式</label>
+                        <select name="method" id="method" class="form-control">
+                            <option>状态报告</option>
+                            <option>安全隐患单</option>
+                            <option>安全隐患排查单</option>
+                            <option>现场整改</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tracenumber">跟踪序号</label>
+                        <input type="text" class="form-control" id="tracenumber" name="tracenumber" placeholder="跟踪序号">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-danger">录入</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/js/detect.js}"></script>
+<script th:src="@{assets/js/fastclick.js}"></script>
+<script th:src="@{assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{assets/js/jquery.blockUI.js}"></script>
+<!--
+<script src="${pageContext.request.contextPath}/assets/js/waves.js"></script>
+ -->
+<script th:src="@{assets/js/wow.min.js}"></script>
+<script th:src="@{assets/js/jquery.nicescroll.js}"></script>
+<script th:src="@{assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{assets/js/jquery.app.js}"></script>
+<!-- 下拉列表 js start -->
+<script th:src="@{assets/js/bootstrap-select.js}" type="text/javascript"></script>
+<!--<script th:src="@{assets/plugins/select2/dist/js/select2.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>-->
+<!-- 下拉列表 js end -->
+<script th:src="@{assets/plugins/magnific-popup/dist/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{assets/plugins/jquery-datatables-editable/jquery.dataTables.js}"></script>
+<script th:src="@{assets/plugins/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<!-- 提示框 -->
+<script th:src="@{assets/js/alertUtils.js}"></script>
+<script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $('#data1').datepicker();
+    $(document).ready(function () {
+        var len = $('table tr').length;
+        for(var i = 1;i<len;i++){
+            $('table tr:eq('+i+') td:first').text(i);
+        }
+    })
+    $('#changeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var taskid = button.data('taskid')
+        var unit = button.data('unit')
+        var factoryBuilding = button.data('fac')
+        var location = button.data('location')
+        var kks = button.data('kks')
+        var name = button.data('name')
+        var year = button.data('year')
+        var checkcycle = button.data('checkcycle')
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id').val(id);
+        modal.find('#taskid').val(taskid);
+        modal.find('#unit').val(unit);
+        modal.find('#factoryBuilding').val(factoryBuilding);
+        modal.find('#location').val(location);
+        modal.find('#kks').val(kks);
+        modal.find('#name').val(name);
+        modal.find('#year').val(year);
+        modal.find('#checkcycle').val(checkcycle);
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<root>
+    <item name='com.lowagie.text.pdf.PdfTable'>
+        <annotation name='java.lang.Deprecated'/>
+    </item>
+</root>

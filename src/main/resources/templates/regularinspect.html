@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+    <title>消防监督检查系统</title>
+    <!--    <link  th:href="@{assets/plugins/select2/dist/css/select2.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/select2/dist/css/select2-bootstrap.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css"/>-->
+
+    <link th:href="@{assets/plugins/sweetalert/dist/sweetalert.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/core.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/icons.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/components.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/pages.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/menu.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/responsive.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap-select.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}" rel="stylesheet">
+    <script th:src="@{assets/js/modernizr.min.js}"></script>
+    <style type="text/css">
+        #detailateForm div div input{
+            background-color: #d6d5d5;
+        }
+        #detailateForm div div textarea{
+            background-color: #d6d5d5;
+        }
+        #queryTable tr th{
+            width:80px;
+            text-align: right;
+        }
+        #queryTable tr td select{
+            width:180px;
+        }
+        #queryTable tr td input{
+            width:180px;
+        }
+        #queryTable tr td{
+            width:180px;
+        }
+        .dataTables_scrollHead {
+            height: 39px;
+        }
+        th,td{
+            white-space:nowrap;
+        }
+
+        #uploadAtt {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!-- 导入头部 -->
+    <!--<%@ include file="top.jsp"%>-->
+    <div th:insert="~{top :: top}"></div>
+    <!-- 导入左侧菜单栏 -->
+    <!--<%@ include file="menu.jsp"%>-->
+    <div th:insert="~{meun :: meun}" style="width: 200px"></div>
+    <!-- 内容页 -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <!-- 层级菜单 -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="pull-left page-title">定期检查</h4>
+                        <ol class="breadcrumb pull-right">
+                            <li><a href="#">消防监督检查系统</a></li>
+                            <li class="active">定期检查</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- 列表、新增、修改区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="container">
+                            <button class="btn btn-info btn-lg" data-toggle="modal" data-target="#changeModal">录入年度定检计划</button>
+                            <a class="btn btn-lg btn-info" th:href="@{/approvalregularinspect}">审批年度定检计划</a>
+                            <a class="btn btn-lg btn-info" th:href="@{/myRegularinspecttask}">我的定期检查任务</a>
+                            <a class="btn btn-lg btn-info" th:href="@{/approvalRegularinspecttask}">审批定期检查任务</a>
+                        </div>
+                        <a class="btn btn-lg" th:href="@{/regularinspectlist(unit='1')}">一号机组定期监督检查跟踪表</a>
+                        <a class="btn btn-lg" th:href="@{/regularinspectlist(unit='2')}">二号机组定期监督检查跟踪表</a>
+                        <a class="btn btn-lg" th:href="@{/regularinspectlist(unit='3')}">三号机组定期监督检查跟踪表</a>
+                        <a class="btn btn-lg" th:href="@{/regularinspectlist(unit='4')}">四号机组定期监督检查跟踪表</a>
+                    </div>
+                </div>
+                <footer class="footer text-right">
+                    2018 © jnpc.com.cn
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"><font color="red">选择</font></h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/entryRegularinspect}">
+                    <div class="form-group">
+                        <label for="unit">选择机组</label>
+                        <select class="form-group selectpicker" id="unit" name="unit">
+                            <option value="1">一号机组</option>
+                            <option value="2">二号机组</option>
+                            <option value="3">三号机组</option>
+                            <option value="4">四号机组</option>
+                            <option value="5">五号机组</option>
+                            <option value="6">六号机组</option>
+                        </select>
+                    </div>
+                    <br/><br/><br/><br/>
+                    <div class="form-group">
+                        <label for="year">选择年度</label>
+                        <input type="text" class="form-control" id="year" name="year" >
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-danger">确认</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/js/detect.js}"></script>
+<script th:src="@{assets/js/fastclick.js}"></script>
+<script th:src="@{assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{assets/js/jquery.blockUI.js}"></script>
+<!--
+<script src="${pageContext.request.contextPath}/assets/js/waves.js"></script>
+ -->
+<script th:src="@{assets/js/wow.min.js}"></script>
+<script th:src="@{assets/js/jquery.nicescroll.js}"></script>
+<script th:src="@{assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{assets/js/jquery.app.js}"></script>
+<!-- 下拉列表 js start -->
+<script th:src="@{assets/js/bootstrap-select.js}" type="text/javascript"></script>
+<!--<script th:src="@{assets/plugins/select2/dist/js/select2.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>-->
+<!-- 下拉列表 js end -->
+<script th:src="@{assets/plugins/magnific-popup/dist/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{assets/plugins/jquery-datatables-editable/jquery.dataTables.js}"></script>
+<script th:src="@{assets/plugins/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<!-- 提示框 -->
+<script th:src="@{assets/js/alertUtils.js}"></script>
+<script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $('#data1').datepicker();
+    $('#year').datepicker({
+        format: 'yyyy',
+        weekStart: 1,
+        autoclose: true,
+        startView: 2,
+        maxViewMode: 2,
+        minViewMode:2,
+        forceParse: false,
+        language: 'zh-CN'
+    });
+</script>
+</body>
+</html>

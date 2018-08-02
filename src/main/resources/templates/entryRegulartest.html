@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+    <title>消防监督检查系统</title>
+    <!--    <link  th:href="@{assets/plugins/select2/dist/css/select2.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/select2/dist/css/select2-bootstrap.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css"/>-->
+
+    <link th:href="@{assets/plugins/sweetalert/dist/sweetalert.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/core.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/icons.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/components.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/pages.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/menu.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/responsive.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap-select.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}" rel="stylesheet">
+    <script th:src="@{assets/js/modernizr.min.js}"></script>
+    <style type="text/css">
+        #detailateForm div div input{
+            background-color: #d6d5d5;
+        }
+        #detailateForm div div textarea{
+            background-color: #d6d5d5;
+        }
+        #queryTable tr th{
+            width:80px;
+            text-align: right;
+        }
+        #queryTable tr td select{
+            width:180px;
+        }
+        #queryTable tr td input{
+            width:180px;
+        }
+        #queryTable tr td{
+            width:180px;
+        }
+        .dataTables_scrollHead {
+            height: 39px;
+        }
+        th,td{
+            white-space:nowrap;
+        }
+
+        #uploadAtt {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!-- 导入头部 -->
+    <!--<%@ include file="top.jsp"%>-->
+    <div th:insert="~{top :: top}"></div>
+    <!-- 导入左侧菜单栏 -->
+    <!--<%@ include file="menu.jsp"%>-->
+    <div th:insert="~{meun :: meun}" style="width: 200px"></div>
+    <!-- 内容页 -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <!-- 层级菜单 -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="pull-left page-title">定期试验</h4>
+                        <ol class="breadcrumb pull-right">
+                            <li><a href="#">消防监督检查系统</a></li>
+                            <li class="active">定期试验</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- 列表、新增、修改区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <a class="btn btn-lg btn-info" data-toggle="modal" data-target="#addModal">录入</a>
+                        <div style="overflow: auto">
+                            <table class="table table-bordered table-striped" id="datatable">
+                                <caption align="top" style="text-align: center"><font size="5">[[${unit}]]号机组定期试验</font></caption>
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center">序号</th>
+                                    <!--<th style="text-align:center">序号</th>-->
+                                    <th style="text-align:center">试验依据</th>
+                                    <th style="text-align:center">试验项目
+                                        <!--<select id="selectedsys" name="selectsys">
+                                            <option value="*">全部系统</option>
+                                            <option th:each="system:${systems}" th:value="${system.systemName}" th:text="${system.systemName}"></option>
+                                        </select>-->
+                                    </th>
+                                    <th style="text-align:center">试验频度
+                                        <!--<select id="selectedfac" name="selectedfac">
+                                            <option value="*">全部厂房</option>
+                                            <option th:each="factory:${factorys}" th:value="${factory.factoryName}" th:text="${factory.factoryName}"></option>
+                                        </select>-->
+                                    </th>
+                                    <th style="text-align:center">计划试验责任人</th>
+                                    <th style="text-align:center">计划开始时间</th>
+                                    <th style="text-align:center">计划结束时间</th>
+                                    <th style="text-align:center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody style="text-align:center ">
+                                <tr th:each="inspect:${list}">
+                                    <td></td>
+                                    <!--<td th:text="${equip.id}"></td>-->
+                                    <td th:text="${inspect.checkbasis}"></td>
+                                    <td th:text="${inspect.checkproject}"></td>
+                                    <td th:text="${inspect.checkfrequency}"></td>
+                                    <td th:text="${inspect.planchecker}"></td>
+                                    <td th:text="${inspect.planbegin}"></td>
+                                    <td th:text="${inspect.planend}"></td>
+                                    <td>
+                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-checkbasis="${inspect.checkbasis}" th:data-checkproject="${inspect.checkproject}"
+                                                th:data-checkfrequency="${inspect.checkfrequency}" th:data-planchecker="${inspect.planchecker}" th:data-planbegin="${inspect.planbegin}" th:data-planend="${inspect.planend}" th:data-unit="${inspect.unit}" th:data-year="${inspect.year}">修改</button>
+                                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${inspect.id}" th:data-checkproject="${inspect.checkproject}" th:data-planchecker="${inspect.planchecker}">删除</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${regularTestApprovalRecord.submitstate ne 1}" style="text-align: center"><a class="btn btn-lg btn-info" th:href="@{/entrysubmit(submiter=${session.username},year=${year},unit=${unit},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">提交审批</a></div>
+                <div th:if="${regularTestApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
+                    <div th:if="${regularTestApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
+                    <div th:if="${regularTestApprovalRecord.approvalstate eq 1}">
+                        <div th:if="${regularTestApprovalRecord.approvalresult eq 0}">
+                            审批未通过，审批意见：<p th:text="${regularTestApprovalRecord.comments}">无</p>
+                            <a class="btn btn-lg btn-info" th:href="@{/entrysubmit(submiter=${session.username},unit=${unit},year=${year},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">重新提交</a>
+                        </div>
+                        <div th:if="${regularTestApprovalRecord.approvalresult eq 1}">审批通过
+                        </div>
+                    </div>
+                </div>
+                <footer class="footer text-right">
+                    2018 © jnpc.com.cn
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 审批模态框（Modal） -->
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="approvalModalLabel">审批</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/entryapprovalcommit}">
+                    <div class="form-group">审批人
+                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
+                    </div>
+                    <div class="form-group">审批结果
+                        <label class="radio-inline">
+                            <input type="radio" name="approvalresult" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true">通过</span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="approvalresult" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true">不通过</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="comments" placeholder="审批意见" name="comments"></textarea>
+                    </div>
+                    <input type="hidden" name="id" th:value="${regularTestApprovalRecord.id}">
+                    <input type="hidden" name="submiter" th:value="${regularTestApprovalRecord.submiter}">
+                    <input type="hidden" name="submitdate" th:value="${regularTestApprovalRecord.submitdate}">
+                    <input type="hidden" name="year" th:value="${regularTestApprovalRecord.year}">
+                    <input type="hidden" name="submitstate" th:value="${regularTestApprovalRecord.submitstate}">
+                    <input type="hidden" name="approvaldate" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}">
+                    <input type="hidden" name="approvalstate" value="1">
+                    <input type="hidden" name="unit" th:value="${regularTestApprovalRecord.unit}">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 增加模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel2">新增</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/addentryregularinspect}">
+                    <div class="form-group">
+                        <input type="hidden" name="unit" th:value="${unit}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="year" th:value="${year}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="checkbasis" placeholder="检查依据">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control selectpicker" data-live-search="true" name="checkproject">
+                            <option value="">名称</option>
+                            <option>火灾报警控制器</option>
+                            <option>图形显示器</option>
+                            <option>楼层显示器</option>
+                            <option>就地报警控制器</option>
+                            <option>点型感烟控制器</option>
+                            <option>线型感烟控制器</option>
+                            <option>抽吸式感烟控制器</option>
+                            <option>点型感温探测器</option>
+                            <option>缆式感温探测器</option>
+                            <option>红外火焰探测器</option>
+                            <option>氢气探测器</option>
+                            <option>可燃气体探测器</option>
+                            <option>声/光报警器</option>
+                            <option>手动报警按钮</option>
+                            <option>消防水池</option>
+                            <option>消防泵</option>
+                            <option>稳压泵</option>
+                            <option>手动喷淋阀</option>
+                            <option>电动喷淋阀</option>
+                            <option>水雾喷头</option>
+                            <option>湿式报警阀组</option>
+                            <option>闸阀</option>
+                            <option>球阀</option>
+                            <option>蝶阀</option>
+                            <option>闭式喷头</option>
+                            <option>水流指示器</option>
+                            <option>信号蝶阀</option>
+                            <option>末端试验装置</option>
+                            <option>雨淋阀</option>
+                            <option>预作用阀</option>
+                            <option>熔断阀</option>
+                            <option>气体灭火控制器</option>
+                            <option>药气瓶组</option>
+                            <option>启动气瓶组</option>
+                            <option>选择阀</option>
+                            <option>安全阀</option>
+                            <option>气体喷头</option>
+                            <option>泄压口</option>
+                            <option>室内消火栓</option>
+                            <option>室外消火栓</option>
+                            <option>水泵接合器</option>
+                            <option>防火门</option>
+                            <option>防火卷帘</option>
+                            <option>防火百叶窗</option>
+                            <option>防火封堵</option>
+                            <option>防火盖板</option>
+                            <option>正压风机</option>
+                            <option>排烟风机</option>
+                            <option>电磁防火阀</option>
+                            <option>电动防火阀</option>
+                            <option>电动排烟阀</option>
+                            <option>手动排烟阀</option>
+                            <option>配电柜</option>
+                            <option>配电箱</option>
+                            <option>手提式干粉灭火器</option>
+                            <option>手提式二氧化碳灭火器</option>
+                            <option>推车式干粉灭火器</option>
+                            <option>推车式二氧化碳灭火器</option>
+                            <option>消防重点部位</option>
+                            <option>动火作业</option>
+                            <option>物料存放</option>
+                            <option>人员违章</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" name="checkfrequency" placeholder="检查频度">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="计划检查人" name="planchecker">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="计划开始时间" readonly id="planbegintime" name="planbegin">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="计划结束时间" readonly id="planendtime" name="planend">
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="hidden" value="0" readonly  name="state">
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交新增</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- change模态框（Modal） -->
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"><font color="red">修改</font></h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changeentryregularinspect}">
+                    <div class="form-group">
+                        <input type="hidden" name="unit" id="unit">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="year"  id="year">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="id" id="id">
+                    </div>
+                    <div class="form-group">
+                        <label for="checkbasis">检查依据</label>
+                        <input type="text" class="form-control" id="checkbasis" name="checkbasis" placeholder="检查依据" >
+                    </div>
+                    <div class="form-group">
+                        <label for="checkproject">检查项目</label>
+                        <input type="text" class="form-control" id="checkproject" name="checkproject" placeholder="检查项目">
+                    </div>
+                    <div class="form-group">
+                        <label for="checkfrequency">检查频度</label>
+                        <input type="text" class="form-control" id="checkfrequency" name="checkfrequency" placeholder="检查频度">
+                    </div>
+                    <div class="form-group">
+                        <label for="planchecker">计划检查人</label>
+                        <input type="text" class="form-control" id="planchecker" name="planchecker" placeholder="计划检查人">
+                    </div>
+                    <div class="form-group">
+                        <label for="planbegin">计划开始时间</label>
+                        <input type="text" class="form-control" id="planbegin" name="planbegin" placeholder="计划开始时间">
+                    </div>
+                    <div class="form-group">
+                        <label for="planend">计划结束时间</label>
+                        <input type="text" class="form-control" id="planend" name="planend" placeholder="计划结束时间">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-danger">修改</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 删除设备模态框（Modal） -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel1"><font color="red">删除</font></h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/deleteentryregularinspect}">
+                    <div class="form-group">
+                        <input type="hidden" name="unit" th:value="${unit}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="year" th:value="${year}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="id" id="id1">
+                    </div>
+                    <div class="form-group">
+                        <label for="checkproject1">检查项目</label>
+                        <input type="text" class="form-control" id="checkproject1" name="checkproject" placeholder="检查项目" >
+                    </div>
+                    <div class="form-group">
+                        <label for="checkproject1">计划检查人</label>
+                        <input type="text" class="form-control" id="planchecker1" name="planchecker" placeholder="计划检查人" >
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-danger">删除</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/js/detect.js}"></script>
+<script th:src="@{assets/js/fastclick.js}"></script>
+<script th:src="@{assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{assets/js/jquery.blockUI.js}"></script>
+<!--
+<script src="${pageContext.request.contextPath}/assets/js/waves.js"></script>
+ -->
+<script th:src="@{assets/js/wow.min.js}"></script>
+<script th:src="@{assets/js/jquery.nicescroll.js}"></script>
+<script th:src="@{assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{assets/js/jquery.app.js}"></script>
+<!-- 下拉列表 js start -->
+<script th:src="@{assets/js/bootstrap-select.js}" type="text/javascript"></script>
+<!--<script th:src="@{assets/plugins/select2/dist/js/select2.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>-->
+<!-- 下拉列表 js end -->
+<script th:src="@{assets/plugins/magnific-popup/dist/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{assets/plugins/jquery-datatables-editable/jquery.dataTables.js}"></script>
+<script th:src="@{assets/plugins/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<!-- 提示框 -->
+<script th:src="@{assets/js/alertUtils.js}"></script>
+<script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $('#data1').datepicker();
+    $('#planbegintime').datepicker();
+    $('#planendtime').datepicker();
+    $(document).ready(function () {
+        var len = $('table tr').length;
+        for(var i = 1;i<len;i++){
+            $('table tr:eq('+i+') td:first').text(i);
+        }
+    })
+
+    $('#changeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var checkbasis=button.data('checkbasis');
+        var checkproject = button.data('checkproject')
+        var checkfrequency=button.data('checkfrequency');
+        var planchecker=button.data('planchecker');
+        var planbegin=button.data('planbegin');
+        var planend=button.data('planend');
+        var unit=button.data('unit');
+        var year=button.data('year');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id').val(id);
+        modal.find('#checkbasis').val(checkbasis);
+        modal.find('#checkproject').val(checkproject);
+        modal.find('#checkfrequency').val(checkfrequency);
+        modal.find('#planchecker').val(planchecker);
+        modal.find('#planbegin').val(planbegin);
+        modal.find('#planend').val(planend);
+        modal.find('#unit').val(unit);
+        modal.find('#year').val(year);
+    })
+
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id=button.data('id');
+        var checkproject=button.data('checkproject');
+        var planchecker=button.data('planchecker');
+        var modal = $(this)
+        modal.find('#id1').val(id);
+        modal.find('#checkproject1').val(checkproject);
+        modal.find('#planchecker1').val(planchecker);
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+    <title>消防监督检查系统</title>
+    <!--    <link  th:href="@{assets/plugins/select2/dist/css/select2.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/select2/dist/css/select2-bootstrap.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css"/>-->
+
+    <link th:href="@{assets/plugins/sweetalert/dist/sweetalert.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/core.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/icons.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/components.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/pages.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/menu.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/responsive.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap-select.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}" rel="stylesheet">
+    <script th:src="@{assets/js/modernizr.min.js}"></script>
+    <style type="text/css">
+        #detailateForm div div input{
+            background-color: #d6d5d5;
+        }
+        #detailateForm div div textarea{
+            background-color: #d6d5d5;
+        }
+        #queryTable tr th{
+            width:80px;
+            text-align: right;
+        }
+        #queryTable tr td select{
+            width:180px;
+        }
+        #queryTable tr td input{
+            width:180px;
+        }
+        #queryTable tr td{
+            width:180px;
+        }
+        .dataTables_scrollHead {
+            height: 39px;
+        }
+        th,td{
+            white-space:nowrap;
+        }
+
+        #uploadAtt {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!-- 导入头部 -->
+    <!--<%@ include file="top.jsp"%>-->
+    <div th:insert="~{top :: top}"></div>
+    <!-- 导入左侧菜单栏 -->
+    <!--<%@ include file="menu.jsp"%>-->
+    <div th:insert="~{meun :: meun}" style="width: 200px"></div>
+    <!-- 内容页 -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <!-- 层级菜单 -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="pull-left page-title">动火作业现场确认单</h4>
+                        <ol class="breadcrumb pull-right">
+                            <li><a href="#">消防监督检查系统</a></li>
+                            <li class="active">动火作业现场确认单</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- 列表、新增、修改区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="container">
+                            <form class="form-inline" th:action="@{/fireworkconformlist}">
+                                <div class="form-group">
+                                    <select class="form-control" id="unit" name="unit">
+                                        <option value="">机组</option>
+                                        <option>一号机组</option>
+                                        <option>二号机组</option>
+                                        <option>三号机组</option>
+                                        <option>四号机组</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="factoryBuilding" name="factoryBuilding" >
+                                        <option value="">请先选择机组</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="location" name="location">
+                                        <option value="">请先选择厂房</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="工作负责人" name="jobmanager">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="动火人" name="fireworkman">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="监火人" name="fireworkinspecter">
+                                </div>
+                                <div class="form-group">现场确认
+                                    <select class="form-control" placeholder="现场确认" name="state">
+                                        <option></option>
+                                        <option value="1">是</option>
+                                        <option value="0">否</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="确认人" name="checker">
+                                </div>
+                                <div class="form-group">确认时间
+                                    <input class="form-control datepicker" placeholder="开始时间" name="start" type="text" readonly id="updatetimestater">
+                                </div>
+                                <div class="form-group">-
+                                    <input class="form-control datepicker" placeholder="结束时间" name="end" type="text" readonly id="updatetimeend">
+                                </div>
+                                <button type="submit" class="btn btn-info">搜索</button>
+                            </form>
+                        </div>
+                        <div style="overflow: auto">
+                            <table class="table table-bordered table-striped" id="datatable">
+                                <thead>
+                                <tr>
+                                    <!--<th style="text-align:center">序号</th>-->
+                                    <th style="text-align:center">机组</th>
+                                    <th style="text-align:center">厂房
+                                        <!--<select id="selectedsys" name="selectsys">
+                                            <option value="*">全部系统</option>
+                                            <option th:each="system:${systems}" th:value="${system.systemName}" th:text="${system.systemName}"></option>
+                                        </select>-->
+                                    </th>
+                                    <th style="text-align:center">位置
+                                        <!--<select id="selectedfac" name="selectedfac">
+                                            <option value="*">全部厂房</option>
+                                            <option th:each="factory:${factorys}" th:value="${factory.factoryName}" th:text="${factory.factoryName}"></option>
+                                        </select>-->
+                                    </th>
+                                    <th style="text-align:center">动火证号</th>
+                                    <th style="text-align:center">工作负责人</th>
+                                    <th style="text-align:center">动火人</th>
+                                    <th style="text-align:center">监火人</th>
+                                    <th style="text-align:center">重大火灾风险分析单号</th>
+                                    <th style="text-align:center">现场确认</th>
+                                    <th style="text-align:center">确认人</th>
+                                    <th style="text-align:center">确认时间</th>
+                                    <th style="text-align:center">备注</th>
+                                    <th style="text-align:center">缺陷描述</th>
+                                    <th style="text-align:center">整改方式</th>
+                                    <th style="text-align:center">跟踪序号</th>
+                                    <th style="text-align:center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody style="text-align:center ">
+                                <div  th:each="dRecord:${recordlist.content}">
+                                    <tr>
+                                        <!--<td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" >#</td>-->
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.unit}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.factoryBuilding}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.location}"></td><td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.fireworkNumber}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.jobmanager}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.fireworkman}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.fireworkinspecter}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.firerisknumber}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:if="${dRecord.state ne 1}">
+                                            未确认
+                                        </td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:if="${dRecord.state eq 1}">
+                                            已确认
+                                        </td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.checker}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:text="${dRecord.checkdate}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:if="${dRecord.attachment ne 1}">
+                                            <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id},record='fwcrecord')}">无附件</a>
+                                        </td>
+                                        <td style="vertical-align: middle" th:rowspan="${dRecord.fcDefects.size()+1}" th:if="${dRecord.attachment eq 1}">
+                                            <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id})}">附件</a>
+                                        </td>
+                                        <div th:if="${dRecord.fcDefects.size() ne 0}">
+                                            <td th:text="${dRecord.fcDefects[0].defectdesc}"></td>
+                                            <td th:text="${dRecord.fcDefects[0].method}"></td>
+                                            <td th:text="${dRecord.fcDefects[0].tracenumber}"></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.fcDefects[0].id}" data-defect="fcdefect"
+                                                        th:data-defectdesc="${dRecord.fcDefects[0].defectdesc}" th:data-method="${dRecord.fcDefects[0].method}" th:data-tracenumber="${dRecord.fcDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                            </td>
+                                        </div>
+                                    </tr>
+                                    <tr th:each="dpdefect:${dRecord.fcDefects}">
+                                        <div th:if="${dRecord.fcDefects.size() ne 0}">
+                                            <div th:if="${dpdefect ne dRecord.fcDefects[0]}">
+                                                <td th:text="${dpdefect.defectdesc}"></td>
+                                                <td th:text="${dpdefect.method}"></td>
+                                                <td th:text="${dpdefect.tracenumber}"></td>
+                                                <td>
+                                                    <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="fcdefect"
+                                                            th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                                </td>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </div>
+                                </tbody>
+                            </table>
+                        </div>
+                        共[[${recordlist.totalElements}]]条记录，
+                        当前第[[${recordlist.number}+1]]页，共[[${recordlist.totalPages}]]页
+                        <a class="btn btn-info btn-xs" th:if="${recordlist.number ne 0}" th:href="@{/fireworkconformlist(number=${recordlist.number-1},unit=${condition.unit},factoryBuilding=${condition.factoryBuilding},location=${condition.location},jobmanager=${condition.jobmanager},fireworkman=${condition.fireworkman},fireworkinspecter=${condition.fireworkinspecter},state=${condition.state},checker=${condition.checker},start=${condition.start},end=${condition.end})}">上一页</a>
+                        <a class="btn btn-info btn-xs" th:if="${recordlist.number+1 lt recordlist.totalPages}"  th:href="@{/fireworkconformlist(number=${equiplist.number+1},unit=${condition.unit},factoryBuilding=${condition.factoryBuilding},location=${condition.location},jobmanager=${condition.jobmanager},fireworkman=${condition.fireworkman},fireworkinspecter=${condition.fireworkinspecter},state=${condition.state},checker=${condition.checker},start=${condition.start},end=${condition.end})}">下一页</a>
+                        <input type="text" id="pagenumber" style="width: 30px"><button class="btn btn-info btn-xs" onclick="jumptopage()">跳转</button>
+                    </div>
+                </div>
+                <footer class="footer text-right">
+                    2018 © jnpc.com.cn
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 修改模态框（Modal） -->
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">修改</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changedefect}">
+                    <div class="form-group">
+                        <label for="defectdesc">缺陷描述</label>
+                        <input type="text" class="form-control" id="defectdesc" placeholder="缺陷描述" name="defectdesc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="method">整改方式</label>
+                        <select name="method" id="method" class="form-control">
+                            <option>状态报告</option>
+                            <option>安全隐患单</option>
+                            <option>安全隐患排查单</option>
+                            <option>现场整改</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tracenumber">跟踪单号</label>
+                        <input type="text" class="form-control" id="tracenumber" placeholder="跟踪单号" name="tracenumber">
+                    </div>
+                    <!--<div class="form-group">状态
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state1" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state2" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </label>
+                    </div>-->
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="id" id="id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="recordid" id="recordid" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="defect" id="defect" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/js/detect.js}"></script>
+<script th:src="@{assets/js/fastclick.js}"></script>
+<script th:src="@{assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{assets/js/jquery.blockUI.js}"></script>
+<!--
+<script src="${pageContext.request.contextPath}/assets/js/waves.js"></script>
+ -->
+<script th:src="@{assets/js/wow.min.js}"></script>
+<script th:src="@{assets/js/jquery.nicescroll.js}"></script>
+<script th:src="@{assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{assets/js/jquery.app.js}"></script>
+<!-- 下拉列表 js start -->
+<script th:src="@{assets/js/bootstrap-select.js}" type="text/javascript"></script>
+<!--<script th:src="@{assets/plugins/select2/dist/js/select2.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>-->
+<!-- 下拉列表 js end -->
+<script th:src="@{assets/plugins/magnific-popup/dist/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{assets/plugins/jquery-datatables-editable/jquery.dataTables.js}"></script>
+<script th:src="@{assets/plugins/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<!-- 提示框 -->
+<script th:src="@{assets/js/alertUtils.js}"></script>
+<script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $('#changeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var defectdesc=button.data('defectdesc');
+        var method = button.data('method')
+        var tracenumber=button.data('tracenumber');
+        var recordid=button.data('recordid');
+        var defect=button.data('defect');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id').val(id);
+        modal.find('#defectdesc').val(defectdesc);
+        modal.find('#method').val(method);
+        modal.find('#tracenumber').val(tracenumber);
+        //modal.find("input[type=radio][name='state'][value='"+state+"']").attr("checked",'checked');
+        modal.find('#recordid').val(recordid);
+        modal.find('#defect').val(defect);
+
+    })
+
+    $('#updatetimestater').datepicker();
+    $('#updatetimeend').datepicker();
+
+    function jumptopage() {
+        var pagenumber=$("#pagenumber").val();
+        var number=parseInt(pagenumber)-1;
+        if(pagenumber>[[${recordlist.totalPages}]]||pagenumber<0){
+            alert("请输入正确页面！");
+            $("#pagenumber").val("");
+            return;
+        }
+        window.location.href="/fireworkconformlist?number="+number+"&unit="+[[${condition.unit}]]+"&factoryBuilding="+[[${condition.factoryBuilding}]]+"&location="+[[${condition.location}]]+"&jobmanager="+[[${condition.jobmanager}]]+"&fireworkman="+[[${condition.fireworkman}]]+"&fireworkinspecter="+[[${condition.fireworkinspecter}]]+"&state="+[[${condition.state}]]+"&checker="+[[${condition.checker}]]+"&start="+[[${condition.start}]]+"&end="+[[${condition.end}]];
+    }
+
+    $("#unit").change(function () {
+        $.ajax({
+            type:"POST",
+            url:[[@{/findfactoryBuildings}]],
+        data:{
+            unit:$("#unit").val()
+        },
+        dataType:"json",
+            success:function (datas) {
+            console.log(datas);
+            $("#factoryBuilding").empty();
+            $("<option></option>").text("全部厂房").val("").appendTo($("#factoryBuilding"));
+            for(var i=0;i<datas.length;i++){
+                $("<option></option>").text(datas[i]).appendTo($("#factoryBuilding"));
+            }
+        }
+    })
+    });
+    $("#factoryBuilding").change(function () {
+        $.ajax({
+            type:"POST",
+            url:[[@{/findlocations}]],
+        data:{
+            factoryBuilding:$("#factoryBuilding").val()
+        },
+        dataType:"json",
+            success:function (datas) {
+            console.log(datas);
+            $("#location").empty();
+            $("<option></option>").text("全部位置").val("").appendTo($("#location"));
+            for(var i=0;i<datas.length;i++){
+                $("<option></option>").text(datas[i]).appendTo($("#location"));
+            }
+        }
+    })
+    });
+</script>
+</body>
+</html>

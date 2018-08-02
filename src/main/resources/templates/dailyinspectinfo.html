@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+    <title>消防监督检查系统</title>
+    <!--    <link  th:href="@{assets/plugins/select2/dist/css/select2.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/select2/dist/css/select2-bootstrap.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css"/>-->
+
+    <link th:href="@{assets/plugins/sweetalert/dist/sweetalert.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/core.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/icons.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/components.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/pages.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/menu.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/responsive.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap-select.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}" rel="stylesheet">
+    <script th:src="@{assets/js/modernizr.min.js}"></script>
+    <style type="text/css">
+        #detailateForm div div input{
+            background-color: #d6d5d5;
+        }
+        #detailateForm div div textarea{
+            background-color: #d6d5d5;
+        }
+        #queryTable tr th{
+            width:80px;
+            text-align: right;
+        }
+        #queryTable tr td select{
+            width:180px;
+        }
+        #queryTable tr td input{
+            width:180px;
+        }
+        #queryTable tr td{
+            width:180px;
+        }
+        .dataTables_scrollHead {
+            height: 39px;
+        }
+        th,td{
+            white-space:nowrap;
+        }
+
+        #uploadAtt {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!-- 导入头部 -->
+    <!--<%@ include file="top.jsp"%>-->
+    <div th:insert="~{top :: top}"></div>
+    <!-- 导入左侧菜单栏 -->
+    <!--<%@ include file="menu.jsp"%>-->
+    <div th:insert="~{meun :: meun}" style="width: 200px"></div>
+    <!-- 内容页 -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <!-- 层级菜单 -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="pull-left page-title">日常巡检/[[${condition.date}]]</h4>
+                        <ol class="breadcrumb pull-right">
+                            <li><a href="#">消防监督检查系统</a></li>
+                            <li class="active">日常巡检</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- 消防重点位置区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped" id="datatable">
+                            <caption align="top" style="text-align: center"><font size="5">消防重点位置</font></caption>
+                            <thead>
+                            <tr>
+                                <!--<th style="text-align:center">序号</th>-->
+                                <th style="text-align:center">机组</th>
+                                <th style="text-align:center">厂房</th>
+                                <th style="text-align:center">位置</th>
+                                <th style="text-align:center">状态</th>
+                                <th style="text-align:center">测量值</th>
+                                <th style="text-align:center">检查时间</th>
+                                <th style="text-align:center">检查人</th>
+                                <th style="text-align:center">备注</th>
+                                <th style="text-align:center">缺陷描述</th>
+                                <th style="text-align:center">整改方式</th>
+                                <th style="text-align:center">跟踪序号</th>
+                                <th style="text-align:center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody style="text-align:center;vertical-align:middle">
+                                <!--<td th:text="${equip.id}"></td>-->
+                                <div  th:each="iRecord:${importantPartRecords}">
+                                    <tr>
+                                        <!--<td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" >#</td>-->
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" th:text="${iRecord.unit}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" th:text="${iRecord.factoryBuilding}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" th:text="${iRecord.location}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}">
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true" th:if="${iRecord.state eq 1}"></span>
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true" th:if="${iRecord.state eq 0}"></span>
+                                        </td>
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" th:text="${iRecord.measurements}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" th:text="${iRecord.checktime}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" th:text="${iRecord.checker}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" th:if="${iRecord.attachment ne 1}">
+                                            <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${iRecord.id},record='iprecord')}">无附件</a>
+                                        </td>
+                                        <td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" th:if="${iRecord.attachment eq 1}">
+                                            <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${iRecord.id})}">附件</a>
+                                        </td>
+                                        <div th:if="${iRecord.IPRdefects.size() ne 0}">
+                                            <td th:text="${iRecord.IPRdefects[0].defectdesc}"></td>
+                                            <td th:text="${iRecord.IPRdefects[0].method}"></td>
+                                            <td th:text="${iRecord.IPRdefects[0].tracenumber}"></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${iRecord.IPRdefects[0].id}" data-defect="IPRdefect"
+                                                        th:data-defectdesc="${iRecord.IPRdefects[0].defectdesc}" th:data-method="${iRecord.IPRdefects[0].method}" th:data-tracenumber="${iRecord.IPRdefects[0].tracenumber}" th:data-recordid="${iRecord.id}">修改</button>
+                                            </td>
+                                        </div>
+                                    </tr>
+                                    <tr th:each="iprdefect:${iRecord.IPRdefects}">
+                                        <div th:if="${iRecord.IPRdefects.size() ne 0}">
+                                            <div th:if="${iprdefect ne iRecord.IPRdefects[0]}">
+                                                <td th:text="${iprdefect.defectdesc}"></td>
+                                                <td th:text="${iprdefect.method}"></td>
+                                                <td th:text="${iprdefect.tracenumber}"></td>
+                                                <td>
+                                                    <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${iprdefect.id}" data-defect="IPRdefect"
+                                                            th:data-defectdesc="${iprdefect.defectdesc}" th:data-method="${iprdefect.method}" th:data-tracenumber="${iprdefect.tracenumber}" th:data-recordid="${iRecord.id}">修改</button>
+                                                </td>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                 <!--动火作业区域 start-->
+                <div class="panel">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped" id="datatable1">
+                            <caption align="top" style="text-align: center"><font size="5">动火作业</font></caption>
+                            <thead>
+                            <tr>
+                                <!--<th style="text-align:center">序号</th>-->
+                                <th style="text-align:center">机组</th>
+                                <th style="text-align:center">厂房</th>
+                                <th style="text-align:center">位置</th>
+                                <th style="text-align:center">动火证号</th>
+                                <th style="text-align:center">工作负责人</th>
+                                <th style="text-align:center">状态</th>
+                                <th style="text-align:center">检查时间</th>
+                                <th style="text-align:center">检查人</th>
+                                <th style="text-align:center">备注</th>
+                                <th style="text-align:center">缺陷描述</th>
+                                <th style="text-align:center">整改方式</th>
+                                <th style="text-align:center">跟踪序号</th>
+                                <th style="text-align:center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody style="text-align:center ">
+                            <div  th:each="fRecord:${fireworkRecords}">
+                                <tr>
+                                    <!--<td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" >#</td>-->
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:text="${fRecord.unit}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:text="${fRecord.factoryBuilding}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:text="${fRecord.location}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:text="${fRecord.fireworkNumber}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:text="${fRecord.jobmanager}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}">
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true" th:if="${fRecord.state eq 1}"></span>
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" th:if="${fRecord.state eq 0}"></span>
+                                    </td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:text="${fRecord.checktime}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:text="${fRecord.checker}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:if="${fRecord.attachment ne 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${fRecord.id},record='fwrecord')}">无附件</a>
+                                    </td>
+                                    <td style="vertical-align: middle" th:rowspan="${fRecord.FWDefects.size()+1}" th:if="${fRecord.attachment eq 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${fRecord.id})}">附件</a>
+                                    </td>
+                                    <div th:if="${fRecord.FWDefects.size() ne 0}">
+                                        <td th:text="${fRecord.FWDefects[0].defectdesc}"></td>
+                                        <td th:text="${fRecord.FWDefects[0].method}"></td>
+                                        <td th:text="${fRecord.FWDefects[0].tracenumber}"></td>
+                                        <td>
+                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${fRecord.FWDefects[0].id}" data-defect="FWdefect"
+                                                    th:data-defectdesc="${fRecord.FWDefects[0].defectdesc}" th:data-method="${fRecord.FWDefects[0].method}" th:data-tracenumber="${fRecord.FWDefects[0].tracenumber}" th:data-recordid="${fRecord.id}">修改</button>
+                                        </td>
+                                    </div>
+
+                                </tr>
+                                <tr th:each="fwdefect:${fRecord.FWDefects}">
+                                    <div th:if="${fRecord.FWDefects.size() ne 0}">
+                                        <div th:if="${fwdefect ne fRecord.FWDefects[0]}">
+                                            <td th:text="${fwdefect.defectdesc}"></td>
+                                            <td th:text="${fwdefect.method}"></td>
+                                            <td th:text="${fwdefect.tracenumber}"></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#fchangeModal" th:data-id="${fwdefect.id}" data-defect="FWdefect"
+                                                        th:data-defectdesc="${fwdefect.defectdesc}" th:data-method="${fwdefect.method}" th:data-tracenumber="${fwdefect.tracenumber}" th:data-recordid="${fRecord.id}">修改</button>
+                                            </td>
+                                        </div>
+                                    </div>
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 物品物料/易燃易爆危险化学品存放区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped" id="datatable2">
+                            <caption align="top" style="text-align: center"><font size="5">物品物料/易燃易爆危险化学品存放</font></caption>
+                            <thead>
+                            <tr>
+                                <!--<th style="text-align:center">序号</th>-->
+                                <th style="text-align:center">机组</th>
+                                <th style="text-align:center">厂房</th>
+                                <th style="text-align:center">位置</th>
+                                <th style="text-align:center">检查时间</th>
+                                <th style="text-align:center">检查人</th>
+                                <th style="text-align:center">备注</th>
+                                <th style="text-align:center">缺陷描述</th>
+                                <th style="text-align:center">整改方式</th>
+                                <th style="text-align:center">跟踪单号</th>
+                                <th style="text-align:center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody style="text-align:center ">
+                            <div  th:each="dRecord:${depositaryRecords}">
+                                <tr>
+                                    <!--<td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" >#</td>-->
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.dpDefects.size()+1}" th:text="${dRecord.unit}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.dpDefects.size()+1}" th:text="${dRecord.factoryBuilding}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.dpDefects.size()+1}" th:text="${dRecord.location}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.dpDefects.size()+1}" th:text="${dRecord.checktime}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.dpDefects.size()+1}" th:text="${dRecord.checker}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.dpDefects.size()+1}" th:if="${dRecord.attachment ne 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id},record='drecord')}">无附件</a>
+                                    </td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.dpDefects.size()+1}" th:if="${dRecord.attachment eq 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id})}">附件</a>
+                                    </td>
+                                    <div th:if="${dRecord.dpDefects.size() ne 0}">
+                                        <td th:text="${dRecord.dpDefects[0].defectdesc}"></td>
+                                        <td th:text="${dRecord.dpDefects[0].method}"></td>
+                                        <td th:text="${dRecord.dpDefects[0].tracenumber}"></td>
+                                        <td>
+                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.dpDefects[0].id}" data-defect="DPdefect"
+                                                    th:data-defectdesc="${dRecord.dpDefects[0].defectdesc}" th:data-method="${dRecord.dpDefects[0].method}" th:data-tracenumber="${dRecord.dpDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                        </td>
+                                    </div>
+
+                                </tr>
+                                <tr th:each="dpdefect:${dRecord.dpDefects}">
+                                    <div th:if="${dRecord.dpDefects.size() ne 0}">
+                                        <div th:if="${dpdefect ne dRecord.dpDefects[0]}">
+                                            <td th:text="${dpdefect.defectdesc}"></td>
+                                            <td th:text="${dpdefect.method}"></td>
+                                            <td th:text="${dpdefect.tracenumber}"></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="DPdefect"
+                                                        th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                            </td>
+                                        </div>
+                                    </div>
+
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 防火门区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped" id="datatable3">
+                            <caption align="top" style="text-align: center"><font size="5">防火门</font></caption>
+                            <thead>
+                            <tr>
+                                <!--<th style="text-align:center">序号</th>-->
+                                <th style="text-align:center">机组</th>
+                                <th style="text-align:center">厂房</th>
+                                <th style="text-align:center">位置</th>
+                                <th style="text-align:center">KKS编码</th>
+                                <th style="text-align:center">名称</th>
+                                <th style="text-align:center">状态</th>
+                                <th style="text-align:center">检查时间</th>
+                                <th style="text-align:center">检查人</th>
+                                <th style="text-align:center">备注</th>
+                                <th style="text-align:center">缺陷描述</th>
+                                <th style="text-align:center">整改方式</th>
+                                <th style="text-align:center">跟踪序号</th>
+                                <th style="text-align:center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody style="text-align:center ">
+                            <div  th:each="dRecord:${fireproofdoorRecords}">
+                                <tr>
+                                    <!--<td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" >#</td>-->
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:text="${dRecord.unit}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:text="${dRecord.factoryBuilding}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:text="${dRecord.location}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:text="${dRecord.kks}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:text="${dRecord.name}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}">
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true" th:if="${dRecord.state eq 1}"></span>
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" th:if="${dRecord.state eq 0}"></span>
+                                    </td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:text="${dRecord.checktime}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:text="${dRecord.checker}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:if="${dRecord.attachment ne 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id},record='fdrecord')}">无附件</a>
+                                    </td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.fdDefects.size()+1}" th:if="${dRecord.attachment eq 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id})}">附件</a>
+                                    </td>
+                                    <div th:if="${dRecord.fdDefects.size() ne 0}">
+                                        <td th:text="${dRecord.fdDefects[0].defectdesc}"></td>
+                                        <td th:text="${dRecord.fdDefects[0].method}"></td>
+                                        <td th:text="${dRecord.fdDefects[0].tracenumber}"></td>
+                                        <td>
+                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.fdDefects[0].id}" data-defect="FDdefect"
+                                                    th:data-defectdesc="${dRecord.fdDefects[0].defectdesc}" th:data-method="${dRecord.fdDefects[0].method}" th:data-tracenumber="${dRecord.fdDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                        </td>
+                                    </div>
+
+                                </tr>
+                                <tr th:each="dpdefect:${dRecord.fdDefects}">
+                                    <div th:if="${dRecord.fdDefects.size() ne 0}">
+                                        <div th:if="${dpdefect ne dRecord.fdDefects[0]}">
+                                            <td th:text="${dpdefect.defectdesc}"></td>
+                                            <td th:text="${dpdefect.method}"></td>
+                                            <td th:text="${dpdefect.tracenumber}"></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="FDdefect"
+                                                        th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                            </td>
+                                        </div>
+                                    </div>
+
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 人员违章区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped" id="datatable4">
+                            <caption align="top" style="text-align: center"><font size="5">人员违章</font></caption>
+                            <thead>
+                            <tr>
+                                <!--<th style="text-align:center">序号</th>-->
+                                <th style="text-align:center">机组</th>
+                                <th style="text-align:center">厂房</th>
+                                <th style="text-align:center">位置</th>
+                                <th style="text-align:center">姓名</th>
+                                <th style="text-align:center">单位</th>
+                                <th style="text-align:center">通行卡号</th>
+                                <th style="text-align:center">检查时间</th>
+                                <th style="text-align:center">检查人</th>
+                                <th style="text-align:center">备注</th>
+                                <th style="text-align:center">缺陷描述</th>
+                                <th style="text-align:center">整改方式</th>
+                                <th style="text-align:center">跟踪序号</th>
+                                <th style="text-align:center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody style="text-align:center ">
+                            <div  th:each="dRecord:${personnelviolationRecords}">
+                                <tr>
+                                    <!--<td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" >#</td>-->
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:text="${dRecord.unit}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:text="${dRecord.factoryBuilding}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:text="${dRecord.location}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:text="${dRecord.personname}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:text="${dRecord.company}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:text="${dRecord.passnumber}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:text="${dRecord.checktime}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:text="${dRecord.checker}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:if="${dRecord.attachment ne 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id},record='precord')}">无附件</a>
+                                    </td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.pvDefects.size()+1}" th:if="${dRecord.attachment eq 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id})}">附件</a>
+                                    </td>
+                                    <div th:if="${dRecord.pvDefects.size() ne 0}">
+                                        <td th:text="${dRecord.pvDefects[0].defectdesc}"></td>
+                                        <td th:text="${dRecord.pvDefects[0].method}"></td>
+                                        <td th:text="${dRecord.pvDefects[0].tracenumber}"></td>
+                                        <td>
+                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.pvDefects[0].id}" data-defect="PVdefect"
+                                                    th:data-defectdesc="${dRecord.pvDefects[0].defectdesc}" th:data-method="${dRecord.pvDefects[0].method}" th:data-tracenumber="${dRecord.pvDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                        </td>
+                                    </div>
+
+                                </tr>
+                                <tr th:each="dpdefect:${dRecord.pvDefects}">
+                                    <div th:if="${dRecord.pvDefects.size() ne 0}">
+                                        <div th:if="${dpdefect ne dRecord.pvDefects[0]}">
+                                            <td th:text="${dpdefect.defectdesc}"></td>
+                                            <td th:text="${dpdefect.method}"></td>
+                                            <td th:text="${dpdefect.tracenumber}"></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="PVdefect"
+                                                        th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                            </td>
+                                        </div>
+                                    </div>
+
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 其他问题区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped" id="datatable5">
+                            <caption align="top" style="text-align: center"><font size="5">其他问题</font></caption>
+                            <thead>
+                            <tr>
+                                <!--<th style="text-align:center">序号</th>-->
+                                <th style="text-align:center">机组</th>
+                                <th style="text-align:center">厂房</th>
+                                <th style="text-align:center">位置</th>
+                                <th style="text-align:center">检查时间</th>
+                                <th style="text-align:center">检查人</th>
+                                <th style="text-align:center">备注</th>
+                                <th style="text-align:center">缺陷描述</th>
+                                <th style="text-align:center">整改方式</th>
+                                <th style="text-align:center">跟踪序号</th>
+                                <th style="text-align:center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody style="text-align:center ">
+                            <div  th:each="dRecord:${otherRecords}">
+                                <tr>
+                                    <!--<td style="vertical-align: middle" th:rowspan="${iRecord.IPRdefects.size()+1}" >#</td>-->
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.oDefects.size()+1}" th:text="${dRecord.unit}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.oDefects.size()+1}" th:text="${dRecord.factoryBuilding}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.oDefects.size()+1}" th:text="${dRecord.location}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.oDefects.size()+1}" th:text="${dRecord.checktime}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.oDefects.size()+1}" th:text="${dRecord.checker}"></td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.oDefects.size()+1}" th:if="${dRecord.attachment ne 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id},record='orecord')}">无附件</a>
+                                    </td>
+                                    <td style="vertical-align: middle" th:rowspan="${dRecord.oDefects.size()+1}" th:if="${dRecord.attachment eq 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${dRecord.id})}">附件</a>
+                                    </td>
+                                    <div th:if="${dRecord.oDefects.size() ne 0}">
+                                        <td th:text="${dRecord.oDefects[0].defectdesc}"></td>
+                                        <td th:text="${dRecord.oDefects[0].method}"></td>
+                                        <td th:text="${dRecord.oDefects[0].tracenumber}"></td>
+                                        <td>
+                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.oDefects[0].id}" data-defect="Odefect"
+                                                    th:data-defectdesc="${dRecord.oDefects[0].defectdesc}" th:data-method="${dRecord.oDefects[0].method}" th:data-tracenumber="${dRecord.oDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                        </td>
+                                    </div>
+
+                                </tr>
+                                <tr th:each="dpdefect:${dRecord.oDefects}">
+                                    <div th:if="${dRecord.oDefects.size() ne 0}">
+                                        <div th:if="${dpdefect ne dRecord.oDefects[0]}">
+                                            <td th:text="${dpdefect.defectdesc}"></td>
+                                            <td th:text="${dpdefect.method}"></td>
+                                            <td th:text="${dpdefect.tracenumber}"></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="Odefect"
+                                                        th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
+                                            </td>
+                                        </div>
+                                    </div>
+
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div th:if="${submitAndApprovalRecord.submitstate ne 1}" style="text-align: center"><a class="btn btn-lg btn-info" th:href="@{/submit(submiter=${session.username},checkdate=${condition.date},unit=${condition.unit},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">提交</a></div>
+                <div th:if="${submitAndApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
+                    <div th:if="${submitAndApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
+                    <div th:if="${submitAndApprovalRecord.approvalstate eq 1}">
+                        <div th:if="${submitAndApprovalRecord.approvalresult eq 0}">
+                            审批未通过，审批意见：<p th:text="${submitAndApprovalRecord.comments}">无</p>
+                            <a class="btn btn-lg btn-info" th:href="@{/submit(submiter=${session.username},unit=${condition.unit},checkdate=${condition.date},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">重新提交</a>
+                        </div>
+                        <div th:if="${submitAndApprovalRecord.approvalresult eq 1}">审批通过
+                            <a class="btn btn-info" th:href="@{/outputPDF(checkdate=${submitAndApprovalRecord.checkdate},submiter=${submitAndApprovalRecord.submiter},unit=${submitAndApprovalRecord.unit})}">导出PDF</a>
+                        </div>
+                    </div>
+                </div>
+                <footer class="footer text-right">
+                    2018 © jnpc.com.cn
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 审批模态框（Modal） -->
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="approvalModalLabel">审批</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/approvalcommit}">
+                    <div class="form-group">审批人
+                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
+                    </div>
+                    <div class="form-group">审批结果
+                        <label class="radio-inline">
+                            <input type="radio" name="approvalresult" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true">通过</span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="approvalresult" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true">不通过</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="comments" placeholder="审批意见" name="comments"></textarea>
+                    </div>
+                    <input type="hidden" name="id" th:value="${submitAndApprovalRecord.id}">
+                    <input type="hidden" name="submiter" th:value="${submitAndApprovalRecord.submiter}">
+                    <input type="hidden" name="submitdate" th:value="${submitAndApprovalRecord.submitdate}">
+                    <input type="hidden" name="checkdate" th:value="${submitAndApprovalRecord.checkdate}">
+                    <input type="hidden" name="submitstate" th:value="${submitAndApprovalRecord.submitstate}">
+                    <input type="hidden" name="approvaldate" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}">
+                    <input type="hidden" name="approvalstate" value="1">
+                    <input type="hidden" name="unit" th:value="${submitAndApprovalRecord.unit}">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 修改消防重点位置模态框（Modal） -->
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">修改</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changedefect}">
+                    <div class="form-group">
+                        <label for="defectdesc">缺陷描述</label>
+                        <input type="text" class="form-control" id="defectdesc" placeholder="缺陷描述" name="defectdesc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="method">整改方式</label>
+                        <select name="method" id="method" class="form-control">
+                            <option>状态报告</option>
+                            <option>安全隐患单</option>
+                            <option>安全隐患排查单</option>
+                            <option>现场整改</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tracenumber">跟踪单号</label>
+                        <input type="text" class="form-control" id="tracenumber" placeholder="跟踪单号" name="tracenumber">
+                    </div>
+                    <!--<div class="form-group">状态
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state1" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state2" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </label>
+                    </div>-->
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="id" id="id" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="date" readonly th:value="${condition.date}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="unit" readonly th:value="${condition.unit}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="username" readonly th:value="${condition.username}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="recordid" id="recordid" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="defect" id="defect" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 修改动火作业模态框（Modal） -->
+<!--<div class="modal fade" id="fchangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel1">修改</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changefRecord}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="defectdesc1" placeholder="缺陷描述" name="defectdesc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="method1" placeholder="整改方式" name="method" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="tracenumber1" placeholder="跟踪单号" name="tracenumber">
+                    </div>
+                    &lt;!&ndash;<div class="form-group">状态
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state1" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state2" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </label>
+                    </div>&ndash;&gt;
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="id" id="id1" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="date" readonly th:value="${condition.date}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="unit" readonly th:value="${condition.unit}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="username" readonly th:value="${condition.username}">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="recordid" id="recordid1" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+    </div>&lt;!&ndash; /.modal &ndash;&gt;
+</div>-->
+
+<!-- 修改物品物料/易燃易爆危险化学品存放模态框（Modal） -->
+<!--<div class="modal fade" id="dchangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel2">修改</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changedRecord}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="unit2" placeholder="机组" name="unit" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="factoryBuilding2" placeholder="厂房" name="factoryBuilding" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="location2" placeholder="位置" name="location" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="defectdesc2" placeholder="缺陷描述" name="defectdesc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="检查时间" name="checktime" id="checktime2" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="检查人" name="checker" id="checker2" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="id" id="id2" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="date" readonly th:value="${condition.date}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+    </div>&lt;!&ndash; /.modal &ndash;&gt;
+</div>-->
+
+<!-- 修改防火门模态框（Modal） -->
+<!--<div class="modal fade" id="fchangeModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel3">修改</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changefireproofdoorRecord}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="unit3" placeholder="机组" name="unit" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="factoryBuilding3" placeholder="厂房" name="factoryBuilding" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="location3" placeholder="位置" name="location" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="kks" placeholder="kks" name="kks" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="name" placeholder="名称" name="name" readonly>
+                    </div>
+                    <div class="form-group">状态
+                        <label class="radio-inline">
+                            <input type="radio" name="state" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="state" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="defectdesc3" placeholder="缺陷描述" name="defectdesc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="检查时间" name="checktime" id="checktime3" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="检查人" name="checker" id="checker3" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="整改方式" name="method" id="method3" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="跟踪单号" name="tracenumber" id="tracenumber3">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="id" id="id3" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="date" readonly th:value="${condition.date}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+    </div>&lt;!&ndash; /.modal &ndash;&gt;
+</div>-->
+
+<!-- 修改人员违章模态框（Modal） -->
+<!--<div class="modal fade" id="pchangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel4">修改</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changepRecord}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="unit4" placeholder="机组" name="unit" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="factoryBuilding4" placeholder="厂房" name="factoryBuilding" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="location4" placeholder="位置" name="location" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="personname" placeholder="姓名" name="personname" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="company" placeholder="单位" name="company" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="passnumber" placeholder="通行卡号" name="passnumber" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="defectdesc4" placeholder="缺陷描述" name="defectdesc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="检查时间" name="checktime" id="checktime4" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="检查人" name="checker" id="checker4" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="整改方式" name="method" id="method4" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="跟踪单号" name="tracenumber" id="tracenumber4">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="id" id="id4" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="date" readonly th:value="${condition.date}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+    </div>&lt;!&ndash; /.modal &ndash;&gt;
+</div>-->
+
+<!-- 修改其他问题模态框（Modal） -->
+<!--<div class="modal fade" id="ochangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel5">修改</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changeoRecord}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="unit5" placeholder="机组" name="unit" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="factoryBuilding5" placeholder="厂房" name="factoryBuilding" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="location5" placeholder="位置" name="location" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="defectdesc5" placeholder="缺陷描述" name="defectdesc" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="检查时间" name="checktime" id="checktime5" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="检查人" name="checker" id="checker5" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="整改方式" name="method" id="method5" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="跟踪单号" name="tracenumber" id="tracenumber5">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="id" id="id5" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="date" readonly th:value="${condition.date}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>&lt;!&ndash; /.modal-content &ndash;&gt;
+    </div>&lt;!&ndash; /.modal &ndash;&gt;
+</div>-->
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/js/detect.js}"></script>
+<script th:src="@{assets/js/fastclick.js}"></script>
+<script th:src="@{assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{assets/js/jquery.blockUI.js}"></script>
+<!--
+<script src="${pageContext.request.contextPath}/assets/js/waves.js"></script>
+ -->
+<script th:src="@{assets/js/wow.min.js}"></script>
+<script th:src="@{assets/js/jquery.nicescroll.js}"></script>
+<script th:src="@{assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{assets/js/jquery.app.js}"></script>
+<!-- 下拉列表 js start -->
+<script th:src="@{assets/js/bootstrap-select.js}" type="text/javascript"></script>
+<!--<script th:src="@{assets/plugins/select2/dist/js/select2.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>-->
+<!-- 下拉列表 js end -->
+<script th:src="@{assets/plugins/magnific-popup/dist/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{assets/plugins/jquery-datatables-editable/jquery.dataTables.js}"></script>
+<script th:src="@{assets/plugins/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<!-- 提示框 -->
+<script th:src="@{assets/js/alertUtils.js}"></script>
+<script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $('#changeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var defectdesc=button.data('defectdesc');
+        var method = button.data('method')
+        var tracenumber=button.data('tracenumber');
+        var recordid=button.data('recordid');
+        var defect=button.data('defect');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id').val(id);
+        modal.find('#defectdesc').val(defectdesc);
+        modal.find('#method').val(method);
+        modal.find('#tracenumber').val(tracenumber);
+        //modal.find("input[type=radio][name='state'][value='"+state+"']").attr("checked",'checked');
+        modal.find('#recordid').val(recordid);
+        modal.find('#defect').val(defect);
+
+    })
+
+   /* $('#fchangeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var unit=button.data('unit');
+        var factoryBuilding = button.data('fac')
+        var location=button.data('location');
+        var state=button.data('state');
+        var fireworkNumber=button.data('fireworknumber');
+        var jobmanager=button.data('jobmanager');
+        var checktime=button.data('checktime');
+        var checker=button.data('checker');
+        var defectdesc=button.data('defectdesc');
+        var method=button.data('method');
+        var tracenumber=button.data('tracenumber');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id1').val(id);
+        modal.find('#unit1').val(unit);
+        modal.find('#factoryBuilding1').val(factoryBuilding);
+        modal.find('#location1').val(location);
+        modal.find("input[type=radio][name='state'][value='"+state+"']").attr("checked",'checked');
+        modal.find('#fireworkNumber').val(fireworkNumber);
+        modal.find('#jobmanager').val(jobmanager);
+        modal.find('#checktime1').val(checktime);
+        modal.find('#checker1').val(checker);
+        modal.find('#defectdesc1').val(defectdesc);
+        modal.find('#method1').val(method);
+        modal.find('#tracenumber1').val(tracenumber);
+    })
+
+    $('#dchangeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var unit=button.data('unit');
+        var factoryBuilding = button.data('fac')
+        var location=button.data('location');
+        var checktime=button.data('checktime');
+        var checker=button.data('checker');
+        var defectdesc=button.data('defectdesc');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id2').val(id);
+        modal.find('#unit2').val(unit);
+        modal.find('#factoryBuilding2').val(factoryBuilding);
+        modal.find('#location2').val(location);
+        modal.find('#checktime2').val(checktime);
+        modal.find('#checker2').val(checker);
+        modal.find('#defectdesc2').val(defectdesc);
+    })
+
+    $('#fchangeModal1').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var unit=button.data('unit');
+        var factoryBuilding = button.data('fac')
+        var location=button.data('location');
+        var state=button.data('state');
+        var kks=button.data('kks');
+        var name=button.data('name');
+        var checktime=button.data('checktime');
+        var checker=button.data('checker');
+        var defectdesc=button.data('defectdesc');
+        var method=button.data('method');
+        var tracenumber=button.data('tracenumber');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id3').val(id);
+        modal.find('#unit3').val(unit);
+        modal.find('#factoryBuilding3').val(factoryBuilding);
+        modal.find('#location3').val(location);
+        modal.find("input[type=radio][name='state'][value='"+state+"']").attr("checked",'checked');
+        modal.find('#kks').val(kks);
+        modal.find('#name').val(name);
+        modal.find('#checktime3').val(checktime);
+        modal.find('#checker3').val(checker);
+        modal.find('#defectdesc3').val(defectdesc);
+        modal.find('#method3').val(method);
+        modal.find('#tracenumber3').val(tracenumber);
+    })
+
+    $('#pchangeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var unit=button.data('unit');
+        var factoryBuilding = button.data('fac')
+        var location=button.data('location');
+        var personname=button.data('personname');
+        var company=button.data('company');
+        var passnumber=button.data('passnumber');
+        var checktime=button.data('checktime');
+        var checker=button.data('checker');
+        var defectdesc=button.data('defectdesc');
+        var method=button.data('method');
+        var tracenumber=button.data('tracenumber');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id4').val(id);
+        modal.find('#unit4').val(unit);
+        modal.find('#factoryBuilding4').val(factoryBuilding);
+        modal.find('#location4').val(location);
+        modal.find('#personname').val(personname);
+        modal.find('#company').val(company);
+        modal.find('#passnumber').val(passnumber);
+        modal.find('#checktime4').val(checktime);
+        modal.find('#checker4').val(checker);
+        modal.find('#defectdesc4').val(defectdesc);
+        modal.find('#method4').val(method);
+        modal.find('#tracenumber4').val(tracenumber);
+    })
+
+    $('#ochangeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var unit=button.data('unit');
+        var factoryBuilding = button.data('fac')
+        var location=button.data('location');
+        var checktime=button.data('checktime');
+        var checker=button.data('checker');
+        var defectdesc=button.data('defectdesc');
+        var method=button.data('method');
+        var tracenumber=button.data('tracenumber');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id5').val(id);
+        modal.find('#unit5').val(unit);
+        modal.find('#factoryBuilding5').val(factoryBuilding);
+        modal.find('#location5').val(location);
+        modal.find('#checktime5').val(checktime);
+        modal.find('#checker5').val(checker);
+        modal.find('#defectdesc5').val(defectdesc);
+        modal.find('#method5').val(method);
+        modal.find('#tracenumber5').val(tracenumber);
+    })
+    $(document).ready(function () {
+        /!*var len = $('#datatable tr').length;
+        for(var i = 1;i<len;i++){
+            $('#datatable tr:eq('+i+') td:first').text(i);
+        }*!/
+        var len1 = $('#datatable1 tr').length;
+        for(var i = 1;i<len1;i++){
+            $('#datatable1 tr:eq('+i+') td:first').text(i);
+        }
+        var len2 = $('#datatable2 tr').length;
+        for(var i = 1;i<len2;i++){
+            $('#datatable2 tr:eq('+i+') td:first').text(i);
+        }
+        var len3 = $('#datatable3 tr').length;
+        for(var i = 1;i<len3;i++){
+            $('#datatable3 tr:eq('+i+') td:first').text(i);
+        }
+        var len4 = $('#datatable4 tr').length;
+        for(var i = 1;i<len4;i++){
+            $('#datatable4 tr:eq('+i+') td:first').text(i);
+        }
+        var len5 = $('#datatable5 tr').length;
+        for(var i = 1;i<len5;i++){
+            $('#datatable5 tr:eq('+i+') td:first').text(i);
+        }*/
+    /*})*/
+
+</script>
+</body>
+</html>

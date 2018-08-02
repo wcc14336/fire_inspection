@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+    <title>消防监督检查系统</title>
+<!--    <link  th:href="@{assets/plugins/select2/dist/css/select2.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{assets/plugins/select2/dist/css/select2-bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css"/>-->
+
+    <link th:href="@{assets/plugins/sweetalert/dist/sweetalert.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/core.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/icons.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/components.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/pages.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/menu.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/responsive.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap-select.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}" rel="stylesheet">
+    <script th:src="@{assets/js/modernizr.min.js}"></script>
+    <style type="text/css">
+        #detailateForm div div input{
+            background-color: #d6d5d5;
+        }
+        #detailateForm div div textarea{
+            background-color: #d6d5d5;
+        }
+        #queryTable tr th{
+            width:80px;
+            text-align: right;
+        }
+        #queryTable tr td select{
+            width:180px;
+        }
+        #queryTable tr td input{
+            width:180px;
+        }
+        #queryTable tr td{
+            width:180px;
+        }
+        .dataTables_scrollHead {
+            height: 39px;
+        }
+        th,td{
+            white-space:nowrap;
+        }
+
+        #uploadAtt {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!-- 导入头部 -->
+    <!--<%@ include file="top.jsp"%>-->
+    <div th:insert="~{top :: top}"></div>
+    <!-- 导入左侧菜单栏 -->
+    <!--<%@ include file="menu.jsp"%>-->
+    <div th:insert="~{meun :: meun}" style="width: 200px"></div>
+    <!-- 内容页 -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <!-- 层级菜单 -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="pull-left page-title">设施参数</h4>
+                        <ol class="breadcrumb pull-right">
+                            <li><a href="#">消防监督检查系统</a></li>
+                            <li class="active">设施参数</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- 列表、新增、修改区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="">
+                            <form class="form-inline" th:action="@{/equiplist}">
+                                <div class="form-group">
+                                    <select class="form-control" id="unit" name="unit">
+                                        <option value="">机组</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="factoryBuilding" name="factoryBuilding" >
+                                        <option value="">请先选择机组</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control" id="location" name="location">
+                                        <option value="">请先选择厂房</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="KKS" name="KKS">
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control selectpicker" data-live-search="true" id="name" name="name">
+                                        <option value="">全部名称</option>
+                                        <option>火灾报警控制器</option>
+                                        <option>图形显示器</option>
+                                        <option>楼层显示器</option>
+                                        <option>就地报警控制器</option>
+                                        <option>点型感烟控制器</option>
+                                        <option>线型感烟控制器</option>
+                                        <option>抽吸式感烟控制器</option>
+                                        <option>点型感温探测器</option>
+                                        <option>缆式感温探测器</option>
+                                        <option>红外火焰探测器</option>
+                                        <option>氢气探测器</option>
+                                        <option>可燃气体探测器</option>
+                                        <option>声/光报警器</option>
+                                        <option>手动报警按钮</option>
+                                        <option>消防水池</option>
+                                        <option>消防泵</option>
+                                        <option>稳压泵</option>
+                                        <option>手动喷淋阀</option>
+                                        <option>电动喷淋阀</option>
+                                        <option>水雾喷头</option>
+                                        <option>湿式报警阀组</option>
+                                        <option>闸阀</option>
+                                        <option>球阀</option>
+                                        <option>蝶阀</option>
+                                        <option>闭式喷头</option>
+                                        <option>水流指示器</option>
+                                        <option>信号蝶阀</option>
+                                        <option>末端试验装置</option>
+                                        <option>雨淋阀</option>
+                                        <option>预作用阀</option>
+                                        <option>熔断阀</option>
+                                        <option>气体灭火控制器</option>
+                                        <option>药气瓶组</option>
+                                        <option>启动气瓶组</option>
+                                        <option>选择阀</option>
+                                        <option>安全阀</option>
+                                        <option>气体喷头</option>
+                                        <option>泄压口</option>
+                                        <option>室内消火栓</option>
+                                        <option>室外消火栓</option>
+                                        <option>水泵接合器</option>
+                                        <option>防火门</option>
+                                        <option>防火卷帘</option>
+                                        <option>防火百叶窗</option>
+                                        <option>防火封堵</option>
+                                        <option>防火盖板</option>
+                                        <option>正压风机</option>
+                                        <option>排烟风机</option>
+                                        <option>电磁防火阀</option>
+                                        <option>电动防火阀</option>
+                                        <option>电动排烟阀</option>
+                                        <option>手动排烟阀</option>
+                                        <option>配电柜</option>
+                                        <option>配电箱</option>
+                                        <option>手提式干粉灭火器</option>
+                                        <option>手提式二氧化碳灭火器</option>
+                                        <option>推车式干粉灭火器</option>
+                                        <option>推车式二氧化碳灭火器</option>
+                                        <option>消防重点部位</option>
+                                        <option>动火作业</option>
+                                        <option>物料存放</option>
+                                        <option>人员违章</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control selectpicker" data-live-search="true" id="category" name="category">
+                                        <option value="">全部类别</option>
+                                        <option>火灾自动报警系统</option>
+                                        <option>水喷雾灭火系统</option>
+                                        <option>湿式自动喷水灭火系统</option>
+                                        <option>预作用自动喷水灭火系统</option>
+                                        <option>七氟丙烷气体灭火系统</option>
+                                        <option>超细干粉灭火系统</option>
+                                        <option>室内消火栓系统</option>
+                                        <option>室外消火栓系统</option>
+                                        <option>防排烟系统</option>
+                                        <option>消防电源</option>
+                                        <option>防火门</option>
+                                        <option>防火卷帘</option>
+                                        <option>防火封堵</option>
+                                        <option>防火盖板</option>
+                                        <option>灭火器</option>
+                                        <option>日常巡检</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" name="updatetimestart" type="text" placeholder="开始时间" readonly id="updatetimestater">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" name="updatetimeend" type="text" placeholder="结束时间" readonly id="updatetimeend">
+                                </div>
+                                <button type="submit" class="btn btn-info">搜索</button>
+                                <a class="btn btn-info btn-primary" data-toggle="modal" data-target="#addModal">添加</a>
+                                <a class="btn btn-info btn-primary" data-toggle="modal" data-target="#importModal">批量导入</a>
+                            </form>
+                        </div>
+
+                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+
+                        <!-- 数据表格区域  start -->
+                        <div style="overflow: auto">
+                        <table class="table table-bordered table-striped" id="datatable">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center">序号</th>
+                                <!--<th style="text-align:center">序号</th>-->
+                                <th style="text-align:center">机组</th>
+                                <th style="text-align:center">厂房
+                                    <!--<select id="selectedsys" name="selectsys">
+                                        <option value="*">全部系统</option>
+                                        <option th:each="system:${systems}" th:value="${system.systemName}" th:text="${system.systemName}"></option>
+                                    </select>-->
+                                </th>
+                                <th style="text-align:center">位置
+                                    <!--<select id="selectedfac" name="selectedfac">
+                                        <option value="*">全部厂房</option>
+                                        <option th:each="factory:${factorys}" th:value="${factory.factoryName}" th:text="${factory.factoryName}"></option>
+                                    </select>-->
+                                </th>
+                                <th style="text-align:center">KKS码</th>
+                                <th style="text-align:center">名称</th>
+                                <th style="text-align:center">类别</th>
+                                <th style="text-align:center">配置时间</th>
+                                <th style="text-align:center">定检周期</th>
+                                <th style="text-align:center">试验周期</th>
+                                <th style="text-align:center">更换周期</th>
+                                <th style="text-align:center">录入人</th>
+                                <th style="text-align:center">更新时间</th>
+                                <th style="text-align:center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody style="text-align:center ">
+                                <tr th:each="equip:${equiplist.content}">
+                                    <td></td>
+                                    <!--<td th:text="${equip.id}"></td>-->
+                                    <td th:text="${equip.unit}"></td>
+                                    <td th:text="${equip.factoryBuilding}"></td>
+                                    <td th:text="${equip.location}"></td>
+                                    <td th:text="${equip.kks}"></td>
+                                    <td th:text="${equip.name}"></td>
+                                    <td th:text="${equip.category}"></td>
+                                    <td th:text="${equip.configurationtime}"></td>
+                                    <td th:text="${equip.checkcycle}"></td>
+                                    <td th:text="${equip.testcycle}"></td>
+                                    <td th:text="${equip.replacecycle}"></td>
+                                    <td th:text="${equip.enteringman}"></td>
+                                    <td th:text="${equip.updatetime}"></td>
+                                    <td>
+                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-unit="${equip.unit}" th:data-fac="${equip.factoryBuilding}" th:data-location="${equip.location}" th:data-kks="${equip.kks}" th:data-name="${equip.name}" th:data-category="${equip.category}" th:data-configurationtime="${equip.configurationtime}" th:data-checkcycle="${equip.checkcycle}" th:data-testcycle="${equip.testcycle}" th:data-replacecycle="${equip.replacecycle}">修改</button>
+                                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-kks="${equip.kks}" th:data-name="${equip.name}">删除</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        共[[${equiplist.totalElements}]]条记录，
+                        当前第[[${equiplist.number}+1]]页，共[[${equiplist.totalPages}]]页
+                        <a class="btn btn-info btn-xs" th:if="${equiplist.number ne 0}" th:href="@{/equiplist(number=${equiplist.number-1},unit=${condition.unit},factoryBuilding=${condition.factoryBuilding},location=${condition.location},KKS=${condition.KKS},name=${condition.name},category=${condition.category},updatetimestart=${condition.updatetimestart},updatetimeend=${condition.updatetimeend})}">上一页</a>
+                        <a class="btn btn-info btn-xs" th:if="${equiplist.number+1 lt equiplist.totalPages}"  th:href="@{/equiplist(number=${equiplist.number+1},unit=${condition.unit},factoryBuilding=${condition.factoryBuilding},location=${condition.location},KKS=${condition.KKS},name=${condition.name},category=${condition.category},updatetimestart=${condition.updatetimestart},updatetimeend=${condition.updatetimeend})}">下一页</a>
+                        <input type="text" id="pagenumber" style="width: 30px"><button class="btn btn-info btn-xs" onclick="jumptopage()">跳转</button>
+                    </div>
+                </div>
+                <footer class="footer text-right">
+                    2018 © jnpc.com.cn
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 批量导入模态框（Modal） -->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="import">批量导入</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/importEquip}" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                        <label for="kks1">选择文件</label>
+                        <input type="file" class="form-control" id="file" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-info">导入</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 修改设备模态框（Modal） -->
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">修改设备参数</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changeEquip}">
+                    <div class="form-group">
+                        <select class="form-control" id="unit2" name="unit">
+                            <option>机组</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="factoryBuilding" id="factoryBuilding2">
+                            <option id="factoryBuilding3"></option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="location" id="location2">
+                            <option id="location3"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="kks2" placeholder="KKS" name="kks">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="name" id="name2">
+                            <!--<option value="">名称</option>-->
+                            <option>火灾报警控制器</option>
+                            <option>图形显示器</option>
+                            <option>楼层显示器</option>
+                            <option>就地报警控制器</option>
+                            <option>点型感烟控制器</option>
+                            <option>线型感烟控制器</option>
+                            <option>抽吸式感烟控制器</option>
+                            <option>点型感温探测器</option>
+                            <option>缆式感温探测器</option>
+                            <option>红外火焰探测器</option>
+                            <option>氢气探测器</option>
+                            <option>可燃气体探测器</option>
+                            <option>声/光报警器</option>
+                            <option>手动报警按钮</option>
+                            <option>消防水池</option>
+                            <option>消防泵</option>
+                            <option>稳压泵</option>
+                            <option>手动喷淋阀</option>
+                            <option>电动喷淋阀</option>
+                            <option>水雾喷头</option>
+                            <option>湿式报警阀组</option>
+                            <option>闸阀</option>
+                            <option>球阀</option>
+                            <option>蝶阀</option>
+                            <option>闭式喷头</option>
+                            <option>水流指示器</option>
+                            <option>信号蝶阀</option>
+                            <option>末端试验装置</option>
+                            <option>雨淋阀</option>
+                            <option>预作用阀</option>
+                            <option>熔断阀</option>
+                            <option>气体灭火控制器</option>
+                            <option>药气瓶组</option>
+                            <option>启动气瓶组</option>
+                            <option>选择阀</option>
+                            <option>安全阀</option>
+                            <option>气体喷头</option>
+                            <option>泄压口</option>
+                            <option>室内消火栓</option>
+                            <option>室外消火栓</option>
+                            <option>水泵接合器</option>
+                            <option>防火门</option>
+                            <option>防火卷帘</option>
+                            <option>防火百叶窗</option>
+                            <option>防火封堵</option>
+                            <option>防火盖板</option>
+                            <option>正压风机</option>
+                            <option>排烟风机</option>
+                            <option>电磁防火阀</option>
+                            <option>电动防火阀</option>
+                            <option>电动排烟阀</option>
+                            <option>手动排烟阀</option>
+                            <option>配电柜</option>
+                            <option>配电箱</option>
+                            <option>手提式干粉灭火器</option>
+                            <option>手提式二氧化碳灭火器</option>
+                            <option>推车式干粉灭火器</option>
+                            <option>推车式二氧化碳灭火器</option>
+                            <option>消防重点部位</option>
+                            <option>动火作业</option>
+                            <option>物料存放</option>
+                            <option>人员违章</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="category" id="category2">
+                            <!--<option value="">类别</option>-->
+                            <option>火灾自动报警系统</option>
+                            <option>水喷雾灭火系统</option>
+                            <option>湿式自动喷水灭火系统</option>
+                            <option>预作用自动喷水灭火系统</option>
+                            <option>七氟丙烷气体灭火系统</option>
+                            <option>超细干粉灭火系统</option>
+                            <option>室内消火栓系统</option>
+                            <option>室外消火栓系统</option>
+                            <option>防排烟系统</option>
+                            <option>消防电源</option>
+                            <option>防火门</option>
+                            <option>防火卷帘</option>
+                            <option>防火封堵</option>
+                            <option>防火盖板</option>
+                            <option>灭火器</option>
+                            <option>日常巡检</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="配置时间" name="configurationtime" id="configurationtime2">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="定检周期" name="checkcycle" id="checkcycle2">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="试验周期" name="testcycle" id="testcycle2">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="更换周期" name="replacecycle" id="replacecycle2">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="enteringman" th:attr="value=${session.username}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="updatetime" th:attr="value=${#dates.format(new java.util.Date().getTime(),'yyyy-MM-dd')}" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交更改</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 删除设备模态框（Modal） -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel1"><font color="red">删除设备</font></h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/deleteEquip}">
+                    <div class="form-group">
+                        <label for="kks1">设备KKS码</label>
+                        <input type="text" class="form-control" id="kks1" name="kks" placeholder="kks" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="name1">设备名称</label>
+                        <input type="text" class="form-control" id="name1" name="name" placeholder="设备名称" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-danger">删除设备</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 增加设备模态框（Modal） -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel2">新增设备</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/addEquip}">
+                    <div class="form-group">
+                        <select class="form-control" id="unit1" name="unit">
+                            <option>机组</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="factoryBuilding1" name="factoryBuilding">
+                            <option value="">厂房</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" id="location1" name="location">
+                            <option value="">位置</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="KKS" name="kks">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control selectpicker" data-live-search="true" name="name">
+                            <option value="">名称</option>
+                            <option>火灾报警控制器</option>
+                            <option>图形显示器</option>
+                            <option>楼层显示器</option>
+                            <option>就地报警控制器</option>
+                            <option>点型感烟控制器</option>
+                            <option>线型感烟控制器</option>
+                            <option>抽吸式感烟控制器</option>
+                            <option>点型感温探测器</option>
+                            <option>缆式感温探测器</option>
+                            <option>红外火焰探测器</option>
+                            <option>氢气探测器</option>
+                            <option>可燃气体探测器</option>
+                            <option>声/光报警器</option>
+                            <option>手动报警按钮</option>
+                            <option>消防水池</option>
+                            <option>消防泵</option>
+                            <option>稳压泵</option>
+                            <option>手动喷淋阀</option>
+                            <option>电动喷淋阀</option>
+                            <option>水雾喷头</option>
+                            <option>湿式报警阀组</option>
+                            <option>闸阀</option>
+                            <option>球阀</option>
+                            <option>蝶阀</option>
+                            <option>闭式喷头</option>
+                            <option>水流指示器</option>
+                            <option>信号蝶阀</option>
+                            <option>末端试验装置</option>
+                            <option>雨淋阀</option>
+                            <option>预作用阀</option>
+                            <option>熔断阀</option>
+                            <option>气体灭火控制器</option>
+                            <option>药气瓶组</option>
+                            <option>启动气瓶组</option>
+                            <option>选择阀</option>
+                            <option>安全阀</option>
+                            <option>气体喷头</option>
+                            <option>泄压口</option>
+                            <option>室内消火栓</option>
+                            <option>室外消火栓</option>
+                            <option>水泵接合器</option>
+                            <option>防火门</option>
+                            <option>防火卷帘</option>
+                            <option>防火百叶窗</option>
+                            <option>防火封堵</option>
+                            <option>防火盖板</option>
+                            <option>正压风机</option>
+                            <option>排烟风机</option>
+                            <option>电磁防火阀</option>
+                            <option>电动防火阀</option>
+                            <option>电动排烟阀</option>
+                            <option>手动排烟阀</option>
+                            <option>配电柜</option>
+                            <option>配电箱</option>
+                            <option>手提式干粉灭火器</option>
+                            <option>手提式二氧化碳灭火器</option>
+                            <option>推车式干粉灭火器</option>
+                            <option>推车式二氧化碳灭火器</option>
+                            <option>消防重点部位</option>
+                            <option>动火作业</option>
+                            <option>物料存放</option>
+                            <option>人员违章</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control selectpicker" data-live-search="true" name="category">
+                            <option value="">类别</option>
+                            <option>火灾自动报警系统</option>
+                            <option>水喷雾灭火系统</option>
+                            <option>湿式自动喷水灭火系统</option>
+                            <option>预作用自动喷水灭火系统</option>
+                            <option>七氟丙烷气体灭火系统</option>
+                            <option>超细干粉灭火系统</option>
+                            <option>室内消火栓系统</option>
+                            <option>室外消火栓系统</option>
+                            <option>防排烟系统</option>
+                            <option>消防电源</option>
+                            <option>防火门</option>
+                            <option>防火卷帘</option>
+                            <option>防火封堵</option>
+                            <option>防火盖板</option>
+                            <option>灭火器</option>
+                            <option>日常巡检</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="配置时间" readonly id="data1" name="configurationtime">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="定检周期" name="checkcycle">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="试验周期" name="testcycle">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="更换周期" name="replacecycle">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="enteringman" th:attr="value=${session.username}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="updatetime" th:attr="value=${#dates.format(new java.util.Date().getTime(),'yyyy-MM-dd')}" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交新增</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/js/detect.js}"></script>
+<script th:src="@{assets/js/fastclick.js}"></script>
+<script th:src="@{assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{assets/js/jquery.blockUI.js}"></script>
+<!--
+<script src="${pageContext.request.contextPath}/assets/js/waves.js"></script>
+ -->
+<script th:src="@{assets/js/wow.min.js}"></script>
+<script th:src="@{assets/js/jquery.nicescroll.js}"></script>
+<script th:src="@{assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{assets/js/jquery.app.js}"></script>
+<!-- 下拉列表 js start -->
+<script th:src="@{assets/js/bootstrap-select.js}" type="text/javascript"></script>
+<!--<script th:src="@{assets/plugins/select2/dist/js/select2.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>-->
+<!-- 下拉列表 js end -->
+<script th:src="@{assets/plugins/magnific-popup/dist/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{assets/plugins/jquery-datatables-editable/jquery.dataTables.js}"></script>
+<script th:src="@{assets/plugins/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<!-- 提示框 -->
+<script th:src="@{assets/js/alertUtils.js}"></script>
+<script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    $('#changeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var unit=button.data('unit');
+        var factoryBuilding = button.data('fac')
+        var location=button.data('location');
+        var kks=button.data('kks');
+        var name=button.data('name');
+        var category=button.data('category');
+        var configurationtime=button.data('configurationtime');
+        var checkcycle=button.data('checkcycle');
+        var testcycle=button.data('testcycle');
+        var replacecycle=button.data('replacecycle');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id2').val(id);
+        modal.find('#unit2').val(unit);
+        modal.find('#factoryBuilding3').val(factoryBuilding);
+        modal.find('#factoryBuilding3').text(factoryBuilding);
+        modal.find('#location3').val(location);
+        modal.find('#location3').text(location);
+        modal.find('#kks2').val(kks);
+        modal.find('#name2').val(name);
+        modal.find('#category2').val(category);
+        modal.find('#configurationtime2').val(configurationtime);
+        modal.find('#checkcycle2').val(checkcycle);
+        modal.find('#testcycle2').val(testcycle);
+        modal.find('#replacecycle2').val(replacecycle);
+    })
+
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var kks=button.data('kks');
+        var name=button.data('name');
+        var id=button.data('id');
+        var modal = $(this)
+        modal.find('#kks1').val(kks);
+        modal.find('#name1').val(name);
+        modal.find('#id1').val(id);
+    })
+</script>
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+/*        $('#datatable').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "对不起，查询不到任何相关数据",
+                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+                "sInfoEmtpy": "找不到相关数据",
+                "sInfoFiltered": "数据表中共为 _MAX_ 条记录)",
+                "sProcessing": "正在加载中...",
+                "sSearch": "搜索",
+                "sUrl": "", //多语言配置文件，可将oLanguage的设置放在一个txt文件中，例：Javascript/datatable/dtCH.txt
+                "oPaginate": {
+                    "sFirst":    "第一页",
+                    "sPrevious": " 上一页 ",
+                    "sNext":     " 下一页 ",
+                    "sLast":     " 最后一页 "
+                }
+            }
+        });*/
+        var len = $('table tr').length;
+        for(var i = 1;i<len;i++){
+            $('table tr:eq('+i+') td:first').text(i);
+        }
+    });
+
+    $('#data1').datepicker();
+    $('#updatetimestater').datepicker();
+    $('#updatetimeend').datepicker();
+    /*$('#configurationtime2').datepicker();*/
+
+    function jumptopage() {
+        var pagenumber=$("#pagenumber").val();
+        var number=parseInt(pagenumber)-1;
+        if(pagenumber>[[${equiplist.totalPages}]]||pagenumber<0){
+            alert("请输入正确页面！");
+            $("#pagenumber").val("");
+            return;
+        }
+        window.location.href="/equiplist?number="+number+"&unit="+[[${condition.unit}]]+"&factoryBuilding="+[[${condition.factoryBuilding}]]+"&location="+[[${condition.location}]]+"&KKS="+[[${condition.KKS}]]+"&name="+[[${condition.name}]]+"&category="+[[${condition.category}]]+"&updatetimestart="+[[${condition.updatetimestart}]]+"&updatetimeend="+[[${condition.updatetimeend}]];
+    }
+    $("#unit").change(function () {
+        $("#location").empty();
+        $.ajax({
+         type:"POST",
+         url:[[@{/findfactoryBuildings}]],
+         data:{
+            unit:$("#unit").val()
+         },
+         dataType:"json",
+         success:function (datas) {
+             console.log(datas);
+            $("#factoryBuilding").empty();
+            $("<option></option>").text("全部厂房").val("").appendTo($("#factoryBuilding"));
+            for(var i=0;i<datas.length;i++){
+                $("<option></option>").text(datas[i]).appendTo($("#factoryBuilding"));
+            }
+         }
+         })
+    });
+
+    $("#unit1").change(function () {
+        $("#location1").empty();
+        $.ajax({
+            type:"POST",
+            url:[[@{/findfactoryBuildings}]],
+        data:{
+            unit:$("#unit1").val()
+        },
+        dataType:"json",
+            success:function (datas) {
+            console.log(datas);
+            $("#factoryBuilding1").empty();
+            $("<option></option>").text("选择厂房").val("").appendTo($("#factoryBuilding1"));
+            for(var i=0;i<datas.length;i++){
+                $("<option></option>").text(datas[i]).appendTo($("#factoryBuilding1"));
+            }
+        }
+    })
+    });
+
+    $("#unit2").change(function () {
+        $("#location2").empty();
+        $.ajax({
+            type:"POST",
+            url:[[@{/findfactoryBuildings}]],
+        data:{
+            unit:$("#unit2").val()
+        },
+        dataType:"json",
+            success:function (datas) {
+            console.log(datas);
+            $("#factoryBuilding2").empty();
+            $("<option></option>").text("选择厂房").val("").appendTo($("#factoryBuilding2"));
+            for(var i=0;i<datas.length;i++){
+                $("<option></option>").text(datas[i]).appendTo($("#factoryBuilding2"));
+            }
+        }
+    })
+    });
+
+    $("#factoryBuilding").change(function () {
+        $.ajax({
+            type:"POST",
+            url:[[@{/findlocations}]],
+        data:{
+            factoryBuilding:$("#factoryBuilding").val()
+        },
+        dataType:"json",
+            success:function (datas) {
+            console.log(datas);
+            $("#location").empty();
+            $("<option></option>").text("全部位置").val("").appendTo($("#location"));
+            for(var i=0;i<datas.length;i++){
+                $("<option></option>").text(datas[i]).appendTo($("#location"));
+            }
+        }
+    })
+    });
+
+    $("#factoryBuilding1").change(function () {
+        $.ajax({
+            type:"POST",
+            url:[[@{/findlocations}]],
+        data:{
+            factoryBuilding:$("#factoryBuilding1").val()
+        },
+        dataType:"json",
+            success:function (datas) {
+            console.log(datas);
+            $("#location1").empty();
+            $("<option></option>").text("选择位置").val("").appendTo($("#location1"));
+            for(var i=0;i<datas.length;i++){
+                $("<option></option>").text(datas[i]).appendTo($("#location1"));
+            }
+        }
+    })
+    });
+
+    $("#factoryBuilding2").change(function () {
+        $.ajax({
+            type:"POST",
+            url:[[@{/findlocations}]],
+        data:{
+            factoryBuilding:$("#factoryBuilding2").val()
+        },
+        dataType:"json",
+            success:function (datas) {
+            console.log(datas);
+            $("#location2").empty();
+            $("<option></option>").text("选择位置").val("").appendTo($("#location2"));
+            for(var i=0;i<datas.length;i++){
+                $("<option></option>").text(datas[i]).appendTo($("#location2"));
+            }
+        }
+    })
+    });
+
+
+</script>
+</body>
+</html>
