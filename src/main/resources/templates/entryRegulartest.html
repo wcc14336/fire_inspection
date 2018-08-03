@@ -130,7 +130,7 @@
                         </div>
                     </div>
                 </div>
-                <div th:if="${regularTestApprovalRecord.submitstate ne 1}" style="text-align: center"><a class="btn btn-lg btn-info" th:href="@{/entrysubmit(submiter=${session.username},year=${year},unit=${unit},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">提交审批</a></div>
+                <div th:if="${regularTestApprovalRecord.submitstate ne 1}" style="text-align: center"><a class="btn btn-lg btn-info" th:href="@{/entrytestsubmit(submiter=${session.username},year=${year},unit=${unit},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">提交审批</a></div>
                 <div th:if="${regularTestApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
                     <div th:if="${regularTestApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
                     <div th:if="${regularTestApprovalRecord.approvalstate eq 1}">
@@ -159,7 +159,7 @@
                 <h4 class="modal-title" id="approvalModalLabel">审批</h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/entryapprovalcommit}">
+                <form th:action="@{/entrytestapprovalcommit}">
                     <div class="form-group">审批人
                         <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
                     </div>
@@ -195,12 +195,12 @@
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" >
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="myModalLabel2">新增</h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/addentryregularinspect}">
+                <form th:action="@{/addentryregulartest}">
                     <div class="form-group">
                         <input type="hidden" name="unit" th:value="${unit}">
                     </div>
@@ -208,7 +208,7 @@
                         <input type="hidden" name="year" th:value="${year}">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="checkbasis" placeholder="检查依据">
+                        <input type="text" class="form-control" name="checkbasis" placeholder="试验依据">
                     </div>
                     <div class="form-group">
                         <select class="form-control selectpicker" data-live-search="true" name="checkproject">
@@ -278,10 +278,10 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" name="checkfrequency" placeholder="检查频度">
+                        <input class="form-control" name="checkfrequency" placeholder="试验频度">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="计划检查人" name="planchecker">
+                        <input type="text" class="form-control" placeholder="计划试验责任人" name="planchecker">
                     </div>
                     <div class="form-group">
                         <input class="form-control" type="text" placeholder="计划开始时间" readonly id="planbegintime" name="planbegin">
@@ -310,7 +310,7 @@
                 <h4 class="modal-title" id="myModalLabel"><font color="red">修改</font></h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/changeentryregularinspect}">
+                <form th:action="@{/changeentryregulartest}">
                     <div class="form-group">
                         <input type="hidden" name="unit" id="unit">
                     </div>
@@ -321,20 +321,23 @@
                         <input type="hidden" name="id" id="id">
                     </div>
                     <div class="form-group">
-                        <label for="checkbasis">检查依据</label>
-                        <input type="text" class="form-control" id="checkbasis" name="checkbasis" placeholder="检查依据" >
+                        <input type="hidden" name="state" id="state" value="0">
                     </div>
                     <div class="form-group">
-                        <label for="checkproject">检查项目</label>
-                        <input type="text" class="form-control" id="checkproject" name="checkproject" placeholder="检查项目">
+                        <label for="checkbasis">试验依据</label>
+                        <input type="text" class="form-control" id="checkbasis" name="checkbasis" placeholder="试验依据" >
                     </div>
                     <div class="form-group">
-                        <label for="checkfrequency">检查频度</label>
-                        <input type="text" class="form-control" id="checkfrequency" name="checkfrequency" placeholder="检查频度">
+                        <label for="checkproject">试验项目</label>
+                        <input type="text" class="form-control" id="checkproject" name="checkproject" placeholder="试验项目">
                     </div>
                     <div class="form-group">
-                        <label for="planchecker">计划检查人</label>
-                        <input type="text" class="form-control" id="planchecker" name="planchecker" placeholder="计划检查人">
+                        <label for="checkfrequency">试验频度</label>
+                        <input type="text" class="form-control" id="checkfrequency" name="checkfrequency" placeholder="试验频度">
+                    </div>
+                    <div class="form-group">
+                        <label for="planchecker">计划试验责任人</label>
+                        <input type="text" class="form-control" id="planchecker" name="planchecker" placeholder="计划试验责任人">
                     </div>
                     <div class="form-group">
                         <label for="planbegin">计划开始时间</label>
@@ -364,7 +367,7 @@
                 <h4 class="modal-title" id="myModalLabel1"><font color="red">删除</font></h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/deleteentryregularinspect}">
+                <form th:action="@{/deleteentryregulartest}">
                     <div class="form-group">
                         <input type="hidden" name="unit" th:value="${unit}">
                     </div>
@@ -375,12 +378,12 @@
                         <input type="hidden" name="id" id="id1">
                     </div>
                     <div class="form-group">
-                        <label for="checkproject1">检查项目</label>
-                        <input type="text" class="form-control" id="checkproject1" name="checkproject" placeholder="检查项目" >
+                        <label for="checkproject1">试验项目</label>
+                        <input type="text" class="form-control" id="checkproject1" name="checkproject" placeholder="试验项目" >
                     </div>
                     <div class="form-group">
-                        <label for="checkproject1">计划检查人</label>
-                        <input type="text" class="form-control" id="planchecker1" name="planchecker" placeholder="计划检查人" >
+                        <label for="checkproject1">计划试验责任人</label>
+                        <input type="text" class="form-control" id="planchecker1" name="planchecker" placeholder="计划试验责任人" >
                     </div>
                     <button type="submit" class="btn btn-primary btn-danger">删除</button>
                 </form>

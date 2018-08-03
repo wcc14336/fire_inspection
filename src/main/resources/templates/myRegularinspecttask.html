@@ -101,7 +101,8 @@
                             </thead>
                             <tbody style="text-align:center ">
                             <tr th:if="${list.size() eq 0}">
-                                <td colspan="5">暂无待任务数据</td>
+                                <td></td>
+                                <td colspan="10">暂无待任务数据</td>
                             </tr>
                             <tr th:each="sRecord:${list}">
                                 <!--<td th:text="${equip.id}"></td>-->
@@ -150,7 +151,8 @@
                             </thead>
                             <tbody style="text-align:center ">
                             <tr th:if="${list1.size() eq 0}">
-                                <td colspan="5">暂无待任务数据</td>
+                                <td></td>
+                                <td colspan="10">暂无待任务数据</td>
                             </tr>
                             <tr th:each="sRecord:${list1}">
                                 <!--<td th:text="${equip.id}"></td>-->

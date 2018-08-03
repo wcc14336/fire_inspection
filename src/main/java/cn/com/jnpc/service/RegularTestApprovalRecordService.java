@@ -5,6 +5,8 @@ import cn.com.jnpc.entity.RegularTestApprovalRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by cc on 2018/8/2.
  */
@@ -19,5 +21,9 @@ public class RegularTestApprovalRecordService {
 
     public void save(RegularTestApprovalRecord regularTestApprovalRecord) {
         regularTestApprovalRecordDao.save(regularTestApprovalRecord);
+    }
+
+    public List<RegularTestApprovalRecord> findbyCondition() {
+        return regularTestApprovalRecordDao.findByCondition();
     }
 }
