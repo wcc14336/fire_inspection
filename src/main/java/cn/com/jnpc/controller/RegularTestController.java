@@ -3,7 +3,9 @@ package cn.com.jnpc.controller;
 import cn.com.jnpc.entity.RegularInspectRecord;
 import cn.com.jnpc.entity.RegularTest;
 import cn.com.jnpc.entity.RegularTestApprovalRecord;
+import cn.com.jnpc.entity.RegularTestRecordApproval;
 import cn.com.jnpc.service.RegularTestApprovalRecordService;
+import cn.com.jnpc.service.RegularTestRecordApprovalService;
 import cn.com.jnpc.service.RegularTestService;
 import com.sun.xml.internal.ws.resources.HttpserverMessages;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,8 @@ public class RegularTestController {
     private RegularTestService regularTestService;
     @Autowired
     private RegularTestApprovalRecordService regularTestApprovalRecordService;
-
+    @Autowired
+    private RegularTestRecordApprovalService regularTestRecordApprovalService;
     @RequestMapping("/regulartest")
     public ModelAndView regulartest(ModelAndView map){
         map.setViewName("regulartest");
@@ -119,6 +122,18 @@ public class RegularTestController {
     @RequestMapping("/regulartestrecord")
     public ModelAndView regulartestrecord(ModelAndView map,String checkproject,String unit,Integer year,String taskid){
         String id=taskid;
+        RegularTestRecordApproval regularTestRecordApproval=regularTestRecordApprovalService.findById(id);
+        if (regularTestRecordApproval==null){
+            regularTestRecordApproval=new RegularTestRecordApproval();
+            regularTestRecordApproval.setId(id);
+            regularTestRecordApproval.setTaskid(id);
+            regularTestRecordApproval.setUnit(unit);
+            regularTestRecordApproval.setYear(year);
+            regularTestRecordApproval.setCheckproject(checkproject);
+            regularTestRecordApprovalService.save(regularTestRecordApproval);
+        }
+        RegularTestRecordApproval regularTestRecordApproval1=regularTestRecordApprovalService.findById(id);
+        map.addObject("regulartestApprovalRecord",regularTestRecordApproval1);
         return map;
     }
 }
