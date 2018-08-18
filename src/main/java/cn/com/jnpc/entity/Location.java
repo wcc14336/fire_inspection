@@ -28,6 +28,7 @@ public class Location {
         this.isimportant = isimportant;
     }
 
+
     public String getId() {
         return id;
     }

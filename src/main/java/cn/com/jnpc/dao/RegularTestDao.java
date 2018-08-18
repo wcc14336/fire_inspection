@@ -14,4 +14,6 @@ public interface RegularTestDao extends JpaRepository<RegularTest,String>{
     List<RegularTest> findByUnitAndYear(String unit, Integer year);
     @Query("select r from RegularTest r where r.state=?2 and r.planchecker like %?1% ORDER BY r.planbegin ASC")
     List<RegularTest> findMyUndonetask(String username, Integer i);
+    @Query("select r from RegularTest r where r.id=?1")
+    RegularTest findbyid(String taskid);
 }

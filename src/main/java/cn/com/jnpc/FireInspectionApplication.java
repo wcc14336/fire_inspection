@@ -5,11 +5,13 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.rest.RepositoryRestMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.sql.DataSource;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 @SpringBootApplication
 @EnableScheduling
+@Import(RepositoryRestMvcAutoConfiguration.class)
 public class FireInspectionApplication extends SpringBootServletInitializer{
 	/**
 	 * 部署到tomcat时需要继承SpringBootServletInitializer，并重写configure方法

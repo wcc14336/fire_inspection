@@ -130,13 +130,13 @@
                         </div>
                     </div>
                 </div>
-                <div th:if="${regularTestApprovalRecord.submitstate ne 1}" style="text-align: center"><a class="btn btn-lg btn-info" th:href="@{/entrytestsubmit(submiter=${session.username},year=${year},unit=${unit},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">提交审批</a></div>
+                <div th:if="${regularTestApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交审批</button></div>
                 <div th:if="${regularTestApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
                     <div th:if="${regularTestApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
                     <div th:if="${regularTestApprovalRecord.approvalstate eq 1}">
                         <div th:if="${regularTestApprovalRecord.approvalresult eq 0}">
                             审批未通过，审批意见：<p th:text="${regularTestApprovalRecord.comments}">无</p>
-                            <a class="btn btn-lg btn-info" th:href="@{/entrysubmit(submiter=${session.username},unit=${unit},year=${year},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">重新提交</a>
+                            <button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">重新提交</button>
                         </div>
                         <div th:if="${regularTestApprovalRecord.approvalresult eq 1}">审批通过
                         </div>
@@ -437,7 +437,9 @@
             $('table tr:eq('+i+') td:first').text(i);
         }
     })
-
+function submit() {
+    window.location.href="/entrytestsubmit?submiter="+[[${session.username}]]+"&year="+[[${year}]]+"&unit="+[[${unit}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1";
+}
     $('#changeModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = button.data('id') // Extract info from data-* attributes

@@ -83,15 +83,48 @@
                 <div class="panel">
                     <div class="panel-body">
                         <div class="container">
-                            <button class="btn btn-info btn-lg" data-toggle="modal" data-target="#changeModal">录入年度定期试验计划</button>
-                            <a class="btn btn-lg btn-info" th:href="@{/approvalregulartest}">审批年度定期试验计划</a>
-                            <a class="btn btn-lg btn-info" th:href="@{/myRegulartesttask}">我的定期试验任务</a>
-                            <a class="btn btn-lg btn-info" th:href="@{/approvalRegulartesttask}">审批定期试验任务</a>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>
+                                        <a class="btn btn-info btn-lg" data-toggle="modal" data-target="#changeModal">录入年度定期试验计划</a>
+                                    </li>
+                                    <br/>
+                                    <li>
+                                        <a class="btn btn-lg btn-info" th:href="@{/approvalregulartest}">审批年度定期试验计划</a>
+                                    </li>
+                                    <br/>
+                                    <li>
+                                        <a class="btn btn-lg btn-info" th:href="@{/myRegulartesttask}">我的定期试验任务</a>
+                                    </li>
+                                    <br/>
+                                    <li>
+                                        <a class="btn btn-lg btn-info" th:href="@{/approvalRegulartesttask}">审批定期试验任务</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul>
+                                    <li>
+                                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='1')}">一号机组定期试验跟踪表</a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='2')}">二号机组定期试验跟踪表</a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='3')}">三号机组定期试验跟踪表</a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='4')}">四号机组定期试验跟踪表</a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='5')}">五号机组定期试验跟踪表</a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='6')}">六号机组定期试验跟踪表</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='1')}">一号机组定期试验跟踪表</a>
-                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='2')}">二号机组定期试验跟踪表</a>
-                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='3')}">三号机组定期试验跟踪表</a>
-                        <a class="btn btn-lg" th:href="@{/regulartestlist(unit='4')}">四号机组定期试验跟踪表</a>
                     </div>
                 </div>
                 <footer class="footer text-right">

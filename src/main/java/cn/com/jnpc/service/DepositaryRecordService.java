@@ -32,4 +32,8 @@ public class DepositaryRecordService {
         depositaryRecordDao.updateattachment(i,recordid);
 
     }
+
+    public List<DepositaryRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
+        return depositaryRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
+    }
 }

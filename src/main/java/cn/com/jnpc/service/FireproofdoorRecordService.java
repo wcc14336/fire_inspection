@@ -31,4 +31,8 @@ public class FireproofdoorRecordService {
     public void updateattachment(int i, String recordid) {
         fireproofdoorRecordDao.updateattachment(i,recordid);
     }
+
+    public List<FireproofdoorRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
+        return fireproofdoorRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
+    }
 }

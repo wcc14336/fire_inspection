@@ -5,12 +5,12 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 /**
- * Created by cc on 2018/7/19.
+ * Created by cc on 2018/8/6.
  */
 @Entity
-@Table(name = "FWdefect")
+@Table(name = "rtdefect")
 /*@GenericGenerator(name="genID", strategy="increment")*/
-public class FWDefect {
+public class RTDefect {
     @Id
     @GenericGenerator(strategy = "uuid",name = "idGenerator")
     @GeneratedValue(generator = "idGenerator")
@@ -20,9 +20,9 @@ public class FWDefect {
     private String method;
     private String tracenumber;
     //多对一，@JoinColumn与@column类似，指定映射的数据库字段
-    @ManyToOne(targetEntity = FireworkRecord.class)
-    @JoinColumn(name="fireworkRecord_id",updatable=false)
-    private FireworkRecord fireworkRecord;
+    @ManyToOne(targetEntity = RegularTestRecord.class)
+    @JoinColumn(name="regulartestRecord_id",updatable=false)
+    private RegularTestRecord regularTestRecord;
 
     public String getId() {
         return id;
@@ -56,11 +56,11 @@ public class FWDefect {
         this.tracenumber = tracenumber;
     }
 
-    public FireworkRecord getFireworkRecord() {
-        return fireworkRecord;
+    public RegularTestRecord getRegularTestRecord() {
+        return regularTestRecord;
     }
 
-    public void setFireworkRecord(FireworkRecord fireworkRecord) {
-        this.fireworkRecord = fireworkRecord;
+    public void setRegularTestRecord(RegularTestRecord regularTestRecord) {
+        this.regularTestRecord = regularTestRecord;
     }
 }

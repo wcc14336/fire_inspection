@@ -31,4 +31,8 @@ public class OtherRecordService {
     public void updateattachment(int i, String recordid) {
         otherRecordDao.updateattachment(i,recordid);
     }
+
+    public List<OtherRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
+        return otherRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
+    }
 }

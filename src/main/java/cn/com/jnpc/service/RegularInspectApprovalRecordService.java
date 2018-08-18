@@ -26,4 +26,8 @@ public class RegularInspectApprovalRecordService {
     public List<RegularInspectApprovalRecord> findBycondition() {
         return regularInspectApprovalRecordDao.findBycondition();
     }
+
+    public RegularInspectApprovalRecord findByTaskid(String taskid) {
+        return regularInspectApprovalRecordDao.findByTaskid(taskid);
+    }
 }

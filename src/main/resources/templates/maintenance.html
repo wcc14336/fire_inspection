@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+    <meta name="author" content="Coderthemes">
+    <title>消防监督检查系统</title>
+    <!--    <link  th:href="@{assets/plugins/select2/dist/css/select2.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/select2/dist/css/select2-bootstrap.css}" rel="stylesheet" type="text/css"/>
+        <link th:href="@{assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css"/>-->
+
+    <link th:href="@{assets/plugins/sweetalert/dist/sweetalert.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/core.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/icons.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/components.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/pages.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/menu.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/responsive.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/css/bootstrap-select.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css}" rel="stylesheet">
+    <script th:src="@{assets/js/modernizr.min.js}"></script>
+    <style type="text/css">
+        #detailateForm div div input{
+            background-color: #d6d5d5;
+        }
+        #detailateForm div div textarea{
+            background-color: #d6d5d5;
+        }
+        #queryTable tr th{
+            width:80px;
+            text-align: right;
+        }
+        #queryTable tr td select{
+            width:180px;
+        }
+        #queryTable tr td input{
+            width:180px;
+        }
+        #queryTable tr td{
+            width:180px;
+        }
+        .dataTables_scrollHead {
+            height: 39px;
+        }
+        th,td{
+            white-space:nowrap;
+        }
+
+        #uploadAtt {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="fixed-left">
+<div id="wrapper">
+    <!-- 导入头部 -->
+    <!--<%@ include file="top.jsp"%>-->
+    <div th:insert="~{top :: top}"></div>
+    <!-- 导入左侧菜单栏 -->
+    <!--<%@ include file="menu.jsp"%>-->
+    <div th:insert="~{meun :: meun}" style="width: 200px"></div>
+    <!-- 内容页 -->
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <!-- 层级菜单 -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="pull-left page-title">消防维修保养</h4>
+                        <ol class="breadcrumb pull-right">
+                            <li><a href="#">消防监督检查系统</a></li>
+                            <li class="active">消防维修保养</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- 列表、新增、修改区域 start -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="container">
+                            <form class="form-inline" th:action="@{/maintenance}">
+                                <div class="form-group">
+                                    <select class="form-control" id="unit" name="unit">
+                                        <option value="">机组</option>
+                                        <option value="1">一号机组</option>
+                                        <option value="2">二号机组</option>
+                                        <option value="3">三号机组</option>
+                                        <option value="4">四号机组</option>
+                                        <option value="5">五号机组</option>
+                                        <option value="6">六号机组</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="KKS" name="kks">
+                                </div>
+                                <div class="form-group">
+                                    <select class="form-control selectpicker" data-live-search="true" id="name" name="name">
+                                        <option value="">全部名称</option>
+                                        <option>火灾报警控制器</option>
+                                        <option>图形显示器</option>
+                                        <option>楼层显示器</option>
+                                        <option>就地报警控制器</option>
+                                        <option>点型感烟控制器</option>
+                                        <option>线型感烟控制器</option>
+                                        <option>抽吸式感烟控制器</option>
+                                        <option>点型感温探测器</option>
+                                        <option>缆式感温探测器</option>
+                                        <option>红外火焰探测器</option>
+                                        <option>氢气探测器</option>
+                                        <option>可燃气体探测器</option>
+                                        <option>声/光报警器</option>
+                                        <option>手动报警按钮</option>
+                                        <option>消防水池</option>
+                                        <option>消防泵</option>
+                                        <option>稳压泵</option>
+                                        <option>手动喷淋阀</option>
+                                        <option>电动喷淋阀</option>
+                                        <option>水雾喷头</option>
+                                        <option>湿式报警阀组</option>
+                                        <option>闸阀</option>
+                                        <option>球阀</option>
+                                        <option>蝶阀</option>
+                                        <option>闭式喷头</option>
+                                        <option>水流指示器</option>
+                                        <option>信号蝶阀</option>
+                                        <option>末端试验装置</option>
+                                        <option>雨淋阀</option>
+                                        <option>预作用阀</option>
+                                        <option>熔断阀</option>
+                                        <option>气体灭火控制器</option>
+                                        <option>药气瓶组</option>
+                                        <option>启动气瓶组</option>
+                                        <option>选择阀</option>
+                                        <option>安全阀</option>
+                                        <option>气体喷头</option>
+                                        <option>泄压口</option>
+                                        <option>室内消火栓</option>
+                                        <option>室外消火栓</option>
+                                        <option>水泵接合器</option>
+                                        <option>防火门</option>
+                                        <option>防火卷帘</option>
+                                        <option>防火百叶窗</option>
+                                        <option>防火封堵</option>
+                                        <option>防火盖板</option>
+                                        <option>正压风机</option>
+                                        <option>排烟风机</option>
+                                        <option>电磁防火阀</option>
+                                        <option>电动防火阀</option>
+                                        <option>电动排烟阀</option>
+                                        <option>手动排烟阀</option>
+                                        <option>配电柜</option>
+                                        <option>配电箱</option>
+                                        <option>手提式干粉灭火器</option>
+                                        <option>手提式二氧化碳灭火器</option>
+                                        <option>推车式干粉灭火器</option>
+                                        <option>推车式二氧化碳灭火器</option>
+                                        <option>消防重点部位</option>
+                                        <option>动火作业</option>
+                                        <option>物料存放</option>
+                                        <option>人员违章</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="维修工作负责人" name="miantainer">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" name="updatetimestart" type="text" placeholder="开始时间" readonly id="updatetimestater">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" name="updatetimeend" type="text" placeholder="结束时间" readonly id="updatetimeend">
+                                </div>
+                                <button type="submit" class="btn btn-info">搜索</button>
+                                <a class="btn btn-info pull-right" th:href="@{/maintenancerecordExcel(unit=${condition.unit},kks=${condition.kks},name=${condition.name},maintainer=${condition.maintainer},starttime=${condition.starttime},endtime=${condition.endtime})}">导出Excel</a>
+                            </form>
+
+                        </div>
+                        <div style="overflow: auto">
+                            <table class="table table-bordered table-striped" id="datatable">
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center">序号</th>
+                                    <th style="text-align:center">机组</th>
+                                    <th style="text-align:center">厂房
+                                        <!--<select id="selectedsys" name="selectsys">
+                                            <option value="*">全部系统</option>
+                                            <option th:each="system:${systems}" th:value="${system.systemName}" th:text="${system.systemName}"></option>
+                                        </select>-->
+                                    </th>
+                                    <th style="text-align:center">位置
+                                        <!--<select id="selectedfac" name="selectedfac">
+                                            <option value="*">全部厂房</option>
+                                            <option th:each="factory:${factorys}" th:value="${factory.factoryName}" th:text="${factory.factoryName}"></option>
+                                        </select>-->
+                                    </th>
+                                    <th style="text-align:center">KKS</th>
+                                    <th style="text-align:center">名称</th>
+                                    <th style="text-align:center">维修工作负责人</th>
+                                    <th style="text-align:center">维修时间</th>
+                                    <th style="text-align:center">工单号</th>
+                                    <th style="text-align:center">备注</th>
+                                    <th style="text-align:center">状态</th>
+                                    <th style="text-align:center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody style="text-align:center ">
+                                <tr th:each="record:${recordlist.content}">
+                                    <td></td>
+                                    <!--<td th:text="${equip.id}"></td>-->
+                                    <td th:text="${record.unit}"></td>
+                                    <td th:text="${record.factoryBuilding}"></td>
+                                    <td th:text="${record.location}"></td>
+                                    <td th:text="${record.kks}"></td>
+                                    <td th:text="${record.name}"></td>
+                                    <td th:text="${record.maintainer}"></td>
+                                    <td th:text="${record.maintaintime}"></td>
+                                    <td th:text="${record.number}"></td>
+                                    <td th:if="${record.attachment eq 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${record.id})}">有附件</a>
+                                    </td>
+                                    <td th:if="${record.attachment ne 1}">
+                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${record.id},record='mttrecord')}">无附件</a>
+                                    </td>
+                                    <td th:if="${record.ifpassed ne 1}">
+                                        未完工
+                                    </td>
+                                    <td th:if="${record.ifpassed eq 1}">
+                                        已完工
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${record.id}" th:data-unit="${record.unit}" th:data-fac="${record.factoryBuilding}" th:data-location="${record.location}" th:data-kks="${record.kks}" th:data-name="${record.name}" th:data-maintainer="${record.maintainer}" th:data-maintaintime="${record.maintaintime}" th:data-number="${record.number}"
+                                                th:data-attachment="${record.attachment}" th:data-ifpassed="${record.ifpassed}" th:data-ifcommit="${record.ifcommit}">修改</button>
+                                        <button class="btn btn-info btn-xs" th:if="${record.ifcommit eq 0}" onclick="this.disabled=true,submit()">提交</button>
+                                        <a class="btn btn-info btn-xs" th:if="${record.ifcommit eq 1 && record.ifpassed ne 1}" data-toggle="modal" data-target="#approvalModal" th:data-id="${record.id}">审批</a>
+                                        <!-- <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${record.id}" th:data-name="${equip.name}">删除</button>-->
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        共[[${recordlist.totalElements}]]条记录，
+                        当前第[[${recordlist.number}+1]]页，共[[${recordlist.totalPages}]]页
+                        <a class="btn btn-info btn-xs" th:if="${recordlist.number ne 0}" th:href="@{/maintenance(number=${recordlist.number-1},unit=${condition.unit},kks=${condition.kks},maintianer=${condition.maintainer},starttime=${condition.starttime},endtime=${condition.endtime},name=${condition.name})}">上一页</a>
+                        <a class="btn btn-info btn-xs" th:if="${recordlist.number+1 lt recordlist.totalPages}"  th:href="@{/maintenance(number=${equiplist.number+1},unit=${condition.unit},kks=${condition.kks},maintianer=${condition.maintainer},starttime=${condition.starttime},endtime=${condition.endtime},name=${condition.name})}">下一页</a>
+                        <input type="text" id="pagenumber" style="width: 30px"><button class="btn btn-info btn-xs" onclick="jumptopage()">跳转</button>
+                    </div>
+                </div>
+                <footer class="footer text-right">
+                    2018 © jnpc.com.cn
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 修改模态框（Modal） -->
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">修改</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/changemaintenancerecord}">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="id" name="id" readonly>
+                    </div>
+                    <div class="form-group">
+                        机组<input type="text" class="form-control" id="unit1" placeholder="机组" name="unit" readonly>
+                    </div>
+                    <div class="form-group">
+                        厂房<input type="text" class="form-control" id="factoryBuilding" placeholder="厂房" name="factoryBuilding" readonly>
+                    </div>
+                    <div class="form-group">
+                        房间<input type="text" class="form-control" id="location" placeholder="房间" name="location" readonly>
+                    </div>
+                    <div class="form-group">
+                        KKS<input type="text" class="form-control" id="kks" placeholder="KKS" name="kks" readonly>
+                    </div>
+                    <div class="form-group">
+                        名称<input type="text" class="form-control" id="name1" placeholder="名称" name="name" readonly>
+                    </div>
+                    <div class="form-group">
+                        维修工作负责人<input type="text" class="form-control" id="maintainer" placeholder="维修工作负责人" name="maintainer" readonly>
+                    </div>
+                    <div class="form-group">
+                        维修时间<input type="text" class="form-control" id="maintaintime" placeholder="维修时间" name="maintaintime" readonly>
+                    </div>
+                    <div class="form-group">
+                        工单号<input type="text" class="form-control" id="number" placeholder="工单号" name="number" >
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="attachment" placeholder="" name="attachment" >
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" id="ifcommit" placeholder="" name="ifcommit" >
+                    </div>
+                    <div class="form-group">状态
+                        <label class="radio-inline">
+                            <input type="radio" name="ifpassed" id="state1" value="1" readonly>已完工
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="ifpassed" id="state2" value="0" readonly>未完工
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">修改</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!-- 审批模态框（Modal） -->
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="approvalModalLabel">审批</h4>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/maintenancerecordapproval}">
+                    <div class="form-group">审批结果
+                        <label class="radio-inline">
+                            <input type="radio" name="ifpassed" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true">通过</span>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="ifpassed" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true">不通过</span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="id" id="id1">
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script>
+    var resizefunc = [];
+</script>
+<!-- jQuery  -->
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/js/detect.js}"></script>
+<script th:src="@{assets/js/fastclick.js}"></script>
+<script th:src="@{assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{assets/js/jquery.blockUI.js}"></script>
+<!--
+<script src="${pageContext.request.contextPath}/assets/js/waves.js"></script>
+ -->
+<script th:src="@{assets/js/wow.min.js}"></script>
+<script th:src="@{assets/js/jquery.nicescroll.js}"></script>
+<script th:src="@{assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{assets/js/jquery.app.js}"></script>
+<!-- 下拉列表 js start -->
+<script th:src="@{assets/js/bootstrap-select.js}" type="text/javascript"></script>
+<!--<script th:src="@{assets/plugins/select2/dist/js/select2.min.js}" type="text/javascript"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.multi-select.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>-->
+<!-- 下拉列表 js end -->
+<script th:src="@{assets/plugins/magnific-popup/dist/jquery.magnific-popup.min.js}"></script>
+<script th:src="@{assets/plugins/jquery-datatables-editable/jquery.dataTables.js}"></script>
+<script th:src="@{assets/plugins/datatables/dataTables.bootstrap.js}"></script>
+<script type="text/javascript" th:src="@{assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+<!-- 提示框 -->
+<script th:src="@{assets/js/alertUtils.js}"></script>
+<script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        var len = $('table tr').length;
+        for(var i = 1;i<len;i++){
+            $('table tr:eq('+i+') td:first').text(i);
+        }
+    })
+    $('#changeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+        var unit=button.data('unit');
+        var fac = button.data('fac')
+        var location=button.data('location');
+        var kks=button.data('kks');
+        var name=button.data('name');
+        var maintainer=button.data('maintainer');
+        var maintaintime=button.data('maintaintime');
+        var ifcommit=button.data('ifcommit');
+        var ifpassed=button.data('ifpassed');
+        var number=button.data('number');
+        var attachment=button.data('attachment');
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('#id').val(id);
+        modal.find('#unit1').val(unit);
+        modal.find('#factoryBuilding').val(fac);
+        modal.find('#location').val(location);
+        modal.find('#kks').val(kks);
+        modal.find("input[type=radio][name='ifpassed'][value='"+ifpassed+"']").attr("checked",'checked');
+        modal.find('#name1').val(name);
+        modal.find('#maintainer').val(maintainer);
+        modal.find('#maintaintime').val(maintaintime);
+        modal.find('#ifcommit').val(ifcommit);
+        modal.find('#number').val(number);
+        modal.find('#attachment').val(attachment);
+    })
+    $('#approvalModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var id = button.data('id') // Extract info from data-* attributes
+
+        var modal = $(this)
+        modal.find('#id1').val(id);
+    })
+    $('#data1').datepicker();
+    $('#updatetimestater').datepicker();
+    $('#updatetimeend').datepicker();
+
+    function jumptopage() {
+        var pagenumber=$("#pagenumber").val();
+        var number=parseInt(pagenumber)-1;
+        if(pagenumber>[[${recordlist.totalPages}]]||pagenumber<0){
+            alert("请输入正确页面！");
+            $("#pagenumber").val("");
+            return;
+        }
+        window.location.href="/fireworkconformlist?number="+number+"&unit="+[[${condition.unit}]]+"&kks="+[[${condition.kks}]]+"&name="+[[${condition.name}]]+"&maintainer="+[[${condition.maintainer}]]+"&starttime="+[[${condition.starttime}]]+"&endtime="+[[${condition.endtime}]];
+    }
+
+    function submit() {
+        window.location.href="/maintenancerecordcommit?id="+[[${record.id}]];
+    }
+
+</script>
+</body>
+</html>

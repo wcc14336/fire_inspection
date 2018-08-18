@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
+
 /**
  * Created by cc on 2018/7/23.
  */
@@ -22,4 +24,6 @@ public interface FireworkconformRecordDao extends JpaRepository<FireworkconformR
     @Modifying
     @Query("update FireworkconformRecord f set f.attachment=?1 where f.id=?2")
     void updateattachment(int i, String recordid);
+
+    List<FireworkconformRecord> findAll(Specification<FireworkconformRecord> specification);
 }

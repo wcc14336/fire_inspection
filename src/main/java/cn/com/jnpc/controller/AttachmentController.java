@@ -1,6 +1,7 @@
 package cn.com.jnpc.controller;
 
 import cn.com.jnpc.entity.Attachment;
+import cn.com.jnpc.entity.RegularTestRecord;
 import cn.com.jnpc.service.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,10 @@ public class AttachmentController {
     private FirerisktaskRecordService firerisktaskRecordService;
     @Autowired
     private RegularInspectRecordService regularInspectRecordService;
+    @Autowired
+    private RegularTestRecordService regularTestRecordService;
+    @Autowired
+    private MaintenanceRecordService maintenanceRecordService;
     @RequestMapping("/attachments")
     public ModelAndView attachments(String recordid,ModelAndView map,String record){
         if (record==null||"".equals(record)){
@@ -91,7 +96,10 @@ public class AttachmentController {
                 case "ricrecord":
                     regularInspectRecordService.updateattachment(1,recordid);
                     break;
-
+                case "rtrecord":
+                    regularTestRecordService.updateattachment(1,recordid);
+                case "mttrecord":
+                    maintenanceRecordService.updateattachment(1,recordid);
             }
         }
         attributes.addAttribute("recordid",recordid);

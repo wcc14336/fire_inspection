@@ -14,4 +14,6 @@ public interface RegularInspectApprovalRecordDao extends JpaRepository<RegularIn
     RegularInspectApprovalRecord findByid(String id);
     @Query("select r from RegularInspectApprovalRecord r where r.submitstate=1 and r.approvalstate=0")
     List<RegularInspectApprovalRecord> findBycondition();
+    @Query("select r from RegularInspectApprovalRecord r where r.taskid=?1")
+    RegularInspectApprovalRecord findByTaskid(String taskid);
 }

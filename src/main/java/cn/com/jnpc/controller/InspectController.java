@@ -2,9 +2,11 @@ package cn.com.jnpc.controller;
 
 import cn.com.jnpc.entity.*;
 import cn.com.jnpc.service.*;
+import cn.com.jnpc.utils.EmailUtil;
 import cn.com.jnpc.utils.PdfUtil;
 import com.lowagie.text.DocumentException;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,15 +18,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.resource.HttpResource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * Created by cc on 2018/7/12.
@@ -49,6 +52,8 @@ public class InspectController {
     private DefectService defectService;
     @Autowired
     private FireworkconformRecordService fireworkconformRecordService;
+    @Autowired
+    private EmailUtil emailUtil;
 
     SubmitAndApprovalRecord record;
     @RequestMapping("/dailyinspect")
@@ -216,7 +221,9 @@ public class InspectController {
         record.setApprovalresult(0);
         record.setUnit(unit);
         submitAndApprovalRecordService.save(record);
-
+        List<String> list=new ArrayList<>();
+        list.add("1433658618@qq.com");
+        emailUtil.sendEmail("系统邮件","<h1>一个大标题</h1><a href='www.baidu.com'>点击查看代办</a>",list);
         return "redirect:/dailyinspectinfo?date="+checkdate+"&unit="+unit;
     }
 
@@ -264,5 +271,217 @@ public class InspectController {
         return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers, HttpStatus.OK);
     }
 
+    @RequestMapping("/dailyinspectExcel")
+    public void dailyinspectExcel(HttpServletResponse response,String starttime,String endtime,String unit) throws IOException {
+        String fileName=unit+"号机组消防巡查问题清单"+starttime+"-"+endtime+".xls";
+        fileName= URLEncoder.encode(fileName,"UTF-8");
+        List<ImportantPartRecord> list=importantPartRecordService.findByChecktimeAndUnit(unit,starttime,endtime);
+        List<FireworkRecord> list1=fireworkRecordService.findByUnitAndChecktime(unit,starttime,endtime);
+        List<DepositaryRecord> list2=depositaryRecordService.findByUnitAndChecktime(unit,starttime,endtime);
+        List<FireproofdoorRecord> list3=fireproofdoorRecordService.findByUnitAndChecktime(unit,starttime,endtime);
+        List<PersonnelviolationRecord> list4=personnelviolationRecordService.findByUnitAndChecktime(unit,starttime,endtime);
+        List<OtherRecord> list5=otherRecordService.findByUnitAndChecktime(unit,starttime,endtime);
+
+        HSSFWorkbook workbook=new HSSFWorkbook();
+        HSSFSheet sheet=workbook.createSheet("消防重点位置");
+        int rowNum=1;
+        String[] headers={"检查模块","检查人","检查时间","缺陷描述","整改方式","跟踪序号","备注"};
+        HSSFRow row=sheet.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            HSSFCell cell=row.createCell(i);
+            HSSFRichTextString text=new HSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+        for (ImportantPartRecord record:list){
+            Set<IPRDefect> ipRdefects = record.getIPRdefects();
+            if (ipRdefects.size()!=0){
+                for (IPRDefect defect:ipRdefects){
+                    HSSFRow row1=sheet.createRow(rowNum);
+                    row1.createCell(0).setCellValue("消防重点位置");
+                    row1.createCell(1).setCellValue(record.getChecker());
+                    row1.createCell(2).setCellValue(record.getChecktime());
+                    row1.createCell(3).setCellValue(defect.getDefectdesc());
+                    row1.createCell(4).setCellValue(defect.getMethod());
+                    row1.createCell(5).setCellValue(defect.getTracenumber());
+                    row1.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    rowNum++;
+                }
+            }else {
+                HSSFRow row1=sheet.createRow(rowNum);
+                row1.createCell(0).setCellValue("消防重点位置");
+                row1.createCell(1).setCellValue(record.getChecker());
+                row1.createCell(2).setCellValue(record.getChecktime());
+                row1.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                rowNum++;
+            }
+        }
+
+        HSSFSheet sheet1=workbook.createSheet("动火作业");
+        int rowNum1=1;
+        HSSFRow row1=sheet1.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            HSSFCell cell=row1.createCell(i);
+            HSSFRichTextString text=new HSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+        for (FireworkRecord record:list1){
+            Set<FWDefect> fwDefects = record.getFWDefects();
+            if (fwDefects.size()!=0){
+                for (FWDefect defect:fwDefects){
+                    HSSFRow row2=sheet1.createRow(rowNum1);
+                    row2.createCell(0).setCellValue("动火作业");
+                    row2.createCell(1).setCellValue(record.getChecker());
+                    row2.createCell(2).setCellValue(record.getChecktime());
+                    row2.createCell(3).setCellValue(defect.getDefectdesc());
+                    row2.createCell(4).setCellValue(defect.getMethod());
+                    row2.createCell(5).setCellValue(defect.getTracenumber());
+                    row2.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    rowNum1++;
+                }
+            }else {
+                HSSFRow row2=sheet1.createRow(rowNum1);
+                row2.createCell(0).setCellValue("动火作业");
+                row2.createCell(1).setCellValue(record.getChecker());
+                row2.createCell(2).setCellValue(record.getChecktime());
+                row2.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                rowNum1++;
+            }
+        }
+
+        HSSFSheet sheet2=workbook.createSheet("物品物料,易燃易爆危险化学品存放");
+        int rowNum2=1;
+        HSSFRow row2=sheet2.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            HSSFCell cell=row2.createCell(i);
+            HSSFRichTextString text=new HSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+        for (DepositaryRecord record:list2){
+            Set<DPDefect> dpDefects = record.getDpDefects();
+            if (dpDefects.size()!=0){
+                for (DPDefect defect:dpDefects){
+                    HSSFRow row3=sheet2.createRow(rowNum2);
+                    row3.createCell(0).setCellValue("物品物料/易燃易爆危险化学品存放");
+                    row3.createCell(1).setCellValue(record.getChecker());
+                    row3.createCell(2).setCellValue(record.getChecktime());
+                    row3.createCell(3).setCellValue(defect.getDefectdesc());
+                    row3.createCell(4).setCellValue(defect.getMethod());
+                    row3.createCell(5).setCellValue(defect.getTracenumber());
+                    row3.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    rowNum2++;
+                }
+            }else {
+                HSSFRow row3=sheet2.createRow(rowNum2);
+                row3.createCell(0).setCellValue("物品物料/易燃易爆危险化学品存放");
+                row3.createCell(1).setCellValue(record.getChecker());
+                row3.createCell(2).setCellValue(record.getChecktime());
+                row3.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                rowNum2++;
+            }
+        }
+
+        HSSFSheet sheet3=workbook.createSheet("防火门");
+        int rowNum3=1;
+        HSSFRow row3=sheet3.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            HSSFCell cell=row3.createCell(i);
+            HSSFRichTextString text=new HSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+        for (FireproofdoorRecord record:list3){
+            Set<FDDefect> fdDefects = record.getFdDefects();
+            if (fdDefects.size()!=0){
+                for (FDDefect defect:fdDefects){
+                    HSSFRow row4=sheet3.createRow(rowNum3);
+                    row4.createCell(0).setCellValue("防火门");
+                    row4.createCell(1).setCellValue(record.getChecker());
+                    row4.createCell(2).setCellValue(record.getChecktime());
+                    row4.createCell(3).setCellValue(defect.getDefectdesc());
+                    row4.createCell(4).setCellValue(defect.getMethod());
+                    row4.createCell(5).setCellValue(defect.getTracenumber());
+                    row4.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    rowNum3++;
+                }
+            }else {
+                HSSFRow row4=sheet3.createRow(rowNum3);
+                row4.createCell(0).setCellValue("防火门");
+                row4.createCell(1).setCellValue(record.getChecker());
+                row4.createCell(2).setCellValue(record.getChecktime());
+                row4.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                rowNum3++;
+            }
+        }
+
+        HSSFSheet sheet4=workbook.createSheet("人员违章");
+        int rowNum4=1;
+        HSSFRow row4=sheet4.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            HSSFCell cell=row4.createCell(i);
+            HSSFRichTextString text=new HSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+        for (PersonnelviolationRecord record:list4){
+            Set<PVDefect> pvDefects = record.getPvDefects();
+            if (pvDefects.size()!=0){
+                for (PVDefect defect:pvDefects){
+                    HSSFRow row5=sheet4.createRow(rowNum4);
+                    row5.createCell(0).setCellValue("人员违章");
+                    row5.createCell(1).setCellValue(record.getChecker());
+                    row5.createCell(2).setCellValue(record.getChecktime());
+                    row5.createCell(3).setCellValue(defect.getDefectdesc());
+                    row5.createCell(4).setCellValue(defect.getMethod());
+                    row5.createCell(5).setCellValue(defect.getTracenumber());
+                    row5.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    rowNum4++;
+                }
+            }else {
+                HSSFRow row5=sheet4.createRow(rowNum4);
+                row5.createCell(0).setCellValue("人员违章");
+                row5.createCell(1).setCellValue(record.getChecker());
+                row5.createCell(2).setCellValue(record.getChecktime());
+                row5.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                rowNum4++;
+            }
+
+        }
+
+        HSSFSheet sheet5=workbook.createSheet("其他问题");
+        int rowNum5=1;
+        HSSFRow row5=sheet5.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            HSSFCell cell=row5.createCell(i);
+            HSSFRichTextString text=new HSSFRichTextString(headers[i]);
+            cell.setCellValue(text);
+        }
+        for (OtherRecord record:list5){
+            Set<ODefect> oDefects = record.getoDefects();
+            if (oDefects.size()!=0){
+                for (ODefect defect:oDefects){
+                    HSSFRow row6=sheet5.createRow(rowNum5);
+                    row6.createCell(0).setCellValue("其他问题");
+                    row6.createCell(1).setCellValue(record.getChecker());
+                    row6.createCell(2).setCellValue(record.getChecktime());
+                    row6.createCell(3).setCellValue(defect.getDefectdesc());
+                    row6.createCell(4).setCellValue(defect.getMethod());
+                    row6.createCell(5).setCellValue(defect.getTracenumber());
+                    row6.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    rowNum5++;
+                }
+            }else {
+                HSSFRow row6=sheet5.createRow(rowNum5);
+                row6.createCell(0).setCellValue("其他问题");
+                row6.createCell(1).setCellValue(record.getChecker());
+                row6.createCell(2).setCellValue(record.getChecktime());
+                row6.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                rowNum5++;
+            }
+
+        }
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/octet-stream;charset=UTF-8");
+        response.setHeader("Content-disposition","attachment;filename="+fileName);
+        response.flushBuffer();
+        workbook.write(response.getOutputStream());
+    }
 
 }

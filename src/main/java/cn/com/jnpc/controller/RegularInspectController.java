@@ -2,13 +2,27 @@ package cn.com.jnpc.controller;
 
 import cn.com.jnpc.entity.*;
 import cn.com.jnpc.service.*;
+import cn.com.jnpc.utils.EmailUtil;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -25,6 +39,8 @@ public class RegularInspectController {
     private EntryAndApprovalRecordSerivce entryAndApprovalRecordSerivce;
     @Autowired
     private EquipService equipService;
+    @Autowired
+    private EmailUtil emailUtil;
     @Autowired
     private RegularInspectApprovalRecordService regularInspectApprovalRecordService;
     EntryAndApprovalRecord record;
@@ -132,6 +148,9 @@ public class RegularInspectController {
         record.setApprovalstate(0);
         record.setApprovalresult(0);
         entryAndApprovalRecordSerivce.save(record);
+        List<String> list=new ArrayList<>();
+        list.add("1433658618@qq.com");
+        emailUtil.sendEmail("年度定检计划审批","有一份年度定期检查计划需要审批",list);
         attributes.addAttribute("unit",record.getUnit());
         attributes.addAttribute("year",record.getYear());
         return "redirect:entryRegularinspect";
@@ -222,6 +241,9 @@ public class RegularInspectController {
         regularInspectApprovalRecord.setApprovalstate(0);
         regularInspectApprovalRecord.setApprovalresult(0);
         regularInspectApprovalRecordService.save(regularInspectApprovalRecord);
+        List<String> list=new ArrayList<>();
+        list.add("1433658618@qq.com");
+        emailUtil.sendEmail("定期检查任务审批","系统中有定期检查任务需要审批",list);
         attributes.addAttribute("checkproject",checkproject);
         attributes.addAttribute("unit",unit);
         attributes.addAttribute("year",year);
@@ -259,5 +281,118 @@ public class RegularInspectController {
         map.addObject("list",list);
         map.setViewName("approvalRegularinspecttask");
         return map;
+    }
+    @RequestMapping("/regularinspectrecordPDF")
+    public void regularinspectrecordPDF(HttpServletResponse response,String taskid,String unit,String checkproject,Integer year) throws IOException, DocumentException {
+        String fileName=unit+"号机组"+checkproject+"定期检查文件"+year+".pdf";
+        fileName= URLEncoder.encode(fileName,"UTF-8");
+        response.setHeader("content-Type", "application/pdf");
+        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+        Document document = new Document();
+        PdfWriter.getInstance(document, response.getOutputStream());
+        document.open();
+        //字体设置
+        BaseFont bf=BaseFont.createFont("C:\\Windows\\Fonts\\simkai.ttf", BaseFont.IDENTITY_H, false);
+        //创建Font对象，将基础字体对象，字体大小，字体风格
+        Font font=new Font(bf,13,Font.NORMAL);
+        Font font1=new Font(bf,15,Font.BOLD);
+        Font font2=new Font(bf,10,Font.NORMAL);
+        List<RegularInspectRecord> list=regularInspectRecordService.findByTaskid(taskid);
+        System.out.println(list.size());
+        RegularInspectApprovalRecord approvalRecord=regularInspectApprovalRecordService.findByTaskid(taskid);
+        Paragraph title=new Paragraph(unit+"号机组"+checkproject+"定期检查文件("+year+")\n\n",font1);
+        title.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(title);
+        Paragraph line=new Paragraph("        检查人："+approvalRecord.getSubmiter()+"/"+approvalRecord.getSubmitdate()+"             "+"批准人："+approvalRecord.getApprovaler()+"/"+approvalRecord.getApprovaldate()+"\n\n",font);
+        document.add(line);
+        PdfPTable table=new PdfPTable(14);
+        PdfPCell header=new PdfPCell();
+        header.setPhrase(new Paragraph("序号",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("机组",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("厂房",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("位置",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("kks",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("名称",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("定检周期",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("状态",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("检查人",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("检查时间",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("缺陷描述",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("整改方式",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("跟踪单号",font2));
+        table.addCell(header);
+        header=new PdfPCell();
+        header.setPhrase(new Paragraph("备注",font2));
+        table.addCell(header);
+        for (int i = 0; i < list.size(); i++) {
+            PdfPCell cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(i+"",font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getUnit(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getFactoryBuilding(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getLocation(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getKks(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getName(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getCheckcycle(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getState()==1?"√":"×",font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getChecker(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getChecktime(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getDefectdesc(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getMethod(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getTracenumber(),font2));
+            table.addCell(cell);
+            cell=new PdfPCell();
+            cell.setPhrase(new Paragraph(list.get(i).getAttachment()==null||list.get(i).getAttachment()!=1?"无附件":"有附件",font2));
+            table.addCell(cell);
+        }
+        document.add(table);
+        document.close();
     }
 }

@@ -31,4 +31,8 @@ public class FireworkRecordService {
     public void updateattachment(int i, String recordid) {
         fireworkRecordDao.updateattachment(i,recordid);
     }
+
+    public List<FireworkRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
+        return fireworkRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
+    }
 }

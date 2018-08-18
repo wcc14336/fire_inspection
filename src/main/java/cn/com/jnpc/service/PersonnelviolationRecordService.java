@@ -31,4 +31,8 @@ public class PersonnelviolationRecordService {
     public void updateattachment(int i, String recordid) {
         personnelviolationRecordDao.updateattachment(i,recordid);
     }
+
+    public List<PersonnelviolationRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
+        return personnelviolationRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
+    }
 }

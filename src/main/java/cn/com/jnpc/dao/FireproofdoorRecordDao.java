@@ -18,4 +18,6 @@ public interface FireproofdoorRecordDao extends JpaRepository<FireproofdoorRecor
     @Modifying
     @Query("update FireproofdoorRecord f set f.attachment=?1 where f.id=?2")
     void updateattachment(int i, String recordid);
+    @Query("select f from FireproofdoorRecord f where f.unit=?1 and f.checktime between ?2 and ?3")
+    List<FireproofdoorRecord> findByUnitAndChecktime(String unit, String starttime, String endtime);
 }

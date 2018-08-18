@@ -129,6 +129,7 @@
                                     <input class="form-control datepicker" placeholder="结束时间" name="end" type="text" readonly id="updatetimeend">
                                 </div>
                                 <button type="submit" class="btn btn-info">搜索</button>
+                                <a class="btn btn-info pull-right" th:href="@{/fireworkconformExcel(unit=${condition.unit},factoryBuilding=${condition.factoryBuilding},location=${condition.location},jobmanager=${condition.jobmanager},fireworkman=${condition.fireworkman},fireworkinspecter=${condition.fireworkinspecter},state=${condition.state},checker=${condition.checker},start=${condition.start},end=${condition.end})}">导出Excel</a>
                             </form>
                         </div>
                         <div style="overflow: auto">

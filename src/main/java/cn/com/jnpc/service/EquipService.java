@@ -144,4 +144,41 @@ public class EquipService {
     public List<Equipment> findAllByCondition(String unit, String checkproject) {
         return equipmentDao.findAllByCondition(unit,checkproject);
     }
+
+    public List<Equipment> findByCondition(String unit, String factoryBuilding, String location, String KKS, String name, String category, String enteringman, String updatetimestart, String updatetimeend) {
+        return equipmentDao.findAll(new Specification<Equipment>() {
+            @Nullable
+            @Override
+            public Predicate toPredicate(Root<Equipment> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> list =new ArrayList<Predicate>();
+                if (!StringUtils.isEmpty(unit)&&unit!=""){
+                    list.add(criteriaBuilder.like(root.get("unit").as(String.class),"%"+unit+"%"));
+                }
+                if (!StringUtils.isEmpty(factoryBuilding)&&factoryBuilding!=""){
+                    list.add(criteriaBuilder.like(root.get("factoryBuilding").as(String.class),"%"+factoryBuilding+"%"));
+                }
+                if (!StringUtils.isEmpty(location)&&location!=""){
+                    list.add(criteriaBuilder.like(root.get("location").as(String.class),"%"+location+"%"));
+                }
+                if (!StringUtils.isEmpty(KKS)&&KKS!=""){
+                    list.add(criteriaBuilder.like(root.get("kks").as(String.class),"%"+KKS+"%"));
+                }
+                if (!StringUtils.isEmpty(name)&&name!=""){
+                    list.add(criteriaBuilder.like(root.get("name").as(String.class),"%"+name+"%"));
+                }
+                if (!StringUtils.isEmpty(category)&&category!=""){
+                    list.add(criteriaBuilder.like(root.get("category").as(String.class),"%"+category+"%"));
+                }
+                if (!StringUtils.isEmpty(enteringman)&&enteringman!=""){
+                    list.add(criteriaBuilder.like(root.get("enteringman").as(String.class),"%"+enteringman+"%"));
+                }
+                if (!StringUtils.isEmpty(updatetimeend)&&updatetimeend!=""&&!StringUtils.isEmpty(updatetimestart)&&updatetimestart!=""){
+                    list.add(criteriaBuilder.between(root.get("configurationtime").as(String .class),updatetimestart,updatetimeend));
+                }
+
+                Predicate[] p=new Predicate[list.size()];
+                return criteriaBuilder.and(list.toArray(p));
+            }
+        });
+    }
 }

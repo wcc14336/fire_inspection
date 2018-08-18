@@ -24,6 +24,8 @@ public class DefectService {
     private ODefectDao oDefectDao;
     @Autowired
     private FCDefectDao fcDefectDao;
+    @Autowired
+    private RTDefectDao rtDefectDao;
 
     public void save(IPRDefect iprDefect) {
         iprDefectDao.save(iprDefect);
@@ -52,4 +54,5 @@ public class DefectService {
     public void save(FCDefect fcDefect) {
         fcDefectDao.save(fcDefect);
     }
+
 }

@@ -9,10 +9,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "FDdefect")
-@GenericGenerator(name="genID", strategy="increment")
+//@GenericGenerator(name="genID", strategy="increment")
 public class FDDefect {
     @Id
-    @GeneratedValue(generator="genID")
+    @GenericGenerator(strategy = "uuid",name = "idGenerator")
+    @GeneratedValue(generator = "idGenerator")
     private String id;
 
     private String defectdesc;

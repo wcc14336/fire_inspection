@@ -72,10 +72,10 @@
                 <!-- 层级菜单 -->
                 <div class="row">
                     <div class="col-sm-12">
-                        <h4 class="pull-left page-title">定期检查</h4>
+                        <h4 class="pull-left page-title">定期试验（[[${year}]]年度）</h4>
                         <ol class="breadcrumb pull-right">
                             <li><a href="#">消防监督检查系统</a></li>
-                            <li class="active">定期检查</li>
+                            <li class="active">定期试验</li>
                         </ol>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                         <a class="btn btn-lg btn-info" data-toggle="modal" data-target="#addModal">录入</a>
                         <div style="overflow: auto">
                             <table class="table table-bordered table-striped" id="datatable">
-                                <caption align="top" style="text-align: center"><font size="5">[[${unit}]]号机组定期检查</font></caption>
+                                <caption align="top" style="text-align: center"><font size="5">[[${unit}]]号机组定期试验跟踪表</font></caption>
                                 <thead>
                                 <tr>
                                     <th style="text-align:center">序号</th>
@@ -106,6 +106,11 @@
                                     <th style="text-align:center">计划检查人</th>
                                     <th style="text-align:center">计划开始时间</th>
                                     <th style="text-align:center">计划结束时间</th>
+                                    <th style="text-align:center">实际开始时间</th>
+                                    <th style="text-align:center">实际结束时间</th>
+                                    <th style="text-align:center">未按计划完成的原因</th>
+                                    <th style="text-align:center">实际检查人</th>
+                                    <th style="text-align:center">状态</th>
                                     <th style="text-align:center">操作</th>
                                 </tr>
                                 </thead>
@@ -119,26 +124,25 @@
                                     <td th:text="${inspect.planchecker}"></td>
                                     <td th:text="${inspect.planbegin}"></td>
                                     <td th:text="${inspect.planend}"></td>
+                                    <td th:text="${inspect.begintime}"></td>
+                                    <td th:text="${inspect.endtime}"></td>
+                                    <td th:text="${inspect.reason}"></td>
+                                    <td th:text="${inspect.checker}"></td>
+                                    <td th:if="${inspect.state eq 1}">
+                                        已完成
+                                    </td>
+                                    <td th:if="${inspect.state ne 1}">
+                                        未完成
+                                    </td>
                                     <td>
                                         <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-checkbasis="${inspect.checkbasis}" th:data-checkproject="${inspect.checkproject}"
-                                                th:data-checkfrequency="${inspect.checkfrequency}" th:data-planchecker="${inspect.planchecker}" th:data-planbegin="${inspect.planbegin}" th:data-planend="${inspect.planend}" th:data-unit="${inspect.unit}" th:data-year="${inspect.year}">修改</button>
-                                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${inspect.id}" th:data-checkproject="${inspect.checkproject}" th:data-planchecker="${inspect.planchecker}">删除</button>
+                                                th:data-checkfrequency="${inspect.checkfrequency}" th:data-planchecker="${inspect.planchecker}" th:data-planbegin="${inspect.planbegin}" th:data-planend="${inspect.planend}" th:data-begintime="${inspect.begintime}"
+                                                th:data-endtime="${inspect.endtime}" th:data-reason="${inspect.reason}" th:data-checker="${inspect.checker}" th:data-state="${inspect.state}" th:data-unit="${inspect.unit}" th:data-year="${inspect.year}">修改</button>
+                                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${inspect.id}" th:data-checkproject="${inspect.checkproject}" th:data-planchecker="${inspect.planchecker}" th:data-state="${inspect.state}">删除</button>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                </div>
-                <div th:if="${entryAndApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交审批</button></div>
-                <div th:if="${entryAndApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
-                    <div th:if="${entryAndApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
-                    <div th:if="${entryAndApprovalRecord.approvalstate eq 1}">
-                        <div th:if="${entryAndApprovalRecord.approvalresult eq 0}">
-                            审批未通过，审批意见：<p th:text="${entryAndApprovalRecord.comments}">无</p>
-                            <button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">重新提交</button>
-                        </div>
-                        <div th:if="${entryAndApprovalRecord.approvalresult eq 1}">审批通过
                         </div>
                     </div>
                 </div>
@@ -149,48 +153,6 @@
         </div>
     </div>
 </div>
-
-<!-- 审批模态框（Modal） -->
-<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="approvalModalLabel">审批</h4>
-            </div>
-            <div class="modal-body">
-                <form th:action="@{/entryapprovalcommit}">
-                    <div class="form-group">审批人
-                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
-                    </div>
-                    <div class="form-group">审批结果
-                        <label class="radio-inline">
-                            <input type="radio" name="approvalresult" value="1" readonly><span class="glyphicon glyphicon-ok" aria-hidden="true">通过</span>
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="approvalresult" value="0" readonly><span class="glyphicon glyphicon-remove" aria-hidden="true">不通过</span>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" id="comments" placeholder="审批意见" name="comments"></textarea>
-                    </div>
-                    <input type="hidden" name="id" th:value="${entryAndApprovalRecord.id}">
-                    <input type="hidden" name="submiter" th:value="${entryAndApprovalRecord.submiter}">
-                    <input type="hidden" name="submitdate" th:value="${entryAndApprovalRecord.submitdate}">
-                    <input type="hidden" name="year" th:value="${entryAndApprovalRecord.year}">
-                    <input type="hidden" name="submitstate" th:value="${entryAndApprovalRecord.submitstate}">
-                    <input type="hidden" name="approvaldate" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}">
-                    <input type="hidden" name="approvalstate" value="1">
-                    <input type="hidden" name="unit" th:value="${entryAndApprovalRecord.unit}">
-                    <button type="submit" class="btn btn-primary">提交</button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
 <!-- 增加模态框（Modal） -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -200,7 +162,7 @@
                 <h4 class="modal-title" id="myModalLabel2">新增</h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/addentryregularinspect}">
+                <form th:action="@{/addregulartest}">
                     <div class="form-group">
                         <input type="hidden" name="unit" th:value="${unit}">
                     </div>
@@ -289,9 +251,6 @@
                     <div class="form-group">
                         <input class="form-control" type="text" placeholder="计划结束时间" readonly id="planendtime" name="planend">
                     </div>
-                    <div class="form-group">
-                        <input class="form-control" type="hidden" value="0" readonly  name="state">
-                    </div>
                     <button type="submit" class="btn btn-primary">提交新增</button>
                 </form>
             </div>
@@ -310,7 +269,7 @@
                 <h4 class="modal-title" id="myModalLabel"><font color="red">修改</font></h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/changeentryregularinspect}">
+                <form th:action="@{/changeregulartest}">
                     <div class="form-group">
                         <input type="hidden" name="unit" id="unit">
                     </div>
@@ -321,33 +280,53 @@
                         <input type="hidden" name="id" id="id">
                     </div>
                     <div class="form-group">
-                        <input type="hidden" name="state" id="state" value="0">
-                    </div>
-                    <div class="form-group">
                         <label for="checkbasis">检查依据</label>
                         <input type="text" class="form-control" id="checkbasis" name="checkbasis" placeholder="检查依据" >
                     </div>
                     <div class="form-group">
-                        <label for="checkproject">检查项目</label>
+                        <label for="checker">检查项目</label>
                         <input type="text" class="form-control" id="checkproject" name="checkproject" placeholder="检查项目">
                     </div>
                     <div class="form-group">
-                        <label for="checkfrequency">检查频度</label>
+                        <label for="checker">检查频度</label>
                         <input type="text" class="form-control" id="checkfrequency" name="checkfrequency" placeholder="检查频度">
                     </div>
                     <div class="form-group">
-                        <label for="planchecker">计划检查人</label>
+                        <label for="checker">计划检查人</label>
                         <input type="text" class="form-control" id="planchecker" name="planchecker" placeholder="计划检查人">
                     </div>
                     <div class="form-group">
-                        <label for="planbegin">计划开始时间</label>
+                        <label for="checker">计划开始时间</label>
                         <input type="text" class="form-control" id="planbegin" name="planbegin" placeholder="计划开始时间">
                     </div>
                     <div class="form-group">
-                        <label for="planend">计划结束时间</label>
+                        <label for="checker">计划结束时间</label>
                         <input type="text" class="form-control" id="planend" name="planend" placeholder="计划结束时间">
                     </div>
-
+                    <div class="form-group">
+                        <label for="checker">实际开始时间</label>
+                        <input type="text" class="form-control" id="begintime" name="begintime" placeholder="实际开始时间">
+                    </div>
+                    <div class="form-group">
+                        <label for="checker">实际结束时间</label>
+                        <input type="text" class="form-control" id="endtime" name="endtime" placeholder="实际结束时间">
+                    </div>
+                    <div class="form-group">
+                        <label for="checker">未按计划完成的原因</label>
+                        <input type="text" class="form-control" id="reason" name="reason" placeholder="未按计划完成的原因">
+                    </div>
+                    <div class="form-group">
+                        <label for="checker">实际检查人</label>
+                        <input type="text" class="form-control" id="checker" name="checker" placeholder="实际检查人">
+                    </div>
+                    <div class="form-group">状态
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state1" value="1" readonly>已完工
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="state" id="state2" value="0" readonly>未完工
+                        </label>
+                    </div>
                     <button type="submit" class="btn btn-primary btn-danger">修改</button>
                 </form>
             </div>
@@ -367,7 +346,7 @@
                 <h4 class="modal-title" id="myModalLabel1"><font color="red">删除</font></h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/deleteentryregularinspect}">
+                <form th:action="@{/deleteregulartest}">
                     <div class="form-group">
                         <input type="hidden" name="unit" th:value="${unit}">
                     </div>
@@ -394,7 +373,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
-
 
 <script>
     var resizefunc = [];
@@ -428,7 +406,6 @@
 <script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
-    $('#data1').datepicker();
     $('#planbegintime').datepicker();
     $('#planendtime').datepicker();
     $(document).ready(function () {
@@ -447,6 +424,11 @@
         var planchecker=button.data('planchecker');
         var planbegin=button.data('planbegin');
         var planend=button.data('planend');
+        var begintime=button.data('begintime');
+        var endtime=button.data('endtime');
+        var reason=button.data('reason');
+        var checker=button.data('checker');
+        var state=button.data('state');
         var unit=button.data('unit');
         var year=button.data('year');
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
@@ -459,13 +441,15 @@
         modal.find('#planchecker').val(planchecker);
         modal.find('#planbegin').val(planbegin);
         modal.find('#planend').val(planend);
+        modal.find('#begintime').val(begintime);
+        modal.find('#endtime').val(endtime);
+        modal.find('#reason').val(reason);
+        modal.find('#checker').val(checker);
         modal.find('#unit').val(unit);
         modal.find('#year').val(year);
+        modal.find("input[type=radio][name='state'][value='"+state+"']").attr("checked",'checked');
     })
 
-    function submit() {
-        window.location.href="/entrysubmit?submiter="+[[${session.username}]]+"&year="+[[${year}]]+"&unit="+[[${unit}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1";
-    }
     $('#deleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id=button.data('id');

@@ -73,4 +73,44 @@ public class FireworkconformRecordService {
     public void updateattachment(int i, String recordid) {
         fireworkconformRecordDao.updateattachment(i,recordid);
     }
+
+    public List<FireworkconformRecord> findByCondition(String unit, String factoryBuilding, String location, String jobmanager, String fireworkman, String fireworkinspecter, Integer state, String checker, String start, String end) {
+        return fireworkconformRecordDao.findAll(new Specification<FireworkconformRecord>() {
+            @Nullable
+            @Override
+            public Predicate toPredicate(Root<FireworkconformRecord> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> list =new ArrayList<Predicate>();
+                if (!StringUtils.isEmpty(unit)&&unit!=""){
+                    list.add(criteriaBuilder.like(root.get("unit").as(String.class),"%"+unit+"%"));
+                }
+                if (!StringUtils.isEmpty(factoryBuilding)&&factoryBuilding!=""){
+                    list.add(criteriaBuilder.like(root.get("factoryBuilding").as(String.class),"%"+factoryBuilding+"%"));
+                }
+                if (!StringUtils.isEmpty(location)&&location!=""){
+                    list.add(criteriaBuilder.like(root.get("location").as(String.class),"%"+location+"%"));
+                }
+                if (!StringUtils.isEmpty(jobmanager)&&jobmanager!=""){
+                    list.add(criteriaBuilder.like(root.get("jobmanager").as(String.class),"%"+jobmanager+"%"));
+                }
+                if (!StringUtils.isEmpty(fireworkman)&&fireworkman!=""){
+                    list.add(criteriaBuilder.like(root.get("fireworkman").as(String.class),"%"+fireworkman+"%"));
+                }
+                if (!StringUtils.isEmpty(fireworkinspecter)&&fireworkinspecter!=""){
+                    list.add(criteriaBuilder.like(root.get("fireworkinspecter").as(String.class),"%"+fireworkinspecter+"%"));
+                }
+                if (state!=null){
+                    list.add(criteriaBuilder.equal(root.get("state").as(Integer.class),state));
+                }
+                if (!StringUtils.isEmpty(checker)&&checker!=""){
+                    list.add(criteriaBuilder.like(root.get("checker").as(String.class),"%"+checker+"%"));
+                }
+                if (!StringUtils.isEmpty(start)&&start!=""&&!StringUtils.isEmpty(end)&&end!=""){
+                    list.add(criteriaBuilder.between(root.get("configurationtime").as(String .class),start,end));
+                }
+
+                Predicate[] p=new Predicate[list.size()];
+                return criteriaBuilder.and(list.toArray(p));
+            }
+        });
+    }
 }

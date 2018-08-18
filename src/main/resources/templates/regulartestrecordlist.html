@@ -72,10 +72,10 @@
                 <!-- 层级菜单 -->
                 <div class="row">
                     <div class="col-sm-12">
-                        <h4 class="pull-left page-title">定期检查</h4>
+                        <h4 class="pull-left page-title">定期试验</h4>
                         <ol class="breadcrumb pull-right">
                             <li><a href="#">消防监督检查系统</a></li>
-                            <li class="active">定期检查</li>
+                            <li class="active">定期试验</li>
                         </ol>
                     </div>
                 </div>
@@ -84,10 +84,9 @@
                     <div class="panel-body">
                         <div style="overflow: auto">
                             <table class="table table-bordered table-striped" id="datatable">
-                                <caption align="top" style="text-align: center"><font size="5">[[${unit}]]号机组[[${checkproject}]]定期检查文件</font></caption>
+                                <caption align="top" style="text-align: center"><font size="5">[[${unit}]]号机组[[${checkproject}]]定期试验文件</font></caption>
                                 <thead>
                                 <tr>
-                                    <th style="text-align:center">序号</th>
                                     <!--<th style="text-align:center">序号</th>-->
                                     <th style="text-align:center">机组</th>
                                     <th style="text-align:center">厂房</th>
@@ -98,60 +97,74 @@
                                     <th style="text-align:center">状态</th>
                                     <th style="text-align:center">检查人</th>
                                     <th style="text-align:center">检查时间</th>
+                                    <th style="text-align:center">备注</th>
                                     <th style="text-align:center">缺陷描述</th>
                                     <th style="text-align:center">整改方式</th>
                                     <th style="text-align:center">跟踪单号</th>
-                                    <th style="text-align:center">备注</th>
                                     <th style="text-align:center">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody style="text-align:center ">
-                                <tr th:each="inspect:${list}">
-                                    <td></td>
-                                    <!--<td th:text="${equip.id}"></td>-->
-                                    <td th:text="${inspect.unit}"></td>
-                                    <td th:text="${inspect.factoryBuilding}"></td>
-                                    <td th:text="${inspect.location}"></td>
-                                    <td th:text="${inspect.kks}"></td>
-                                    <td th:text="${inspect.name}"></td>
-                                    <td th:text="${inspect.checkcycle}"></td>
-                                    <td>
-                                        <span class="glyphicon glyphicon-ok" aria-hidden="true" th:if="${inspect.state  eq 1}"></span>
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" th:if="${inspect.state ne 1}"></span>
-                                    </td>
-                                    <td th:text="${inspect.checker}"></td>
-                                    <td th:text="${inspect.checktime}"></td>
-                                    <td th:text="${inspect.defectdesc}"></td>
-                                    <td th:text="${inspect.method}"></td>
-                                    <td th:text="${inspect.tracenumber}"></td>
-                                    <td th:if="${inspect.attachment eq 1}">
-                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${inspect.id})}">附件</a>
-                                    </td>
-                                    <td th:if="${inspect.attachment ne 1}">
-                                        <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${inspect.id},record='ricrecord')}">无附件</a>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-taskid="${inspect.taskid}"
-                                        th:data-unit="${inspect.unit}" th:data-year="${inspect.year}" th:data-fac="${inspect.factoryBuilding}" th:data-location="${inspect.location}" th:data-kks="${inspect.location}"
-                                        th:data-name="${inspect.name}" th:data-checkcycle="${inspect.checkcycle}" th:data-state="${inspect.state}" th:data-checker="${inspect.checker}" th:data-checktime="${inspect.checktime}"
-                                        th:data-defectdesc="${inspect.defectdesc}" th:data-method="${inspect.method}" th:data-tracenumber="${inspect.tracenumber}" th:data-attachment="${inspect.attachment}">录入</button>
-                                    </td>
-                                </tr>
+                                <div th:each="inspect:${list}">
+                                    <tr>
+                                        <!--<td th:text="${equip.id}"></td>-->
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:text="${inspect.unit}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:text="${inspect.factoryBuilding}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:text="${inspect.location}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:text="${inspect.kks}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:text="${inspect.name}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:text="${inspect.checkcycle}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}">
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true" th:if="${inspect.state  eq 1}"></span>
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true" th:if="${inspect.state ne 1}"></span>
+                                        </td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:text="${inspect.checker}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:text="${inspect.checktime}"></td>
+                                        <td style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:if="${inspect.attachment eq 1}">
+                                            <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${inspect.id})}">附件</a>
+                                        </td>
+                                        <td  style="vertical-align: middle" th:rowspan="${inspect.rtDefects.size()+1}" th:if="${inspect.attachment ne 1}">
+                                            <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${inspect.id},record='rtrecord')}">无附件</a>
+                                        </td>
+                                        <div th:if="${inspect.rtDefects.size() ne 0}">
+                                            <td th:text="${inspect.rtDefects[0].defectdesc}"></td>
+                                            <td th:text="${inspect.rtDefects[0].method}"></td>
+                                            <td th:text="${inspect.rtDefects[0].tracenumber}"></td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.rtDefects[0].id}"
+                                                        th:data-defectdesc="${inspect.rtDefects[0].defectdesc}" th:data-method="${inspect.rtDefects[0].method}" th:data-tracenumber="${inspect.rtDefects[0].tracenumber}" th:data-recordid="${inspect.id}">修改</button>
+                                            </td>
+                                        </div>
+                                    </tr>
+                                    <tr th:each="dpdefect:${inspect.rtDefects}">
+                                        <div th:if="${inspect.rtDefects.size() ne 0}">
+                                            <div th:if="${dpdefect ne inspect.rtDefects[0]}">
+                                                <td th:text="${dpdefect.defectdesc}"></td>
+                                                <td th:text="${dpdefect.method}"></td>
+                                                <td th:text="${dpdefect.tracenumber}"></td>
+                                                <td>
+                                                    <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}"
+                                                            th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${inspect.id}">修改</button>
+                                                </td>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </div>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                <div th:if="${regularInspectApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交</button></div>
-                <div th:if="${regularInspectApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
-                    <div th:if="${regularInspectApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
-                    <div th:if="${regularInspectApprovalRecord.approvalstate eq 1}">
-                        <div th:if="${regularInspectApprovalRecord.approvalresult eq 0}">
-                            审批未通过，审批意见：<p th:text="${regularInspectApprovalRecord.comments}">无</p>
-                            <a class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">重新提交</a>
+                <div th:if="${regulartestApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交</button></div>
+                <div th:if="${regulartestApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
+                    <div th:if="${regulartestApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
+                    <div th:if="${regulartestApprovalRecord.approvalstate eq 1}">
+                        <div th:if="${regulartestApprovalRecord.approvalresult eq 0}">
+                            审批未通过，审批意见：<p th:text="${regulartestApprovalRecord.comments}">无</p>
+                            <button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">重新提交</button>
                         </div>
-                        <div th:if="${regularInspectApprovalRecord.approvalresult eq 1}">审批通过
-                            <a class="btn btn-info" th:href="@{/regularinspectrecordPDF(taskid=${taskid},unit=${unit},checkproject=${checkproject},year=${year})}">导出PDF</a>
+                        <div th:if="${regulartestApprovalRecord.approvalresult eq 1}">审批通过
+                            <a class="btn btn-info" th:href="@{/regularinspectrecordPDF}">导出PDF</a>
                         </div>
                     </div>
                 </div>
@@ -171,7 +184,7 @@
                 <h4 class="modal-title" id="approvalModalLabel">审批</h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/regularinspectrecordcommit}">
+                <form th:action="@{/regulartestrecordcommit}">
                     <div class="form-group">审批人
                         <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
                     </div>
@@ -186,13 +199,13 @@
                     <div class="form-group">
                         <textarea class="form-control" id="comments" placeholder="审批意见" name="comments"></textarea>
                     </div>
-                    <input type="hidden" name="id" th:value="${regularInspectApprovalRecord.id}">
-                    <input type="hidden" name="submiter" th:value="${regularInspectApprovalRecord.submiter}">
-                    <input type="hidden" name="submitdate" th:value="${regularInspectApprovalRecord.submitdate}">
-                    <input type="hidden" name="submitstate" th:value="${regularInspectApprovalRecord.submitstate}">
+                    <input type="hidden" name="id" th:value="${regulartestApprovalRecord.id}">
+                    <input type="hidden" name="submiter" th:value="${regulartestApprovalRecord.submiter}">
+                    <input type="hidden" name="submitdate" th:value="${regulartestApprovalRecord.submitdate}">
+                    <input type="hidden" name="submitstate" th:value="${regulartestApprovalRecord.submitstate}">
                     <input type="hidden" name="approvaldate" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}">
                     <input type="hidden" name="approvalstate" value="1">
-                    <input type="hidden" name="taskid" th:value="${regularInspectApprovalRecord.taskid}">
+                    <input type="hidden" name="taskid" th:value="${regulartestApprovalRecord.taskid}">
                     <input type="hidden" name="unit" th:value="${unit}">
                     <input type="hidden" name="year" th:value="${year}">
                     <input type="hidden" name="checkproject" th:value="${checkproject}">
@@ -214,55 +227,24 @@
                 <h4 class="modal-title" id="myModalLabel"><font color="red">录入</font></h4>
             </div>
             <div class="modal-body">
-                <form th:action="@{/entryregularinspectrecord}">
+                <form th:action="@{/changertdefect}">
                     <div class="form-group">
                         <input type="hidden" name="id" id="id">
                     </div>
                     <div class="form-group">
-                        <input type="hidden" name="taskid" id="taskid">
+                        <input type="hidden" name="recordid" id="recordid">
                     </div>
                     <div class="form-group">
-                        <input type="hidden" name="unit" id="unit">
+                        <input type="hidden" name="taskid" th:value="${taskid}">
                     </div>
                     <div class="form-group">
-                        <input type="hidden" name="factoryBuilding" id="factoryBuilding">
+                        <input type="hidden" name="unit" th:value="${unit}">
                     </div>
                     <div class="form-group">
-                        <input type="hidden" name="year" id="year">
+                        <input type="hidden" name="year" th:value="${year}">
                     </div>
                     <div class="form-group">
-                        <input type="hidden" name="location" id="location">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" name="kks" id="kks">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" name="name" id="name">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" name="checkcycle" id="checkcycle">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" name="ifchecked" id="ifchecked" value="1">
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" name="attachment" id="attachment" value="1">
-                    </div>
-                    <div class="form-group">状态
-                        <label class="radio-inline">
-                            <input type="radio" name="state" id="state1" value="1" readonly>已完工
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="state" id="state2" value="0" readonly>未完工
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label for="checker">检查人</label>
-                        <input type="text" class="form-control" id="checker" name="checker" th:attr="value=${session.username}" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="checktime">检查时间</label>
-                        <input type="text" class="form-control" id="checktime" name="checktime" th:attr="value=${#dates.format(new java.util.Date().getTime(),'yyyy-MM-dd')}" readonly>
+                        <input type="hidden" name="checkproject" th:value="${checkproject}">
                     </div>
                     <div class="form-group">
                         <label for="defectdesc">缺陷描述</label>
@@ -326,52 +308,26 @@
 <script type="text/javascript" th:inline="javascript">
     $('#data1').datepicker();
     $(document).ready(function () {
-        var len = $('table tr').length;
-        for(var i = 1;i<len;i++){
-            $('table tr:eq('+i+') td:first').text(i);
-        }
-    })
 
+    })
     $('#changeModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = button.data('id') // Extract info from data-* attributes
-        var taskid = button.data('taskid')
-        var unit = button.data('unit')
-        var factoryBuilding = button.data('fac')
-        var location = button.data('location')
-        var kks = button.data('kks')
-        var name = button.data('name')
-        var year = button.data('year')
-        var checkcycle = button.data('checkcycle')
-        var state=button.data('state')
-        var checker=button.data('checker')
-        var checktime=button.data('checktime')
-        var defectdesc=button.data('defectdesc')
-        var method=button.data('method')
-        var tracenumber=button.data('tracenumber')
-        var attachment=button.data('attachment')
+        var recordid = button.data('recordid')
+        var defectdesc = button.data('defectdesc')
+        var method = button.data('method')
+        var tracenumber = button.data('tracenumber')
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
         modal.find('#id').val(id);
-        modal.find('#taskid').val(taskid);
-        modal.find('#unit').val(unit);
-        modal.find('#factoryBuilding').val(factoryBuilding);
-        modal.find('#location').val(location);
-        modal.find('#kks').val(kks);
-        modal.find('#name').val(name);
-        modal.find('#year').val(year);
-        modal.find('#checkcycle').val(checkcycle);
-        modal.find('#checker').val(checker);
-        modal.find('#checktime').val(checktime);
+        modal.find('#recordid').val(recordid);
         modal.find('#defectdesc').val(defectdesc);
         modal.find('#method').val(method);
         modal.find('#tracenumber').val(tracenumber);
-        modal.find('#attachment').val(attachment);
-        modal.find("input[type=radio][name='state'][value='"+state+"']").attr("checked",'checked');
     })
     function submit() {
-        window.location.href="/submitregularinspectrecord?submiter="+[[${session.username}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1&taskid="+[[${taskid}]]+"&unit="+[[${unit}]]+"&checkproject="+[[${checkproject}]]+"&year="+[[${year}]];
+        window.location.href="/submitregulartestrecord?submiter="+[[${session.username}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1&taskid="+[[${taskid}]]+"&unit="+[[${unit}]]+"&checkproject="+[[${checkproject}]]+"&year="+[[${year}]];
     }
 </script>
 </body>

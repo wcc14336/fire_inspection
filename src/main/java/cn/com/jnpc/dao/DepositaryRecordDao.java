@@ -18,4 +18,6 @@ public interface DepositaryRecordDao extends JpaRepository<DepositaryRecord,Stri
     @Modifying
     @Query("update DepositaryRecord d set d.attachment=?1 where d.id=?2")
     void updateattachment(int i, String recordid);
+    @Query("select d from DepositaryRecord d where d.unit=?1 and d.checktime between ?2 and ?3")
+    List<DepositaryRecord> findByUnitAndChecktime(String unit, String starttime, String endtime);
 }

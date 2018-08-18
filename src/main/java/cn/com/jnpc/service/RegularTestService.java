@@ -31,4 +31,8 @@ public class RegularTestService {
     public List<RegularTest> findMyUndonetask(String username, Integer i) {
         return regularTestDao.findMyUndonetask(username,i);
     }
+
+    public RegularTest findbyid(String taskid) {
+        return regularTestDao.findbyid(taskid);
+    }
 }

@@ -213,7 +213,7 @@
                                             <td th:text="${fwdefect.method}"></td>
                                             <td th:text="${fwdefect.tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#fchangeModal" th:data-id="${fwdefect.id}" data-defect="FWdefect"
+                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${fwdefect.id}" data-defect="FWdefect"
                                                         th:data-defectdesc="${fwdefect.defectdesc}" th:data-method="${fwdefect.method}" th:data-tracenumber="${fwdefect.tracenumber}" th:data-recordid="${fRecord.id}">修改</button>
                                             </td>
                                         </div>
@@ -503,13 +503,13 @@
                         </table>
                     </div>
                 </div>
-                <div th:if="${submitAndApprovalRecord.submitstate ne 1}" style="text-align: center"><a class="btn btn-lg btn-info" th:href="@{/submit(submiter=${session.username},checkdate=${condition.date},unit=${condition.unit},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">提交</a></div>
+                <div th:if="${submitAndApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交</button></div>
                 <div th:if="${submitAndApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
                     <div th:if="${submitAndApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
                     <div th:if="${submitAndApprovalRecord.approvalstate eq 1}">
                         <div th:if="${submitAndApprovalRecord.approvalresult eq 0}">
                             审批未通过，审批意见：<p th:text="${submitAndApprovalRecord.comments}">无</p>
-                            <a class="btn btn-lg btn-info" th:href="@{/submit(submiter=${session.username},unit=${condition.unit},checkdate=${condition.date},submitdate=${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')},submitstate=1)}">重新提交</a>
+                            <button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">重新提交</button>
                         </div>
                         <div th:if="${submitAndApprovalRecord.approvalresult eq 1}">审批通过
                             <a class="btn btn-info" th:href="@{/outputPDF(checkdate=${submitAndApprovalRecord.checkdate},submiter=${submitAndApprovalRecord.submiter},unit=${submitAndApprovalRecord.unit})}">导出PDF</a>
@@ -947,6 +947,9 @@
         modal.find('#defect').val(defect);
 
     })
+    function submit() {
+        window.location.href="/submit?submiter="+[[${session.username}]]+"&checkdate="+[[${condition.date}]]+"&unit="+[[${condition.unit}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1"
+    }
 
    /* $('#fchangeModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal

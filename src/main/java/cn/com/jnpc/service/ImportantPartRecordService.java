@@ -32,4 +32,8 @@ public class ImportantPartRecordService {
     public void updateattachment(Integer i,String recordid) {
         importantPartRecordDao.updateattachment(i,recordid);
     }
+
+    public List<ImportantPartRecord> findByChecktimeAndUnit(String unit, String starttime, String endtime) {
+        return importantPartRecordDao.findByChecktimeAndUnit(unit,starttime,endtime);
+    }
 }

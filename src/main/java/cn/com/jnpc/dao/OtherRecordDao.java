@@ -18,4 +18,6 @@ public interface OtherRecordDao extends JpaRepository<OtherRecord,String>{
     @Modifying
     @Query("update OtherRecord o set o.attachment=?1 where o.id=?2")
     void updateattachment(int i, String recordid);
+    @Query("select o from OtherRecord o where o.unit=?1 and o.checktime between ?2 and ?3")
+    List<OtherRecord> findByUnitAndChecktime(String unit, String starttime, String endtime);
 }

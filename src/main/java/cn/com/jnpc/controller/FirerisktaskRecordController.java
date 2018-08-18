@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,9 +93,10 @@ public class FirerisktaskRecordController {
     @RequestMapping("/firerisktaskExcel")
     public void firerisktaskExcel(String unit,String factoryBuilding,String location,String jobmanager,String fireworker,String fireworkinspecter,Integer state,String inspecter,HttpServletResponse response) throws IOException {
         List<FirerisktaskRecord> list=firerisktaskRecordService.findAllByCondition(unit,factoryBuilding,location,jobmanager,fireworker,fireworkinspecter,state,inspecter);
-        String fileName = "动火作业现场确认单列表"  + ".xls";//设置要导出的文件的名字
+        String fileName = "重大火灾风险作业跟踪监督单"  + ".xls";//设置要导出的文件的名字
+        fileName = URLEncoder.encode(fileName, "UTF-8");
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("动火作业现场确认单");
+        HSSFSheet sheet = workbook.createSheet("重大火灾风险作业跟踪监督单");
         int rowNum = 1;
         String[] headers = { "机组", "厂房", "房间", "重大火灾风险分析单号","工作负责人","测量数据","测量时间","动火人","监火人","监督人1","测量数据","测量时间","监督人2","测量数据","测量时间","状态","备注"};
         //headers表示excel表中第一行的表头
