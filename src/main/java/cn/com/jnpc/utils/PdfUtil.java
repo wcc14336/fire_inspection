@@ -334,7 +334,6 @@ public class PdfUtil {
             table.addCell(cell);
             cell=mergeRow(record.getLocation(),font,size);
             table.addCell(cell);
-            table.addCell(cell);
             cell=mergeRow(record.getChecktime(),font,size);
             table.addCell(cell);
             cell=mergeRow(record.getChecker(),font,size);

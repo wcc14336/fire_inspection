@@ -131,7 +131,7 @@
                                         <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${inspect.id},record='ricrecord')}">无附件</a>
                                     </td>
                                     <td>
-                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-taskid="${inspect.taskid}"
+                                        <button th:if="${regularInspectApprovalRecord.submitstate ne 1 ||(regularInspectApprovalRecord.submitstate eq 1 && regularInspectApprovalRecord.approvalstate eq 1 && regularInspectApprovalRecord.approvalresult eq 0)}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-taskid="${inspect.taskid}"
                                         th:data-unit="${inspect.unit}" th:data-year="${inspect.year}" th:data-fac="${inspect.factoryBuilding}" th:data-location="${inspect.location}" th:data-kks="${inspect.location}"
                                         th:data-name="${inspect.name}" th:data-checkcycle="${inspect.checkcycle}" th:data-state="${inspect.state}" th:data-checker="${inspect.checker}" th:data-checktime="${inspect.checktime}"
                                         th:data-defectdesc="${inspect.defectdesc}" th:data-method="${inspect.method}" th:data-tracenumber="${inspect.tracenumber}" th:data-attachment="${inspect.attachment}">录入</button>
@@ -144,7 +144,7 @@
                 </div>
                 <div th:if="${regularInspectApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交</button></div>
                 <div th:if="${regularInspectApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
-                    <div th:if="${regularInspectApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
+                    <div th:if="${regularInspectApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal" th:if="${session.person.engineer eq 1}">点击审批</button></div>
                     <div th:if="${regularInspectApprovalRecord.approvalstate eq 1}">
                         <div th:if="${regularInspectApprovalRecord.approvalresult eq 0}">
                             审批未通过，审批意见：<p th:text="${regularInspectApprovalRecord.comments}">无</p>
@@ -173,7 +173,7 @@
             <div class="modal-body">
                 <form th:action="@{/regularinspectrecordcommit}">
                     <div class="form-group">审批人
-                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
+                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.person.name}">
                     </div>
                     <div class="form-group">审批结果
                         <label class="radio-inline">
@@ -258,7 +258,7 @@
                     </div>
                     <div class="form-group">
                         <label for="checker">检查人</label>
-                        <input type="text" class="form-control" id="checker" name="checker" th:attr="value=${session.username}" readonly>
+                        <input type="text" class="form-control" id="checker" name="checker" th:attr="value=${session.person.name}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="checktime">检查时间</label>
@@ -330,6 +330,12 @@
         for(var i = 1;i<len;i++){
             $('table tr:eq('+i+') td:first').text(i);
         }
+        var methods=[[${methods}]];
+        var select=$("select[name=method]");
+        select.empty();
+        for(var i=0;i<methods.length;i++){
+            $("<option></option>").val(methods[i]).text(methods[i]).appendTo(select);
+        }
     })
 
     $('#changeModal').on('show.bs.modal', function (event) {
@@ -371,7 +377,7 @@
         modal.find("input[type=radio][name='state'][value='"+state+"']").attr("checked",'checked');
     })
     function submit() {
-        window.location.href="/submitregularinspectrecord?submiter="+[[${session.username}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1&taskid="+[[${taskid}]]+"&unit="+[[${unit}]]+"&checkproject="+[[${checkproject}]]+"&year="+[[${year}]];
+        window.location.href="/submitregularinspectrecord?submiter="+[[${session.person.name}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1&taskid="+[[${taskid}]]+"&unit="+[[${unit}]]+"&checkproject="+[[${checkproject}]]+"&year="+[[${year}]];
     }
 </script>
 </body>

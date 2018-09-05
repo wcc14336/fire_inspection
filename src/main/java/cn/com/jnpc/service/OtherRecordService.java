@@ -35,4 +35,8 @@ public class OtherRecordService {
     public List<OtherRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
         return otherRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
     }
+
+    public OtherRecord findByUnitAndFactoryBuildingAndLocationAndCheckerAndChecktime(String unit, String factoryBuilding, String location, String checker, String checktime) {
+        return otherRecordDao.findByUnitAndFactoryBuildingAndLocationAndCheckerAndChecktime(unit,factoryBuilding,location,checker,checktime);
+    }
 }

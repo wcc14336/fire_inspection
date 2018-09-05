@@ -127,7 +127,7 @@
                                             <td th:text="${iRecord.IPRdefects[0].method}"></td>
                                             <td th:text="${iRecord.IPRdefects[0].tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${iRecord.IPRdefects[0].id}" data-defect="IPRdefect"
+                                                <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${iRecord.IPRdefects[0].id}" data-defect="IPRdefect"
                                                         th:data-defectdesc="${iRecord.IPRdefects[0].defectdesc}" th:data-method="${iRecord.IPRdefects[0].method}" th:data-tracenumber="${iRecord.IPRdefects[0].tracenumber}" th:data-recordid="${iRecord.id}">修改</button>
                                             </td>
                                         </div>
@@ -139,7 +139,7 @@
                                                 <td th:text="${iprdefect.method}"></td>
                                                 <td th:text="${iprdefect.tracenumber}"></td>
                                                 <td>
-                                                    <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${iprdefect.id}" data-defect="IPRdefect"
+                                                    <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${iprdefect.id}" data-defect="IPRdefect"
                                                             th:data-defectdesc="${iprdefect.defectdesc}" th:data-method="${iprdefect.method}" th:data-tracenumber="${iprdefect.tracenumber}" th:data-recordid="${iRecord.id}">修改</button>
                                                 </td>
                                             </div>
@@ -200,7 +200,7 @@
                                         <td th:text="${fRecord.FWDefects[0].method}"></td>
                                         <td th:text="${fRecord.FWDefects[0].tracenumber}"></td>
                                         <td>
-                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${fRecord.FWDefects[0].id}" data-defect="FWdefect"
+                                            <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${fRecord.FWDefects[0].id}" data-defect="FWdefect"
                                                     th:data-defectdesc="${fRecord.FWDefects[0].defectdesc}" th:data-method="${fRecord.FWDefects[0].method}" th:data-tracenumber="${fRecord.FWDefects[0].tracenumber}" th:data-recordid="${fRecord.id}">修改</button>
                                         </td>
                                     </div>
@@ -213,7 +213,7 @@
                                             <td th:text="${fwdefect.method}"></td>
                                             <td th:text="${fwdefect.tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${fwdefect.id}" data-defect="FWdefect"
+                                                <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${fwdefect.id}" data-defect="FWdefect"
                                                         th:data-defectdesc="${fwdefect.defectdesc}" th:data-method="${fwdefect.method}" th:data-tracenumber="${fwdefect.tracenumber}" th:data-recordid="${fRecord.id}">修改</button>
                                             </td>
                                         </div>
@@ -265,7 +265,7 @@
                                         <td th:text="${dRecord.dpDefects[0].method}"></td>
                                         <td th:text="${dRecord.dpDefects[0].tracenumber}"></td>
                                         <td>
-                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.dpDefects[0].id}" data-defect="DPdefect"
+                                            <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.dpDefects[0].id}" data-defect="DPdefect"
                                                     th:data-defectdesc="${dRecord.dpDefects[0].defectdesc}" th:data-method="${dRecord.dpDefects[0].method}" th:data-tracenumber="${dRecord.dpDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                         </td>
                                     </div>
@@ -278,7 +278,7 @@
                                             <td th:text="${dpdefect.method}"></td>
                                             <td th:text="${dpdefect.tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="DPdefect"
+                                                <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="DPdefect"
                                                         th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                             </td>
                                         </div>
@@ -340,7 +340,7 @@
                                         <td th:text="${dRecord.fdDefects[0].method}"></td>
                                         <td th:text="${dRecord.fdDefects[0].tracenumber}"></td>
                                         <td>
-                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.fdDefects[0].id}" data-defect="FDdefect"
+                                            <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.fdDefects[0].id}" data-defect="FDdefect"
                                                     th:data-defectdesc="${dRecord.fdDefects[0].defectdesc}" th:data-method="${dRecord.fdDefects[0].method}" th:data-tracenumber="${dRecord.fdDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                         </td>
                                     </div>
@@ -353,7 +353,7 @@
                                             <td th:text="${dpdefect.method}"></td>
                                             <td th:text="${dpdefect.tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="FDdefect"
+                                                <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="FDdefect"
                                                         th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                             </td>
                                         </div>
@@ -412,7 +412,7 @@
                                         <td th:text="${dRecord.pvDefects[0].method}"></td>
                                         <td th:text="${dRecord.pvDefects[0].tracenumber}"></td>
                                         <td>
-                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.pvDefects[0].id}" data-defect="PVdefect"
+                                            <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.pvDefects[0].id}" data-defect="PVdefect"
                                                     th:data-defectdesc="${dRecord.pvDefects[0].defectdesc}" th:data-method="${dRecord.pvDefects[0].method}" th:data-tracenumber="${dRecord.pvDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                         </td>
                                     </div>
@@ -425,7 +425,7 @@
                                             <td th:text="${dpdefect.method}"></td>
                                             <td th:text="${dpdefect.tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="PVdefect"
+                                                <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="PVdefect"
                                                         th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                             </td>
                                         </div>
@@ -478,7 +478,7 @@
                                         <td th:text="${dRecord.oDefects[0].method}"></td>
                                         <td th:text="${dRecord.oDefects[0].tracenumber}"></td>
                                         <td>
-                                            <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.oDefects[0].id}" data-defect="Odefect"
+                                            <button th:if="${submitAndApprovalRecord.submitstate ne 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.oDefects[0].id}" data-defect="Odefect"
                                                     th:data-defectdesc="${dRecord.oDefects[0].defectdesc}" th:data-method="${dRecord.oDefects[0].method}" th:data-tracenumber="${dRecord.oDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                         </td>
                                     </div>
@@ -491,7 +491,7 @@
                                             <td th:text="${dpdefect.method}"></td>
                                             <td th:text="${dpdefect.tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="Odefect"
+                                                <button th:if="${submitAndApprovalRecord.submitstate eq 1||(submitAndApprovalRecord.submitstate eq 1 && submitAndApprovalRecord.approvalstate eq 1 && submitAndApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}" data-defect="Odefect"
                                                         th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                             </td>
                                         </div>
@@ -505,7 +505,7 @@
                 </div>
                 <div th:if="${submitAndApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交</button></div>
                 <div th:if="${submitAndApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
-                    <div th:if="${submitAndApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
+                    <div th:if="${submitAndApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal" th:if="${session.person.engineer eq 1}">点击审批</button></div>
                     <div th:if="${submitAndApprovalRecord.approvalstate eq 1}">
                         <div th:if="${submitAndApprovalRecord.approvalresult eq 0}">
                             审批未通过，审批意见：<p th:text="${submitAndApprovalRecord.comments}">无</p>
@@ -534,7 +534,7 @@
             <div class="modal-body">
                 <form th:action="@{/approvalcommit}">
                     <div class="form-group">审批人
-                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
+                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.person.name}">
                     </div>
                     <div class="form-group">审批结果
                         <label class="radio-inline">
@@ -927,6 +927,14 @@
 <script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        var methods=[[${methods}]];
+        var select=$("select[name=method]");
+        select.empty();
+        for(var i=0;i<methods.length;i++){
+            $("<option></option>").val(methods[i]).text(methods[i]).appendTo(select);
+        }
+    })
     $('#changeModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = button.data('id') // Extract info from data-* attributes
@@ -948,7 +956,7 @@
 
     })
     function submit() {
-        window.location.href="/submit?submiter="+[[${session.username}]]+"&checkdate="+[[${condition.date}]]+"&unit="+[[${condition.unit}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1"
+        window.location.href="/submit?submiter="+[[${session.person.name}]]+"&checkdate="+[[${condition.date}]]+"&unit="+[[${condition.unit}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1"
     }
 
    /* $('#fchangeModal').on('show.bs.modal', function (event) {

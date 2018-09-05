@@ -1,14 +1,13 @@
 package cn.com.jnpc.controller;
 
+import cn.com.jnpc.dao.MethodDao;
 import cn.com.jnpc.entity.*;
 import cn.com.jnpc.service.*;
 import cn.com.jnpc.utils.EmailUtil;
-import com.sun.xml.internal.ws.resources.HttpserverMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -35,6 +34,8 @@ public class RegularTestController {
     private RTDefectService rtDefectService;
     @Autowired
     private EmailUtil emailUtil;
+    @Autowired
+    private MethodDao methodDao;
     @RequestMapping("/regulartest")
     public ModelAndView regulartest(ModelAndView map){
         map.setViewName("regulartest");
@@ -43,7 +44,8 @@ public class RegularTestController {
     @RequestMapping("/entryRegulartest")
     public ModelAndView entryRegulartest(ModelAndView map, String unit, Integer year, HttpSession session,String username){
         if (username==null||"".equals(username)){
-            username = (String) session.getAttribute("username");
+            Person person=(Person)session.getAttribute("person");
+            username = person.getName();
         }
         String id=username+"-"+year+"-"+unit;
         RegularTestApprovalRecord regularTestApprovalRecord=regularTestApprovalRecordService.findByid(id);
@@ -102,6 +104,7 @@ public class RegularTestController {
         emailUtil.sendEmail("年度定期试验计划审批","系统中有年度定期试验计划需要审批",list);
         attributes.addAttribute("unit",regularTestApprovalRecord.getUnit());
         attributes.addAttribute("year",regularTestApprovalRecord.getYear());
+        attributes.addAttribute("username",regularTestApprovalRecord.getSubmiter());
         return "redirect:entryRegulartest";
     }
     @RequestMapping("/entrytestapprovalcommit")
@@ -120,7 +123,8 @@ public class RegularTestController {
     }
     @RequestMapping("/myRegulartesttask")
     public ModelAndView myRegulartesttask(ModelAndView map, HttpSession session){
-        String username= (String) session.getAttribute("username");
+        Person person= (Person) session.getAttribute("person");
+        String username=person.getName();
         List<RegularTest> list=regularTestService.findMyUndonetask(username,0);
         List<RegularTest> list1=regularTestService.findMyUndonetask(username,1);
         map.addObject("list",list);
@@ -139,6 +143,8 @@ public class RegularTestController {
             regularTestRecordApproval.setUnit(unit);
             regularTestRecordApproval.setYear(year);
             regularTestRecordApproval.setCheckproject(checkproject);
+            regularTestRecordApproval.setSubmitstate(0);
+            regularTestRecordApproval.setApprovalstate(0);
             regularTestRecordApprovalService.save(regularTestRecordApproval);
         }
         RegularTestRecordApproval regularTestRecordApproval1=regularTestRecordApprovalService.findById(id);
@@ -164,6 +170,8 @@ public class RegularTestController {
         list=regularTestRecordService.findByTaskid(taskid);
         map.addObject("list",list);
         map.setViewName("regulartestrecordlist");
+        List<String> list1=methodDao.finddistinctmethod();
+        map.addObject("methods",list1);
         map.addObject("taskid",taskid);
         map.addObject("unit",unit);
         map.addObject("year",year);
@@ -214,6 +222,13 @@ public class RegularTestController {
         attributes.addAttribute("year",year);
         attributes.addAttribute("taskid",taskid);
         return "redirect:regulartestrecord";
+    }
+    @RequestMapping("/changeregulartest")
+    public String changeregulartest(RegularTest regularTest,String unit,Integer year,RedirectAttributes attributes){
+        attributes.addAttribute("unit",unit);
+        attributes.addAttribute("year",year);
+        regularTestService.save(regularTest);
+        return "redirect:/regulartestlist";
     }
     @RequestMapping("/changertdefect")
     public String changertdefect(RTDefect rtDefect,String recordid,String taskid,String unit,String checkproject,Integer year,RedirectAttributes attributes){

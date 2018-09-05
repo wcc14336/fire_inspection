@@ -87,10 +87,12 @@
                                 <div class="form-group">
                                     <select class="form-control" id="unit" name="unit">
                                         <option value="">机组</option>
-                                        <option>一号机组</option>
-                                        <option>二号机组</option>
-                                        <option>三号机组</option>
-                                        <option>四号机组</option>
+                                        <option value="1">一号机组</option>
+                                        <option value="2">二号机组</option>
+                                        <option value="3">三号机组</option>
+                                        <option value="4">四号机组</option>
+                                        <option value="5">四号机组</option>
+                                        <option value="6">四号机组</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -159,7 +161,7 @@
                                     <th style="text-align:center">测量时间</th>
                                     <th style="text-align:center">状态</th>
                                     <th style="text-align:center">备注</th>
-                                    <th style="text-align:center">操作</th>
+                                    <th style="text-align:center" th:if="${session.person.engineer eq 1}" >操作</th>
                                 </tr>
                                 </thead>
                                 <tbody style="text-align:center ">
@@ -193,7 +195,7 @@
                                     <td th:if="${record.attachment ne 1}">
                                         <a class="btn btn-xs btn-info" th:href="@{/attachments(recordid=${record.id},record='frtrecord')}">无附件</a>
                                     </td>
-                                    <td>
+                                    <td th:if="${session.person.engineer eq 1}" >
                                         <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${record.id}" th:data-unit="${record.unit}" th:data-fac="${record.factoryBuilding}" th:data-location="${record.location}" th:data-tracenumber="${record.tracenumber}" th:data-jobmanager="${record.jobmanager}" th:data-fireworker="${record.fireworker}" th:data-fireinspecter="${record.fireinspecter}" th:data-measurement="${record.measurement}" th:data-measuretime="${record.measuretime}" th:data-inspecter1="${record.inspecter1}"
                                                 th:data-measurement1="${record.measurement1}" th:data-measuretime1="${record.measuretime1}" th:data-inspecter2="${record.inspecter2}" th:data-measurement2="${record.measurement2}" th:data-measuretime2="${record.measuretime2}" th:data-state="${record.state}" th:data-attachment="${record.attachment}">修改</button>
                                        <!-- <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${record.id}" th:data-name="${equip.name}">删除</button>-->
@@ -414,7 +416,8 @@
             type:"POST",
             url:[[@{/findlocations}]],
         data:{
-            factoryBuilding:$("#factoryBuilding").val()
+            factoryBuilding:$("#factoryBuilding").val(),
+            unit:$("#unit").val()
         },
         dataType:"json",
             success:function (datas) {

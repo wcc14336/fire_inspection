@@ -26,7 +26,7 @@ public class MaintenanceRecord {
     private String maintainer;
     private String maintaintime;
     private String number;
-    private Integer attachment;
+    private Integer attachment=0;
     private Integer ifcommit;
     private Integer ifpassed;
 

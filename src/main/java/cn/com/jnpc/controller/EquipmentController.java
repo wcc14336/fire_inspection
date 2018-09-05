@@ -1,6 +1,10 @@
 package cn.com.jnpc.controller;
 
+import cn.com.jnpc.dao.CategoryDao;
+import cn.com.jnpc.dao.NameDao;
+import cn.com.jnpc.entity.Category;
 import cn.com.jnpc.entity.Equipment;
+import cn.com.jnpc.entity.Name;
 import cn.com.jnpc.service.EquipService;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +33,13 @@ import java.util.Map;
 public class EquipmentController {
     @Autowired
     private EquipService equipService;
+    @Autowired
+    private NameDao nameDao;
+    @Autowired
+    private CategoryDao categoryDao;
     @RequestMapping("/equiplist")
     public ModelAndView equiplist(HttpSession session,ModelAndView map, Integer number, String unit, String factoryBuilding, String location, String KKS, String name, String category, String enteringman, String updatetimestart, String updatetimeend){
-        session.setAttribute("username","李四");
+        //session.setAttribute("username","李四");
         Integer pagesize=10;
         if (number==null||"".equals(number)){
             number=0;
@@ -83,6 +91,10 @@ public class EquipmentController {
         }else {
             condition.put("updatetimeend",updatetimeend);
         }
+        List<String> list1 = categoryDao.finddistinctcategory();
+        List<String> list2 = nameDao.finddistinctname();
+        map.addObject("names",list2);
+        map.addObject("categorys",list1);
         map.addObject("condition",condition);
         map.addObject("equiplist",list);
         map.setViewName("equiplist");

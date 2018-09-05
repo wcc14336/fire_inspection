@@ -1,5 +1,6 @@
 package cn.com.jnpc.controller;
 
+import cn.com.jnpc.dao.MethodDao;
 import cn.com.jnpc.entity.FCDefect;
 import cn.com.jnpc.entity.FireworkconformRecord;
 import cn.com.jnpc.service.FireworkconformRecordService;
@@ -27,6 +28,8 @@ import java.util.Set;
 public class FireworkController {
     @Autowired
     private FireworkconformRecordService fireworkconformRecordService;
+    @Autowired
+    private MethodDao methodDao;
     @RequestMapping("/fireworkconformlist")
     public ModelAndView hotworkconforminfo(ModelAndView map,Integer number, String unit, String factoryBuilding, String location, String jobmanager, String fireworkman, String fireworkinspecter, Integer state, String checker,String start, String end){
         Integer pagesize=10;
@@ -85,6 +88,8 @@ public class FireworkController {
         }else {
             condition.put("end",end);
         }
+        List<String> list1=methodDao.finddistinctmethod();
+        map.addObject("methods",list1);
         map.addObject("condition",condition);
         map.addObject("recordlist",list);
         map.setViewName("fireworkconformlist");

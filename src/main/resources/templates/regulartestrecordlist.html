@@ -131,7 +131,7 @@
                                             <td th:text="${inspect.rtDefects[0].method}"></td>
                                             <td th:text="${inspect.rtDefects[0].tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.rtDefects[0].id}"
+                                                <button th:if="${regulartestApprovalRecord.submitstate ne 1 ||(regulartestApprovalRecord.submitstate eq 1 && regulartestApprovalRecord.approvalstate eq 1 && regulartestApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.rtDefects[0].id}"
                                                         th:data-defectdesc="${inspect.rtDefects[0].defectdesc}" th:data-method="${inspect.rtDefects[0].method}" th:data-tracenumber="${inspect.rtDefects[0].tracenumber}" th:data-recordid="${inspect.id}">修改</button>
                                             </td>
                                         </div>
@@ -143,7 +143,7 @@
                                                 <td th:text="${dpdefect.method}"></td>
                                                 <td th:text="${dpdefect.tracenumber}"></td>
                                                 <td>
-                                                    <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}"
+                                                    <button th:if="${regulartestApprovalRecord.submitstate ne 1 ||(regulartestApprovalRecord.submitstate eq 1 && regulartestApprovalRecord.approvalstate eq 1 && regulartestApprovalRecord.approvalresult eq 0)}" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dpdefect.id}"
                                                             th:data-defectdesc="${dpdefect.defectdesc}" th:data-method="${dpdefect.method}" th:data-tracenumber="${dpdefect.tracenumber}" th:data-recordid="${inspect.id}">修改</button>
                                                 </td>
                                             </div>
@@ -157,7 +157,7 @@
                 </div>
                 <div th:if="${regulartestApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交</button></div>
                 <div th:if="${regulartestApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
-                    <div th:if="${regulartestApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
+                    <div th:if="${regulartestApprovalRecord.approvalstate eq 0 }">未审批<br/><button th:if="${session.person.engineer eq 1}" class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
                     <div th:if="${regulartestApprovalRecord.approvalstate eq 1}">
                         <div th:if="${regulartestApprovalRecord.approvalresult eq 0}">
                             审批未通过，审批意见：<p th:text="${regulartestApprovalRecord.comments}">无</p>
@@ -186,7 +186,7 @@
             <div class="modal-body">
                 <form th:action="@{/regulartestrecordcommit}">
                     <div class="form-group">审批人
-                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
+                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.person.name}">
                     </div>
                     <div class="form-group">审批结果
                         <label class="radio-inline">
@@ -308,7 +308,12 @@
 <script type="text/javascript" th:inline="javascript">
     $('#data1').datepicker();
     $(document).ready(function () {
-
+        var methods=[[${methods}]];
+        var select=$("select[name=method]");
+        select.empty();
+        for(var i=0;i<methods.length;i++){
+            $("<option></option>").val(methods[i]).text(methods[i]).appendTo(select);
+        }
     })
     $('#changeModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
@@ -327,7 +332,7 @@
         modal.find('#tracenumber').val(tracenumber);
     })
     function submit() {
-        window.location.href="/submitregulartestrecord?submiter="+[[${session.username}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1&taskid="+[[${taskid}]]+"&unit="+[[${unit}]]+"&checkproject="+[[${checkproject}]]+"&year="+[[${year}]];
+        window.location.href="/submitregulartestrecord?submiter="+[[${session.person.name}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1&taskid="+[[${taskid}]]+"&unit="+[[${unit}]]+"&checkproject="+[[${checkproject}]]+"&year="+[[${year}]];
     }
 </script>
 </body>

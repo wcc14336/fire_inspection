@@ -22,4 +22,10 @@ public interface FirerisktaskRecordDao extends JpaRepository<FirerisktaskRecord,
     void updateattachment(int i, String recordid);
 
     List<FirerisktaskRecord> findAll(Specification<FirerisktaskRecord> specification);
+
+    List<FirerisktaskRecord> findByUnit(String unit);
+
+    List<FirerisktaskRecord> findByUnitAndState(String unit, int i);
+    @Query("select f from FirerisktaskRecord f where f.tracenumber=?1")
+    FirerisktaskRecord findBytracenumber(String tracenumber);
 }

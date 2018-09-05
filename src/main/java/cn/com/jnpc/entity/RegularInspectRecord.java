@@ -33,7 +33,7 @@ public class RegularInspectRecord {
     private String defectdesc;
     private String method;
     private String tracenumber;
-    private Integer attachment;
+    private Integer attachment=0;
 
     public String getId() {
         return id;

@@ -18,8 +18,8 @@ public class LocationService {
     public List findfacByUnit(String unit){
         return locationDao.findfacByUnit(unit);
     }
-    public List findlocationByfac(String factoryBuilding){
-        return locationDao.findlocationByFac(factoryBuilding);
+    public List findlocationByfac(String factoryBuilding,String unit){
+        return locationDao.findlocationByFac(factoryBuilding,unit);
     }
 
     public List<Location> findlocationIsimportant(int i) {

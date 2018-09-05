@@ -35,7 +35,7 @@ public class ImportantPartRecord {
     @JoinColumn(name="importantPartRecord_id")
     private Set<IPRDefect> IPRdefects = new HashSet<IPRDefect>();
 
-    private Integer attachment;
+    private Integer attachment=0;
 
 
     public Integer getAttachment() {

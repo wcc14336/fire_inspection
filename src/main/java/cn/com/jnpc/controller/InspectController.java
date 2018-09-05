@@ -1,5 +1,8 @@
 package cn.com.jnpc.controller;
 
+import cn.com.jnpc.dao.CategoryDao;
+import cn.com.jnpc.dao.MethodDao;
+import cn.com.jnpc.dao.NameDao;
 import cn.com.jnpc.entity.*;
 import cn.com.jnpc.service.*;
 import cn.com.jnpc.utils.EmailUtil;
@@ -54,7 +57,8 @@ public class InspectController {
     private FireworkconformRecordService fireworkconformRecordService;
     @Autowired
     private EmailUtil emailUtil;
-
+    @Autowired
+    private MethodDao methodDao;
     SubmitAndApprovalRecord record;
     @RequestMapping("/dailyinspect")
     public String dailyinspect(){
@@ -66,7 +70,8 @@ public class InspectController {
     @ResponseBody
     public ModelAndView dailyinspectinfo(ModelAndView map, String date, HttpSession session,String unit,String username){
         if (username==null||"".equals(username)){
-            username = (String) session.getAttribute("username");
+            Person person =(Person) session.getAttribute("person");
+            username=person.getName();
         }
         List<ImportantPartRecord> importantPartRecords=importantPartRecordService.findAllByDateAndName(date,username,unit);
         List<FireworkRecord> fireworkRecords=fireworkRecordService.findAllByDateAndName(date,username,unit);
@@ -93,6 +98,8 @@ public class InspectController {
         condition.put("date",date);
         condition.put("unit",unit);
         condition.put("username",username);
+        List<String> list=methodDao.finddistinctmethod();
+        map.addObject("methods",list);
         map.addObject("condition",condition);
         map.setViewName("dailyinspectinfo");
         return map;
@@ -209,7 +216,7 @@ public class InspectController {
     }
 
     @RequestMapping("/submit")
-    public String  submit(String submiter,String checkdate,String submitdate,Integer submitstate,String unit){
+    public String  submit(String submiter,String checkdate,String submitdate,Integer submitstate,String unit,RedirectAttributes attributes){
         record=new SubmitAndApprovalRecord();
         String id=submiter+"-"+checkdate+"-"+unit;
         record.setId(id);
@@ -224,7 +231,10 @@ public class InspectController {
         List<String> list=new ArrayList<>();
         list.add("1433658618@qq.com");
         emailUtil.sendEmail("系统邮件","<h1>一个大标题</h1><a href='www.baidu.com'>点击查看代办</a>",list);
-        return "redirect:/dailyinspectinfo?date="+checkdate+"&unit="+unit;
+        attributes.addAttribute("date",checkdate);
+        attributes.addAttribute("unit",unit);
+        attributes.addAttribute("username",submiter);
+        return "redirect:/dailyinspectinfo";
     }
 
     @RequestMapping("/approvallist")
@@ -236,9 +246,12 @@ public class InspectController {
     }
 
     @RequestMapping("/approvalcommit")
-    public String  approvalcommit(SubmitAndApprovalRecord submitAndApprovalRecord){
+    public String  approvalcommit(SubmitAndApprovalRecord submitAndApprovalRecord,RedirectAttributes attributes){
         submitAndApprovalRecordService.save(submitAndApprovalRecord);
-        return "redirect:/dailyinspectinfo?date="+submitAndApprovalRecord.getCheckdate()+"&unit="+submitAndApprovalRecord.getUnit();
+        attributes.addAttribute("date",submitAndApprovalRecord.getCheckdate());
+        attributes.addAttribute("unit",submitAndApprovalRecord.getUnit());
+        attributes.addAttribute("username",submitAndApprovalRecord.getSubmiter());
+        return "redirect:/dailyinspectinfo";
     }
 
     @RequestMapping("/outputPDF")
@@ -303,7 +316,11 @@ public class InspectController {
                     row1.createCell(3).setCellValue(defect.getDefectdesc());
                     row1.createCell(4).setCellValue(defect.getMethod());
                     row1.createCell(5).setCellValue(defect.getTracenumber());
-                    row1.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    if (record.getAttachment()==null){
+                        row1.createCell(6).setCellValue("无附件");
+                    }else {
+                        row1.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    }
                     rowNum++;
                 }
             }else {
@@ -311,7 +328,11 @@ public class InspectController {
                 row1.createCell(0).setCellValue("消防重点位置");
                 row1.createCell(1).setCellValue(record.getChecker());
                 row1.createCell(2).setCellValue(record.getChecktime());
-                row1.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                if (record.getAttachment()==null){
+                    row1.createCell(6).setCellValue("无附件");
+                }else {
+                    row1.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                }
                 rowNum++;
             }
         }
@@ -335,7 +356,11 @@ public class InspectController {
                     row2.createCell(3).setCellValue(defect.getDefectdesc());
                     row2.createCell(4).setCellValue(defect.getMethod());
                     row2.createCell(5).setCellValue(defect.getTracenumber());
-                    row2.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    if (record.getAttachment()==null){
+                        row2.createCell(6).setCellValue("无附件");
+                    }else {
+                        row2.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    }
                     rowNum1++;
                 }
             }else {
@@ -343,7 +368,11 @@ public class InspectController {
                 row2.createCell(0).setCellValue("动火作业");
                 row2.createCell(1).setCellValue(record.getChecker());
                 row2.createCell(2).setCellValue(record.getChecktime());
-                row2.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                if (record.getAttachment()==null){
+                    row2.createCell(6).setCellValue("无附件");
+                }else {
+                    row2.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                }
                 rowNum1++;
             }
         }
@@ -367,7 +396,11 @@ public class InspectController {
                     row3.createCell(3).setCellValue(defect.getDefectdesc());
                     row3.createCell(4).setCellValue(defect.getMethod());
                     row3.createCell(5).setCellValue(defect.getTracenumber());
-                    row3.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    if (record.getAttachment()==null){
+                        row3.createCell(6).setCellValue("无附件");
+                    }else {
+                        row3.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    }
                     rowNum2++;
                 }
             }else {
@@ -375,7 +408,11 @@ public class InspectController {
                 row3.createCell(0).setCellValue("物品物料/易燃易爆危险化学品存放");
                 row3.createCell(1).setCellValue(record.getChecker());
                 row3.createCell(2).setCellValue(record.getChecktime());
-                row3.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                if (record.getAttachment()==null){
+                    row3.createCell(6).setCellValue("无附件");
+                }else {
+                    row3.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                }
                 rowNum2++;
             }
         }
@@ -399,7 +436,11 @@ public class InspectController {
                     row4.createCell(3).setCellValue(defect.getDefectdesc());
                     row4.createCell(4).setCellValue(defect.getMethod());
                     row4.createCell(5).setCellValue(defect.getTracenumber());
-                    row4.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    if (record.getAttachment()==null){
+                        row4.createCell(6).setCellValue("无附件");
+                    }else {
+                        row4.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    }
                     rowNum3++;
                 }
             }else {
@@ -407,7 +448,11 @@ public class InspectController {
                 row4.createCell(0).setCellValue("防火门");
                 row4.createCell(1).setCellValue(record.getChecker());
                 row4.createCell(2).setCellValue(record.getChecktime());
-                row4.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                if (record.getAttachment()==null){
+                    row4.createCell(6).setCellValue("无附件");
+                }else {
+                    row4.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                }
                 rowNum3++;
             }
         }
@@ -431,7 +476,11 @@ public class InspectController {
                     row5.createCell(3).setCellValue(defect.getDefectdesc());
                     row5.createCell(4).setCellValue(defect.getMethod());
                     row5.createCell(5).setCellValue(defect.getTracenumber());
-                    row5.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    if (record.getAttachment()==null){
+                        row5.createCell(6).setCellValue("无附件");
+                    }else {
+                        row5.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    }
                     rowNum4++;
                 }
             }else {
@@ -439,7 +488,11 @@ public class InspectController {
                 row5.createCell(0).setCellValue("人员违章");
                 row5.createCell(1).setCellValue(record.getChecker());
                 row5.createCell(2).setCellValue(record.getChecktime());
-                row5.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                if (record.getAttachment()==null){
+                    row5.createCell(6).setCellValue("无附件");
+                }else {
+                    row5.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                }
                 rowNum4++;
             }
 
@@ -464,7 +517,11 @@ public class InspectController {
                     row6.createCell(3).setCellValue(defect.getDefectdesc());
                     row6.createCell(4).setCellValue(defect.getMethod());
                     row6.createCell(5).setCellValue(defect.getTracenumber());
-                    row6.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    if (record.getAttachment()==null){
+                        row6.createCell(6).setCellValue("无附件");
+                    }else {
+                        row6.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                    }
                     rowNum5++;
                 }
             }else {
@@ -472,7 +529,11 @@ public class InspectController {
                 row6.createCell(0).setCellValue("其他问题");
                 row6.createCell(1).setCellValue(record.getChecker());
                 row6.createCell(2).setCellValue(record.getChecktime());
-                row6.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                if (record.getAttachment()==null){
+                    row6.createCell(6).setCellValue("无附件");
+                }else {
+                    row6.createCell(6).setCellValue(record.getAttachment()==1?"有附件":"无附件");
+                }
                 rowNum5++;
             }
 

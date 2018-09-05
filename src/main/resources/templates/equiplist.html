@@ -201,12 +201,12 @@
                                     <input class="form-control" name="updatetimeend" type="text" placeholder="结束时间" readonly id="updatetimeend">
                                 </div>
                                 <button type="submit" class="btn btn-info">搜索</button>
-                                <a class="btn btn-info btn-primary" data-toggle="modal" data-target="#addModal">添加</a>
-                                <a class="btn btn-info btn-primary" data-toggle="modal" data-target="#importModal">批量导入</a>
+                                <a th:if="${session.person.admin eq 1}" class="btn btn-info btn-primary" data-toggle="modal" data-target="#addModal">添加</a>
+                                <a th:if="${session.person.admin eq 1}" class="btn btn-info btn-primary" data-toggle="modal" data-target="#importModal">批量导入</a>
                                 <a class="btn btn-info pull-right" th:href="@{/EquipExcel(unit=${condition.unit},factoryBuilding=${condition.factoryBuilding},location=${condition.location},KKS=${condition.KKS},name=${condition.name},category=${condition.category},enteringman=${condition.enteringman},updatetimestart=${condition.updatetimestart},updatetimeend=${condition.updatetimeend})}">导出Excel</a>
                             </form>
                         </div>
-
+                        <br/>
                         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 
@@ -239,7 +239,7 @@
                                 <th style="text-align:center">更换周期</th>
                                 <th style="text-align:center">录入人</th>
                                 <th style="text-align:center">更新时间</th>
-                                <th style="text-align:center">操作</th>
+                                <th th:if="${session.person.admin eq 1}" style="text-align:center">操作</th>
                             </tr>
                             </thead>
                             <tbody style="text-align:center ">
@@ -258,9 +258,9 @@
                                     <td th:text="${equip.replacecycle}"></td>
                                     <td th:text="${equip.enteringman}"></td>
                                     <td th:text="${equip.updatetime}"></td>
-                                    <td>
-                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-unit="${equip.unit}" th:data-fac="${equip.factoryBuilding}" th:data-location="${equip.location}" th:data-kks="${equip.kks}" th:data-name="${equip.name}" th:data-category="${equip.category}" th:data-configurationtime="${equip.configurationtime}" th:data-checkcycle="${equip.checkcycle}" th:data-testcycle="${equip.testcycle}" th:data-replacecycle="${equip.replacecycle}">修改</button>
-                                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-kks="${equip.kks}" th:data-name="${equip.name}">删除</button>
+                                    <td th:if="${session.person.admin eq 1}">
+                                        <button th:if="${session.person.admin eq 1}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-unit="${equip.unit}" th:data-fac="${equip.factoryBuilding}" th:data-location="${equip.location}" th:data-kks="${equip.kks}" th:data-name="${equip.name}" th:data-category="${equip.category}" th:data-configurationtime="${equip.configurationtime}" th:data-checkcycle="${equip.checkcycle}" th:data-testcycle="${equip.testcycle}" th:data-replacecycle="${equip.replacecycle}">修改</button>
+                                        <button th:if="${session.person.admin eq 1}" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-kks="${equip.kks}" th:data-name="${equip.name}">删除</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -723,6 +723,21 @@
         for(var i = 1;i<len;i++){
             $('table tr:eq('+i+') td:first').text(i);
         }
+        var names=[[${names}]];
+        console.log(names);
+        var select=$("select[name='name']");
+        select.empty();
+        $("<option></option>").val("").text("选择设备名称").appendTo(select);
+        for(var i=0;i<=names.length;i++){
+            $("<option></option>").val(names[i]).text(names[i]).appendTo(select);
+        }
+        var categorys=[[${categorys}]];
+        var select1=$("select[name='category']");
+        select1.empty();
+        $("<option></option>").val("").text("选择设备类别").appendTo(select1);
+        for(var i=0;i<categorys.length;i++){
+            $("<option></option>").val(categorys[i]).text(categorys[i]).appendTo(select1);
+        }
     });
 
     $('#data1').datepicker();
@@ -766,7 +781,7 @@
             type:"POST",
             url:[[@{/findfactoryBuildings}]],
         data:{
-            unit:$("#unit1").val()
+            unit:$("#unit1").val(),
         },
         dataType:"json",
             success:function (datas) {
@@ -805,7 +820,8 @@
             type:"POST",
             url:[[@{/findlocations}]],
         data:{
-            factoryBuilding:$("#factoryBuilding").val()
+            factoryBuilding:$("#factoryBuilding").val(),
+            unit:$("#unit").val()
         },
         dataType:"json",
             success:function (datas) {
@@ -824,7 +840,8 @@
             type:"POST",
             url:[[@{/findlocations}]],
         data:{
-            factoryBuilding:$("#factoryBuilding1").val()
+            factoryBuilding:$("#factoryBuilding1").val(),
+            unit:$("#unit1").val()
         },
         dataType:"json",
             success:function (datas) {
@@ -843,7 +860,8 @@
             type:"POST",
             url:[[@{/findlocations}]],
         data:{
-            factoryBuilding:$("#factoryBuilding2").val()
+            factoryBuilding:$("#factoryBuilding2").val(),
+            unit:$("#unit2").val()
         },
         dataType:"json",
             success:function (datas) {

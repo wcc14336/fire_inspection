@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -24,4 +25,12 @@ public interface RegularTestRecordDao extends JpaRepository<RegularTestRecord,St
     @Modifying
     @Query("update RegularTestRecord r set r.attachment=?1 where r.id=?2")
     void updateattachment(int i, String recordid);
+    @Query("select r from RegularTestRecord r where r.taskid=?1 and r.ifchecked=?2")
+    List<RegularTestRecord> findUndoByTaskid(String taskid, int i);
+    @Query("select r from RegularTestRecord r where r.taskid=?1 and r.kks like %?2% and r.ifchecked=0")
+    List<RegularTestRecord> findByTaskidAndKks(String taskid, String kks);
+    @Modifying
+    @Transactional
+    @Query("update RegularTestRecord r set r.checker=?2,r.checktime=?3,r.state=?4,r.ifchecked=?5 where r.id=?1")
+    void updaterecordById(String id, String checker, String checktime, Integer state, int i);
 }

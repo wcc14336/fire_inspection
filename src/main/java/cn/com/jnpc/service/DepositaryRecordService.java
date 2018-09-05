@@ -36,4 +36,8 @@ public class DepositaryRecordService {
     public List<DepositaryRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
         return depositaryRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
     }
+
+    public DepositaryRecord findByUnitAndFactoryBuildingAndLocationAndCheckerAndChecktime(String unit, String factoryBuilding, String location, String checker, String checktime) {
+        return depositaryRecordDao.findByUnitAndFactoryBuildingAndLocationAndCheckerAndChecktime(unit,factoryBuilding,location,checker,checktime);
+    }
 }

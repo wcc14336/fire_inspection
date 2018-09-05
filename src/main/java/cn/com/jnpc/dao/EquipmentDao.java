@@ -25,4 +25,8 @@ public interface EquipmentDao extends JpaRepository<Equipment,String>,JpaSpecifi
 
     @Query("select e from Equipment e WHERE e.unit=?1 and e.name=?2")
     List<Equipment> findAllByCondition(String unit, String checkproject);
+    @Query("select e from Equipment e where e.kks=?1")
+    Equipment findByKks(String kks);
+    @Query("select e from Equipment e where e.kks like %?1%")
+    List<Equipment> findBykksLike(String kks);
 }

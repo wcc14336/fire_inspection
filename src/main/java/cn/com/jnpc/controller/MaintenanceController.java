@@ -1,5 +1,6 @@
 package cn.com.jnpc.controller;
 
+import cn.com.jnpc.dao.PersonDao;
 import cn.com.jnpc.entity.MaintenanceRecord;
 import cn.com.jnpc.service.MaintenanceRecordService;
 import cn.com.jnpc.utils.EmailUtil;
@@ -30,6 +31,8 @@ public class MaintenanceController {
     private MaintenanceRecordService maintenanceRecordService;
     @Autowired
     private EmailUtil emailUtil;
+    @Autowired
+    private PersonDao personDao;
     @RequestMapping("/maintenance")
     public ModelAndView maintenance(ModelAndView map,Integer number,String unit,String kks,String name,String maintainer,String starttime,String endtime){
         Integer pagesize=10;
@@ -82,7 +85,8 @@ public class MaintenanceController {
     @RequestMapping("/maintenancerecordcommit")
     public String maintenancerecordcommit(String id){
         maintenanceRecordService.updateifcommit(id);
-        List<String> list=new ArrayList<>();
+        List<String> list=personDao.findEngineer();
+        //List<String> list=new ArrayList<>();
         list.add("1433658618@qq.com");
         emailUtil.sendEmail("维修保养任务待审批","系统中有维修保养任务需要审批",list);
         return "redirect:/maintenance";

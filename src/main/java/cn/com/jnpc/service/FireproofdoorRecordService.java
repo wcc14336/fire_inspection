@@ -35,4 +35,8 @@ public class FireproofdoorRecordService {
     public List<FireproofdoorRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
         return fireproofdoorRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
     }
+
+    public FireproofdoorRecord findBykksAndCheckerAndChecktime(String kks, String checker, String checktime) {
+        return fireproofdoorRecordDao.findBykksAndCheckerAndChecktime(kks,checker,checktime);
+    }
 }

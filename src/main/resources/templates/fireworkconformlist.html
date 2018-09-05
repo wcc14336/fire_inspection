@@ -87,10 +87,12 @@
                                 <div class="form-group">
                                     <select class="form-control" id="unit" name="unit">
                                         <option value="">机组</option>
-                                        <option>一号机组</option>
-                                        <option>二号机组</option>
-                                        <option>三号机组</option>
-                                        <option>四号机组</option>
+                                        <option value="1">一号机组</option>
+                                        <option value="2">二号机组</option>
+                                        <option value="3">三号机组</option>
+                                        <option value="4">四号机组</option>
+                                        <option value="5">四号机组</option>
+                                        <option value="6">四号机组</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -195,7 +197,7 @@
                                             <td th:text="${dRecord.fcDefects[0].method}"></td>
                                             <td th:text="${dRecord.fcDefects[0].tracenumber}"></td>
                                             <td>
-                                                <button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.fcDefects[0].id}" data-defect="fcdefect"
+                                                <button  class="btn btn-xs btn-warning" data-toggle="modal" data-target="#changeModal" th:data-id="${dRecord.fcDefects[0].id}" data-defect="fcdefect"
                                                         th:data-defectdesc="${dRecord.fcDefects[0].defectdesc}" th:data-method="${dRecord.fcDefects[0].method}" th:data-tracenumber="${dRecord.fcDefects[0].tracenumber}" th:data-recordid="${dRecord.id}">修改</button>
                                             </td>
                                         </div>
@@ -318,6 +320,14 @@
 <script th:src="@{assets/plugins/sweetalert/dist/sweetalert.min.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
+    $(document).ready(function () {
+        var methods=[[${methods}]];
+        var select=$("select[name=method]");
+        select.empty();
+        for(var i=0;i<methods.length;i++){
+            $("<option></option>").val(methods[i]).text(methods[i]).appendTo(select);
+        }
+    })
     $('#changeModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var id = button.data('id') // Extract info from data-* attributes
@@ -376,7 +386,8 @@
             type:"POST",
             url:[[@{/findlocations}]],
         data:{
-            factoryBuilding:$("#factoryBuilding").val()
+            factoryBuilding:$("#factoryBuilding").val(),
+            unit:$("#unit").val()
         },
         dataType:"json",
             success:function (datas) {

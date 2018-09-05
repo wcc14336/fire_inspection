@@ -82,7 +82,7 @@
                 <!-- 列表、新增、修改区域 start -->
                 <div class="panel">
                     <div class="panel-body">
-                        <a class="btn btn-lg btn-info" data-toggle="modal" data-target="#addModal">录入</a>
+                        <a th:if="${entryAndApprovalRecord.submitstate ne 1 ||(entryAndApprovalRecord.submitstate eq 1 && entryAndApprovalRecord.approvalstate eq 1 && entryAndApprovalRecord.approvalresult eq 0)}" class="btn btn-lg btn-info" data-toggle="modal" data-target="#addModal">录入</a>
                         <div style="overflow: auto">
                             <table class="table table-bordered table-striped" id="datatable">
                                 <caption align="top" style="text-align: center"><font size="5">[[${unit}]]号机组定期检查</font></caption>
@@ -120,9 +120,9 @@
                                     <td th:text="${inspect.planbegin}"></td>
                                     <td th:text="${inspect.planend}"></td>
                                     <td>
-                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-checkbasis="${inspect.checkbasis}" th:data-checkproject="${inspect.checkproject}"
+                                        <button th:if="${entryAndApprovalRecord.submitstate ne 1 ||(entryAndApprovalRecord.submitstate eq 1 && entryAndApprovalRecord.approvalstate eq 1 && entryAndApprovalRecord.approvalresult eq 0)}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-checkbasis="${inspect.checkbasis}" th:data-checkproject="${inspect.checkproject}"
                                                 th:data-checkfrequency="${inspect.checkfrequency}" th:data-planchecker="${inspect.planchecker}" th:data-planbegin="${inspect.planbegin}" th:data-planend="${inspect.planend}" th:data-unit="${inspect.unit}" th:data-year="${inspect.year}">修改</button>
-                                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${inspect.id}" th:data-checkproject="${inspect.checkproject}" th:data-planchecker="${inspect.planchecker}">删除</button>
+                                        <button th:if="${entryAndApprovalRecord.submitstate ne 1 ||(entryAndApprovalRecord.submitstate eq 1 && entryAndApprovalRecord.approvalstate eq 1 && entryAndApprovalRecord.approvalresult eq 0)}" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${inspect.id}" th:data-checkproject="${inspect.checkproject}" th:data-planchecker="${inspect.planchecker}">删除</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -132,7 +132,7 @@
                 </div>
                 <div th:if="${entryAndApprovalRecord.submitstate ne 1}" style="text-align: center"><button class="btn btn-lg btn-info" onclick="this.disabled=true,submit()">提交审批</button></div>
                 <div th:if="${entryAndApprovalRecord.submitstate eq 1}" style="text-align: center;font-size: large;background-color:#33b86c">审批状态：
-                    <div th:if="${entryAndApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal">点击审批</button></div>
+                    <div th:if="${entryAndApprovalRecord.approvalstate eq 0 }">未审批<br/><button class="btn btn-info" data-toggle="modal" data-target="#approvalModal" th:if="${session.person.admin}">点击审批</button></div>
                     <div th:if="${entryAndApprovalRecord.approvalstate eq 1}">
                         <div th:if="${entryAndApprovalRecord.approvalresult eq 0}">
                             审批未通过，审批意见：<p th:text="${entryAndApprovalRecord.comments}">无</p>
@@ -161,7 +161,7 @@
             <div class="modal-body">
                 <form th:action="@{/entryapprovalcommit}">
                     <div class="form-group">审批人
-                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.username}">
+                        <input type="text" class="form-control" placeholder="审批人" name="approvaler" readonly th:value="${session.person.name}">
                     </div>
                     <div class="form-group">审批结果
                         <label class="radio-inline">
@@ -464,7 +464,7 @@
     })
 
     function submit() {
-        window.location.href="/entrysubmit?submiter="+[[${session.username}]]+"&year="+[[${year}]]+"&unit="+[[${unit}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1";
+        window.location.href="/entrysubmit?submiter="+[[${session.person.name}]]+"&year="+[[${year}]]+"&unit="+[[${unit}]]+"&submitdate="+[[${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}]]+"&submitstate=1";
     }
     $('#deleteModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal

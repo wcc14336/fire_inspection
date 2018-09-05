@@ -43,4 +43,16 @@ public class RegularTestRecordService {
     public void updateattachment(Integer i, String recordid) {
         regularTestRecordDao.updateattachment(1,recordid);
     }
+
+    public List<RegularTestRecord> findUndoByTaskid(String taskid, int i) {
+        return regularTestRecordDao.findUndoByTaskid(taskid,i);
+    }
+
+    public List<RegularTestRecord> findUndoBytaskidAndkks(String taskid, String kks) {
+        return regularTestRecordDao.findByTaskidAndKks(taskid,kks);
+    }
+
+    public void updaterecordById(String id, String checker, String checktime, Integer state, int i) {
+        regularTestRecordDao.updaterecordById(id,checker,checktime,state,i);
+    }
 }

@@ -20,4 +20,6 @@ public interface PersonnelviolationRecordDao extends JpaRepository<Personnelviol
     void updateattachment(int i, String recordid);
     @Query("select p from PersonnelviolationRecord p where p.unit=?1 and p.checktime between ?2 and ?3")
     List<PersonnelviolationRecord> findByUnitAndChecktime(String unit, String starttime, String endtime);
+    @Query("select p from PersonnelviolationRecord p where p.unit=?1 and p.factoryBuilding=?2 and p.location=?3 and p.checker=?4 and p.checktime=?5 and p.passnumber=?6")
+    PersonnelviolationRecord findByUnitAndFactoryBuildingAndLocationAndCheckAndPassnumber(String unit, String factoryBuilding, String location, String checker, String checktime, String passnumber);
 }

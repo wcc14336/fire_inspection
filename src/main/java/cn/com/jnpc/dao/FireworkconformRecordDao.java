@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -26,4 +27,12 @@ public interface FireworkconformRecordDao extends JpaRepository<FireworkconformR
     void updateattachment(int i, String recordid);
 
     List<FireworkconformRecord> findAll(Specification<FireworkconformRecord> specification);
+    @Query("select f from FireworkconformRecord f where f.fireworkNumber like %?1% and f.state=0")
+    List<FireworkconformRecord> findByfireworkNumberlike(String fireworkNumber);
+    @Query("select f from FireworkconformRecord f where f.fireworkNumber=?1")
+    FireworkconformRecord findbyfireworkNumber(String fireworkNumber);
+    @Modifying
+    @Transactional
+    @Query("update FireworkconformRecord f set f.checker=?2,f.checkdate=?3,f.state=?4 where f.fireworkNumber=?1")
+    void updatestate(String fireworkNumber, String checker, String checkdate, Integer state);
 }

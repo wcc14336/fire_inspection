@@ -27,7 +27,7 @@ public class FireworkRecord {
     private Integer state;
     private String checktime;
     private String checker;
-    private Integer attachment;
+    private Integer attachment=0;
 
     @OneToMany(targetEntity=FWDefect.class)
     @Cascade(value={org.hibernate.annotations.CascadeType.SAVE_UPDATE})

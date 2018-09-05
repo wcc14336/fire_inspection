@@ -23,7 +23,7 @@ public class OtherRecord {
     private String location;
     private String checktime;
     private String checker;
-    private Integer attachment;
+    private Integer attachment=0;
 
     @OneToMany(targetEntity=ODefect.class)
     @Cascade(value={org.hibernate.annotations.CascadeType.SAVE_UPDATE})

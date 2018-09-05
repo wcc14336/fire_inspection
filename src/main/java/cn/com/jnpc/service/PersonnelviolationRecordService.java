@@ -35,4 +35,8 @@ public class PersonnelviolationRecordService {
     public List<PersonnelviolationRecord> findByUnitAndChecktime(String unit, String starttime, String endtime) {
         return personnelviolationRecordDao.findByUnitAndChecktime(unit,starttime,endtime);
     }
+
+    public PersonnelviolationRecord findByUnitAndFactoryBuildingAndLocationAndCheckerAndChecktimeAndPassnumber(String unit, String factoryBuilding, String location, String checker, String checktime,String passnumber) {
+        return personnelviolationRecordDao.findByUnitAndFactoryBuildingAndLocationAndCheckAndPassnumber(unit,factoryBuilding,location,checker,checktime,passnumber);
+    }
 }

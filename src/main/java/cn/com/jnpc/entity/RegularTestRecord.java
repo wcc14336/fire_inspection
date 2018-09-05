@@ -30,7 +30,7 @@ public class RegularTestRecord {
     private Integer state;
     private String checker;
     private String checktime;
-    private Integer attachment;
+    private Integer attachment=0;
     @OneToMany(targetEntity=RTDefect.class)
     @Cascade(value={org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     @JoinColumn(name="regulartestRecord_id")

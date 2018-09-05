@@ -102,4 +102,9 @@ public class MaintenanceRecordService {
             }
         },sort);
     }
+
+    public MaintenanceRecord findById(String id) {
+        return maintenanceRecordDao.findByid(id);
+
+    }
 }

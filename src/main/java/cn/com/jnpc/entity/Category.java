@@ -1,6 +1,9 @@
 package cn.com.jnpc.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -12,10 +15,11 @@ import javax.validation.constraints.NotNull;
 @Table(name = "category")
 public class Category {
     @Id
+    @GenericGenerator(strategy = "uuid",name = "idGenerator")
+    @GeneratedValue(generator = "idGenerator")
     private String id;
     @NotNull
     private String categoryname;
-    private String categorydesc;
 
     public String getId() {
         return id;
@@ -33,11 +37,4 @@ public class Category {
         this.categoryname = categoryname;
     }
 
-    public String getCategorydesc() {
-        return categorydesc;
-    }
-
-    public void setCategorydesc(String categorydesc) {
-        this.categorydesc = categorydesc;
-    }
 }

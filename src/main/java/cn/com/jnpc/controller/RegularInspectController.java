@@ -1,5 +1,7 @@
 package cn.com.jnpc.controller;
 
+import cn.com.jnpc.dao.MethodDao;
+import cn.com.jnpc.dao.PersonDao;
 import cn.com.jnpc.entity.*;
 import cn.com.jnpc.service.*;
 import cn.com.jnpc.utils.EmailUtil;
@@ -43,6 +45,10 @@ public class RegularInspectController {
     private EmailUtil emailUtil;
     @Autowired
     private RegularInspectApprovalRecordService regularInspectApprovalRecordService;
+    @Autowired
+    private PersonDao personDao;
+    @Autowired
+    private MethodDao methodDao;
     EntryAndApprovalRecord record;
     RegularInspectRecord regularInspectRecord;
     @RequestMapping("/regularinspect")
@@ -94,6 +100,7 @@ public class RegularInspectController {
         attributes.addAttribute("unit",unit);
         attributes.addAttribute("year",year);
         regularInspectService.deleteById(id);
+        regularInspectRecordService.deleteAllByTaskid(id);
         return "redirect:/entryRegularinspect";
     }
 
@@ -109,12 +116,29 @@ public class RegularInspectController {
         attributes.addAttribute("unit",unit);
         attributes.addAttribute("year",year);
         regularInspectService.save(regularInspect);
+        List<Equipment> equipments=equipService.findAllByCondition(unit,regularInspect.getCheckproject());
+        String taskid=regularInspect.getId();
+        for (Equipment equipment:equipments){
+            regularInspectRecord=new RegularInspectRecord();
+            regularInspectRecord.setUnit(unit);
+            regularInspectRecord.setYear(year);
+            regularInspectRecord.setTaskid(taskid);
+            regularInspectRecord.setFactoryBuilding(equipment.getFactoryBuilding());
+            regularInspectRecord.setLocation(equipment.getLocation());
+            regularInspectRecord.setKks(equipment.getKks());
+            regularInspectRecord.setIfchecked(0);
+            regularInspectRecord.setName(equipment.getName());
+            regularInspectRecord.setCheckcycle(equipment.getCheckcycle());
+            regularInspectRecord.setAttachment(0);
+            regularInspectRecordService.save(regularInspectRecord);
+        }
         return "redirect:/entryRegularinspect";
     }
     @RequestMapping("/entryRegularinspect")
     public ModelAndView entryRegularinspect(String unit, Integer year, HttpSession session,ModelAndView map,String username){
         if (username==null||"".equals(username)){
-            username = (String) session.getAttribute("username");
+            Person person= (Person) session.getAttribute("person");
+            username=person.getName();
         }
         String id=username+"-"+year+"-"+unit;
         EntryAndApprovalRecord entryAndApprovalRecord=entryAndApprovalRecordSerivce.findById(id);
@@ -142,17 +166,18 @@ public class RegularInspectController {
         record.setId(id);
         record.setSubmiter(submiter);
         record.setSubmitdate(submitdate);
-        record.setSubmitstate(submitstate);
+        record.setSubmitstate(1);
         record.setYear(year);
         record.setUnit(unit);
         record.setApprovalstate(0);
         record.setApprovalresult(0);
         entryAndApprovalRecordSerivce.save(record);
-        List<String> list=new ArrayList<>();
-        list.add("1433658618@qq.com");
+        List<String> list=personDao.findEngineer();
+        //list.add("1433658618@qq.com");
         emailUtil.sendEmail("年度定检计划审批","有一份年度定期检查计划需要审批",list);
         attributes.addAttribute("unit",record.getUnit());
         attributes.addAttribute("year",record.getYear());
+        attributes.addAttribute("username",record.getSubmiter());
         return "redirect:entryRegularinspect";
     }
     @RequestMapping("/entryapprovalcommit")
@@ -171,7 +196,8 @@ public class RegularInspectController {
     }
     @RequestMapping("/myRegularinspecttask")
     public ModelAndView myRegularinspecttask(ModelAndView map,HttpSession session){
-        String username= (String) session.getAttribute("username");
+        Person person= (Person) session.getAttribute("person");
+        String username=person.getName();
         List<RegularInspect> list=regularInspectService.findMyUndoneInspect(username,0);
         List<RegularInspect> list1=regularInspectService.findMyUndoneInspect(username,1);
         map.addObject("list1",list1);
@@ -209,10 +235,13 @@ public class RegularInspectController {
                 regularInspectRecord.setName(equipment.getName());
                 regularInspectRecord.setCheckcycle(equipment.getCheckcycle());
                 regularInspectRecord.setAttachment(0);
+                regularInspectRecord.setState(0);
                 regularInspectRecordService.save(regularInspectRecord);
             }
         }
         list=regularInspectRecordService.findByTaskid(taskid);
+        List<String> list1=methodDao.finddistinctmethod();
+        map.addObject("methods",list1);
         map.addObject("list",list);
         map.setViewName("regularinspectrecordlist");
         map.addObject("taskid",taskid);
@@ -241,8 +270,8 @@ public class RegularInspectController {
         regularInspectApprovalRecord.setApprovalstate(0);
         regularInspectApprovalRecord.setApprovalresult(0);
         regularInspectApprovalRecordService.save(regularInspectApprovalRecord);
-        List<String> list=new ArrayList<>();
-        list.add("1433658618@qq.com");
+        List<String> list=personDao.findEngineer();
+        //list.add("1433658618@qq.com");
         emailUtil.sendEmail("定期检查任务审批","系统中有定期检查任务需要审批",list);
         attributes.addAttribute("checkproject",checkproject);
         attributes.addAttribute("unit",unit);
@@ -262,7 +291,11 @@ public class RegularInspectController {
             for(String s:checkers){
                 checker+=s+"/";
             }
-            checker=checker.substring(0,checker.length()-1);
+            if (checker.length()==0){
+                checker="";
+            }else {
+                checker=checker.substring(0,checker.length()-1);
+            }
             regularInspect.setBegintime(begintime);
             regularInspect.setState(1);
             regularInspect.setEndtime(endtime);

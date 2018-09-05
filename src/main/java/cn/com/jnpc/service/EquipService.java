@@ -181,4 +181,12 @@ public class EquipService {
             }
         });
     }
+
+    public Equipment findByKks(String kks) {
+        return equipmentDao.findByKks(kks);
+    }
+
+    public List<Equipment> findBykkslike(String kks) {
+        return equipmentDao.findBykksLike(kks);
+    }
 }

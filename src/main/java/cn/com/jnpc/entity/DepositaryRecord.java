@@ -23,7 +23,7 @@ public class DepositaryRecord {
     private String location;
     private String checktime;
     private String checker;
-    private Integer attachment;
+    private Integer attachment=0;
     @OneToMany(targetEntity=DPDefect.class)
     @Cascade(value={org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     @JoinColumn(name="depositaryRecord_id")

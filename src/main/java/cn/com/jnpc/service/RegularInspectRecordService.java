@@ -39,4 +39,24 @@ public class RegularInspectRecordService {
     public List<String> findAllcheckers(String taskid) {
         return regularInspectRecordDao.findAllcheckers(taskid);
     }
+
+    public void deleteAllByTaskid(String id) {
+        regularInspectRecordDao.deleteAllByTaskid(id);
+    }
+
+    public List<RegularInspectRecord> findUndoByTaskid(String taskid, int i) {
+        return regularInspectRecordDao.findUndoByTaskid(taskid,i);
+    }
+
+    public RegularInspectRecord findbyId(String id) {
+        return regularInspectRecordDao.findbyId(id);
+    }
+
+    public void updaterecordById(String id, String checker, String checktime, String defectdesc, String method, Integer state, int ifchecked) {
+        regularInspectRecordDao.updaterecordByid(id,checker,checktime,defectdesc,method,state,ifchecked);
+    }
+
+    public List<RegularInspectRecord> findBytaskidAndkks(String taskid, String kks) {
+        return regularInspectRecordDao.findBytaskAndkks(taskid,kks);
+    }
 }

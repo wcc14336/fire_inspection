@@ -21,6 +21,51 @@ public class Person {
     private String number;
     private String name;
     private String email;
+    private Integer inspect;
+    private Integer test;
+    private Integer maintance;
+    private Integer engineer;
+    private Integer admin;
+
+    public Integer getInspect() {
+        return inspect;
+    }
+
+    public void setInspect(Integer inspect) {
+        this.inspect = inspect;
+    }
+
+    public Integer getTest() {
+        return test;
+    }
+
+    public void setTest(Integer test) {
+        this.test = test;
+    }
+
+    public Integer getMaintance() {
+        return maintance;
+    }
+
+    public void setMaintance(Integer maintance) {
+        this.maintance = maintance;
+    }
+
+    public Integer getEngineer() {
+        return engineer;
+    }
+
+    public void setEngineer(Integer engineer) {
+        this.engineer = engineer;
+    }
+
+    public Integer getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Integer admin) {
+        this.admin = admin;
+    }
 
     public String getId() {
         return id;

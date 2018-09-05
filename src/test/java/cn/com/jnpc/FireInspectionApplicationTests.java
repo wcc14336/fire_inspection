@@ -17,6 +17,9 @@ import javax.transaction.Transactional;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -221,13 +224,11 @@ public class FireInspectionApplicationTests {
 	private FireworkRecordDao fireworkRecordDao;
 	@Autowired
 	private FWDefectDao fwDefectDao;
+	@Autowired
+	private RegularInspectDao regularInspectDao;
 	@Test
 	public void test(){
-		FWDefect defect=new FWDefect();
-		List<FireworkRecord> list = fireworkRecordDao.findAllByDateAndName("2018-07-01", "尼古拉斯赵四", "1");
-		FireworkRecord record1 = list.get(0);
-		defect.setFireworkRecord(record1);
-		defect.setMethod("zhuangtai");
-		fwDefectDao.save(defect);
+		List<RegularInspect> list=regularInspectDao.findrecentundotask("李四",0,"2018-8-31");
+		System.out.println(list.size());
 	}
 }

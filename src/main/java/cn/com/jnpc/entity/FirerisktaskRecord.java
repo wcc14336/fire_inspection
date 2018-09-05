@@ -34,7 +34,7 @@ public class FirerisktaskRecord {
     private String measurement2;
     private String measuretime2;
     private Integer state;
-    private Integer attachment;
+    private Integer attachment=0;
 
     public String getId() {
         return id;

@@ -25,8 +25,8 @@ public class LocationController {
     }
     @RequestMapping("/findlocations")
     @ResponseBody
-    public List findlocationbyfac(String factoryBuilding){
-        return locationService.findlocationByfac(factoryBuilding);
+    public List findlocationbyfac(String factoryBuilding,String unit){
+        return locationService.findlocationByfac(factoryBuilding,unit);
     }
     @RequestMapping("/importantlocation")
     public ModelAndView importantlocation(ModelAndView map){

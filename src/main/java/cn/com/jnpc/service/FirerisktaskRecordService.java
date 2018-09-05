@@ -109,4 +109,16 @@ public class FirerisktaskRecordService {
             }
         });
     }
+
+    public List<FirerisktaskRecord> findByUnit(String unit) {
+        return firerisktaskRecordDao.findByUnit(unit);
+    }
+
+    public List<FirerisktaskRecord> findByUnitAndState(String unit, int i) {
+        return firerisktaskRecordDao.findByUnitAndState(unit,i);
+    }
+
+    public FirerisktaskRecord findBytracenumber(String tracenumber) {
+        return firerisktaskRecordDao.findBytracenumber(tracenumber);
+    }
 }

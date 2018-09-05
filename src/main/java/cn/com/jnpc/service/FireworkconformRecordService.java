@@ -113,4 +113,16 @@ public class FireworkconformRecordService {
             }
         });
     }
+
+    public List<FireworkconformRecord> findByfireworkNumberlike(String fireworkNumber) {
+        return fireworkconformRecordDao.findByfireworkNumberlike(fireworkNumber);
+    }
+
+    public FireworkconformRecord findonebyfireworkNumber(String fireworkNumber) {
+        return fireworkconformRecordDao.findbyfireworkNumber(fireworkNumber);
+    }
+
+    public void updatestate(String fireworkNumber, String checker, String checkdate, Integer state) {
+        fireworkconformRecordDao.updatestate(fireworkNumber,checker,checkdate,state);
+    }
 }

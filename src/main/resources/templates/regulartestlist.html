@@ -82,7 +82,7 @@
                 <!-- 列表、新增、修改区域 start -->
                 <div class="panel">
                     <div class="panel-body">
-                        <a class="btn btn-lg btn-info" data-toggle="modal" data-target="#addModal">录入</a>
+                       <!-- <a class="btn btn-lg btn-info" data-toggle="modal" data-target="#addModal">录入</a>-->
                         <div style="overflow: auto">
                             <table class="table table-bordered table-striped" id="datatable">
                                 <caption align="top" style="text-align: center"><font size="5">[[${unit}]]号机组定期试验跟踪表</font></caption>
@@ -135,10 +135,10 @@
                                         未完成
                                     </td>
                                     <td>
-                                        <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-checkbasis="${inspect.checkbasis}" th:data-checkproject="${inspect.checkproject}"
+                                        <button th:if="${session.person.engineer eq 1}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#changeModal" th:data-id="${inspect.id}" th:data-checkbasis="${inspect.checkbasis}" th:data-checkproject="${inspect.checkproject}"
                                                 th:data-checkfrequency="${inspect.checkfrequency}" th:data-planchecker="${inspect.planchecker}" th:data-planbegin="${inspect.planbegin}" th:data-planend="${inspect.planend}" th:data-begintime="${inspect.begintime}"
                                                 th:data-endtime="${inspect.endtime}" th:data-reason="${inspect.reason}" th:data-checker="${inspect.checker}" th:data-state="${inspect.state}" th:data-unit="${inspect.unit}" th:data-year="${inspect.year}">修改</button>
-                                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${inspect.id}" th:data-checkproject="${inspect.checkproject}" th:data-planchecker="${inspect.planchecker}" th:data-state="${inspect.state}">删除</button>
+                                        <button th:if="${session.person.engineer eq 1}" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal" th:data-id="${inspect.id}" th:data-checkproject="${inspect.checkproject}" th:data-planchecker="${inspect.planchecker}" th:data-state="${inspect.state}">删除</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -280,11 +280,11 @@
                         <input type="hidden" name="id" id="id">
                     </div>
                     <div class="form-group">
-                        <label for="checkbasis">检查依据</label>
+                        <label for="checkbasis">试验依据</label>
                         <input type="text" class="form-control" id="checkbasis" name="checkbasis" placeholder="检查依据" >
                     </div>
                     <div class="form-group">
-                        <label for="checker">检查项目</label>
+                        <label for="checker">试验项目</label>
                         <input type="text" class="form-control" id="checkproject" name="checkproject" placeholder="检查项目">
                     </div>
                     <div class="form-group">

@@ -41,4 +41,8 @@ public class RegularInspectService {
     public RegularInspect findByid(String taskid) {
         return regularInspectDao.findByid(taskid);
     }
+
+    public List<RegularInspect> findrecentundotask(String username, int i, String beforedate) {
+        return regularInspectDao.findrecentundotask(username,i,beforedate);
+    }
 }

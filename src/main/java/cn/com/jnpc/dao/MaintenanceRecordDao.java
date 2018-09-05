@@ -32,4 +32,6 @@ public interface MaintenanceRecordDao extends JpaRepository<MaintenanceRecord,St
     void recordnotpassed(String id);
 
     List<MaintenanceRecord> findAll(Specification<MaintenanceRecord> specification, Sort sort);
+    @Query("select m from MaintenanceRecord m where m.id=?1")
+    MaintenanceRecord findByid(String id);
 }

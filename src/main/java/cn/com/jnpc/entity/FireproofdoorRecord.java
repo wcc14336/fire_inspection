@@ -24,7 +24,7 @@ public class FireproofdoorRecord {
     private String kks;
     private String name;
     private Integer state;
-    private Integer attachment;
+    private Integer attachment=0;
     private String checktime;
     private String checker;
     @OneToMany(targetEntity=FDDefect.class)

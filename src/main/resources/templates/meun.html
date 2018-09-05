@@ -14,7 +14,7 @@
                 </div>
                 <div class="user-info">
                     <br/>
-                    <p th:text="${session.username}"></p>
+                    <p th:text="${session.person.name}"></p>
                 </div>
             </div>
             <!--- Divider -->
@@ -23,7 +23,7 @@
                     <li>
                         <a href="#" th:href="@{/equiplist}" class="waves-effect"><i class="md md-view-list"></i><span> 设施参数 </span></a>
                     </li>
-                    <li class="has_sub">
+                    <li class="has_sub" th:if="${session.person.inspect eq 1}">
                         <a href="#" class="waves-effect waves-light"><i class="md md-view-list"></i><span> 监督检查 </span><span class="pull-right"><i class="md md-add"></i></span></a>
                         <ul class="list-unstyled">
                             <li><a href="#" th:href="@{/dailyinspect}">日常巡检</a></li>
@@ -32,19 +32,20 @@
                             <li><a href="#" th:href="@{/regularinspect}">定期监督检查</a></li>
                         </ul>
                     </li>
-                    <li>
+                    <li th:if="${session.person.test eq 1}">
                         <a href="#" class="waves-effect" th:href="@{/regulartest}"><i class="md md-dashboard"></i><span> 消防定期试验 </span></a>
                     </li>
-                    <li>
+                    <li th:if="${session.person.maintance eq 1}">
                         <a href="#" class="waves-effect" th:href="@{/maintenance}"><i class="md md-warning"></i><span> 消防维修保养 </span></a>
                     </li>
-                    <li class="has_sub">
+                    <li class="has_sub" th:if="${session.person.admin eq 1}">
                         <a href="#" class="waves-effect waves-light"></i><i class="md md-view-list"></i><span> 系统配置 </span><span class="pull-right"><i class="md md-add"></i></span></a>
                         <ul class="list-unstyled">
                             <li><a href="#" th:href="@{/importantlocation}">消防重点部位配置</a></li>
-                            <li><a href="#" >设备名称配置</a></li>
-                            <li><a href="#" >系统类别配置</a></li>
+                            <li><a href="#" th:href="@{/name}">设备名称配置</a></li>
+                            <li><a href="#" th:href="@{/category}">设备类别配置</a></li>
                             <li><a href="#" th:href="@{/method}">整改方式配置</a></li>
+                            <li><a href="#" th:href="@{/person}">人员权限配置</a></li>
 
                         </ul>
                     </li>

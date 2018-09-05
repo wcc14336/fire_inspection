@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -22,4 +23,18 @@ public interface RegularInspectRecordDao extends JpaRepository<RegularInspectRec
     String findendtime(String taskid);
     @Query("select distinct r.checker from RegularInspectRecord r where r.taskid=?1")
     List<String> findAllcheckers(String taskid);
+    @Transactional
+    @Modifying
+    @Query("delete from RegularInspectRecord r where r.taskid=?1")
+    void deleteAllByTaskid(String id);
+    @Query("select r from RegularInspectRecord r where r.taskid=?1 and r.ifchecked=?2")
+    List<RegularInspectRecord> findUndoByTaskid(String taskid, int i);
+    @Query("select r from RegularInspectRecord r where r.id=?1")
+    RegularInspectRecord findbyId(String id);
+    @Modifying
+    @Transactional
+    @Query("update RegularInspectRecord r set r.checker=?2,r.checktime=?3,r.defectdesc=?4,r.method=?5,r.state=?6,r.ifchecked=?7 where r.id=?1")
+    void updaterecordByid(String id, String checker, String checktime, String defectdesc, String method, Integer state, int ifchecked);
+    @Query("select r from RegularInspectRecord r where r.taskid=?1 and r.kks like %?2% and r.ifchecked=0")
+    List<RegularInspectRecord> findBytaskAndkks(String taskid, String kks);
 }

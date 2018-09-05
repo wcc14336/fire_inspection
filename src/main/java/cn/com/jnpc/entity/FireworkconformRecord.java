@@ -29,7 +29,7 @@ public class FireworkconformRecord {
     private Integer state;
     private String checker;
     private String checkdate;
-    private Integer attachment;
+    private Integer attachment=0;
     @OneToMany(targetEntity=FCDefect.class)
     @Cascade(value={org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     @JoinColumn(name="fireworkconformRecord_id")

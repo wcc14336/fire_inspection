@@ -20,4 +20,6 @@ public interface RegularInspectDao extends JpaRepository<RegularInspect,String>{
     void updatestate(String taskid, int i);
     @Query("select r from RegularInspect r where r.id=?1")
     RegularInspect findByid(String taskid);
+    @Query("select r from RegularInspect r where r.state=?2 and r.planbegin<=?3 and r.planchecker like %?1% order by r.planbegin ASC")
+    List<RegularInspect> findrecentundotask(String username, int i, String beforedate);
 }
